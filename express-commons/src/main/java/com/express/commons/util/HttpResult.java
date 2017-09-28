@@ -7,7 +7,7 @@ public class HttpResult {
   private int httpStatusCode;
   private String responseBody;
 
-  public HttpResult(int httpStatusCode, String responseBody){
+  public HttpResult(int httpStatusCode, String responseBody) {
     this.httpStatusCode = httpStatusCode;
     this.responseBody = responseBody;
   }

@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by xinghang on 17/8/18.
  */
@@ -91,7 +93,8 @@ public class HttpUtil {
     }
   }
 
-  public static HttpResult getMethod(String methodName, NameValuePair[] parameters, List<Header> headerList)
+  public static HttpResult getMethod(String methodName, NameValuePair[] parameters, List<Header>
+    headerList)
     throws HttpException, IOException {
     HttpClient httpClient = null;
     GetMethod method = null;
