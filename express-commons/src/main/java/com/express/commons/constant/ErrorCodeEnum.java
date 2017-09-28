@@ -14,8 +14,8 @@ public enum ErrorCodeEnum {
   SESSION_ERROR(100002, "Session Error"),
   RETURN_NULL_ERROR(100003, "Return Null"),
   DB_ERROR(100004, "DB Error"),
-  NO_AUTH(100005, "No Authority");
-
+  NO_AUTH(100005, "No Authority"),
+  NO_TOKEN(20000, "get token failed");
 
   private static Map<Integer, String> codeAndMsgMap = new HashMap<Integer, String>();
   //market report
