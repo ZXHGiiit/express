@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * Created by renren on 17/7/25.
  */
-public class JsonUtils {
+public class JacksonUtils {
 
-  public static final Log LOG = LogFactory.getLog(JsonUtils.class);
+  public static final Log LOG = LogFactory.getLog(JacksonUtils.class);
   //定义json对象
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
