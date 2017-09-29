@@ -1,10 +1,11 @@
-package com.express.controller.login;
+package com.express.controller;
 
 import com.google.common.base.Strings;
 
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.commons.vo.ExpressResult;
+import com.express.domain.User;
 import com.express.service.UserService;
 
 import org.apache.commons.logging.Log;
@@ -14,6 +15,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +25,9 @@ import javax.servlet.http.HttpServletResponse;
  * Created by xinghang on 17/9/28.
  */
 
-@Controller("/login")
-public class LoginController {
-  private Log LOG = LogFactory.getLog(LoginController.class);
+@Controller("/user")
+public class UserController {
+  private Log LOG = LogFactory.getLog(UserController.class);
 
   @Autowired
   private UserService userService;
@@ -36,7 +38,7 @@ public class LoginController {
     resp) {
     String token = userService.login(name, password, req, resp);
     if (token == null) {
-      LOG.error("LoginController.login.ERROR.token is null");
+      LOG.error("UserController.login.ERROR.token is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_TOKEN);
     } else {
       return RetJacksonUtil.resultOk();
@@ -48,11 +50,11 @@ public class LoginController {
   @ResponseBody
   public Object token(@PathVariable String token, String callback) {
     if (Strings.isNullOrEmpty(token)) {
-      LOG.error("LoginController.token.token is null");
+      LOG.error("UserController.token.token is null");
       return "";
     }
     String result = userService.selByToken(token);
-    LOG.info("LoginController.token.callback.result = " + result);
+    LOG.info("UserController.token.callback.result = " + result);
     ExpressResult expressResult = new ExpressResult();
     if (!Strings.isNullOrEmpty(result)) {
       expressResult.setStatus(200);
@@ -63,12 +65,12 @@ public class LoginController {
       expressResult.setMsg("ERROR");
     }
     if (!Strings.isNullOrEmpty(callback)) {
-      LOG.info("LoginController.token.callback = " + callback);
+      LOG.info("UserController.token.callback = " + callback);
       MappingJacksonValue mjv = new MappingJacksonValue(expressResult);
       mjv.setJsonpFunction(callback);
       return mjv;
     } else {
-      LOG.info("LoginController.token.callback is null");
+      LOG.info("UserController.token.callback is null");
       return expressResult;
     }
 
@@ -87,14 +89,29 @@ public class LoginController {
       LOG.error("UserController.logout.ERROR", e);
     }
     if (!Strings.isNullOrEmpty(callback)) {
-      LOG.info("LoginController.logout.callback = " + callback);
+      LOG.info("UserController.logout.callback = " + callback);
       MappingJacksonValue mjv = new MappingJacksonValue(expressResult);
       mjv.setJsonpFunction(callback);
       return mjv;
     } else {
-      LOG.info("LoginController.logout.callback is null");
+      LOG.info("UserController.logout.callback is null");
       return expressResult;
     }
+  }
+
+  @RequestMapping("/register")
+  @ResponseBody
+  public String register(@RequestParam("user") User user) {
+    if (user == null) {
+      LOG.error("UserController.register.user is null");
+      return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
+    }
+    int result = userService.createUser(user);
+    if (result != 1) {
+      LOG.error("UserController.register.createUser Failed!!!");
+      return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.UNKNOWN_ERROR);
+    }
+    return RetJacksonUtil.resultOk();
   }
 
 }

@@ -87,6 +87,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public int createUser(User user) {
+    if (user == null) {
+      LOG.error("UserServiceImpl.createUser.user is null");
+      return -1;
+    }
+
+    return userDao.add(user);
+  }
+
+  @Override
   public User testFilter(String userName, String password) {
     return null;
   }

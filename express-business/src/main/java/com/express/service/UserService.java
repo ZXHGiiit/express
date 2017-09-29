@@ -15,5 +15,7 @@ public interface UserService {
 
   void logout(HttpServletRequest req, HttpServletResponse resp);
 
+  int createUser(User user);
+
   User testFilter(String userName, String password);
 }

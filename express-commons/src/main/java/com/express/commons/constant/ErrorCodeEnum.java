@@ -15,8 +15,8 @@ public enum ErrorCodeEnum {
   RETURN_NULL_ERROR(100003, "Return Null"),
   DB_ERROR(100004, "DB Error"),
   NO_AUTH(100005, "No Authority"),
-  NO_TOKEN(20000, "get token failed");
-
+  NO_TOKEN(20000, "get token failed"),
+  NO_PARAM(50000, "parameter is null");
   private static Map<Integer, String> codeAndMsgMap = new HashMap<Integer, String>();
   //market report
 
