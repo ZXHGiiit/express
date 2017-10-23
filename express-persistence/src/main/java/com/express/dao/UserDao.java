@@ -11,29 +11,37 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface UserDao {
   String TABLE = "user";
-  String COLL_ALL = "id, account, pasword, name, phone, email, creat_time, updat_time";//待定
+  String COLL_ALL = "id, account, password, name, phone, email, age, isVip";//待定
 
   @Select(" select "
     + COLL_ALL
     + " from "
     + TABLE
     + " where "
-    + " name = = #{name}"
+    + " account = #{account}"
+    + " and "
     + " password = #{password}"
   )
-  User selectByUAP(@Param("username") String name, @Param("password") String password);
+  User selectByUAP(@Param("account") String account, @Param("password") String password);
 
-  @Insert(" inster into "
+  @Insert(" insert into "
     + TABLE
     + " set "
-    + " id = #{id}, "
     + " account = #{account}, "
     + " name = #{name}, "
     + " password = #{password}, "
     + " phone = #{phone}, "
     + " email = #{email}, "
-    + " creat_time = #{creatTime}, "
-    + " update_time = #{updateTime} "
+    + " isVip = #{isVip}, "
+    + " age = #{age} "
   )
   int add(User user);
+
+  @Insert(" insert into "
+    + TABLE
+    + " set "
+    + " account = #{account}, "
+    + " password = #{password}"
+  )
+  int test(User user);
 }

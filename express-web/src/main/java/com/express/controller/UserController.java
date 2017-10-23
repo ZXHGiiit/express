@@ -5,11 +5,14 @@ import com.google.common.base.Strings;
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.commons.vo.ExpressResult;
+import com.express.dao.UserDao;
 import com.express.domain.User;
+import com.express.interceptor.HostHolder;
 import com.express.service.UserService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
@@ -33,15 +36,23 @@ public class UserController {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private HostHolder holder;
+  @Autowired
+  private UserDao userDao;
+
   @RequestMapping("/login")
   @ResponseBody
-  public String login(String name, String password, HttpServletRequest req, HttpServletResponse
+  public String login(String account, String password, HttpServletRequest req, HttpServletResponse
     resp) {
-    String token = userService.login(name, password, req, resp);
-    if (token == null) {
+    //String token = userService.login(account, password, req, resp);
+    User user = userService.login(account, password, req, resp);
+    if (user == null) {
       LOG.error("UserController.login.ERROR.token is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_TOKEN);
     } else {
+      //将用户登录信息保存到holder中
+      holder.setUser(user);
       return RetJacksonUtil.resultOk();
     }
   }
@@ -102,11 +113,17 @@ public class UserController {
 
   @RequestMapping("/register")
   @ResponseBody
-  public String register(@RequestParam("user") User user) {
-    if (user == null) {
-      LOG.error("UserController.register.user is null");
+  public String register(@RequestParam("email") String email,
+                         @RequestParam("password") String password) {
+    if (email == null || password == null) {
+      LOG.error("UserController.register.parameter is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
     }
+    LOG.info("UserController.register.params:{email : "+ email + "password : "+ password + "}");
+    User user = new User();
+    user.setEmail(email);
+    user.setAccount(email);
+    user.setPassword(password);
     int result = userService.createUser(user);
     if (result != 1) {
       LOG.error("UserController.register.createUser Failed!!!");
@@ -115,4 +132,15 @@ public class UserController {
     return RetJacksonUtil.resultOk();
   }
 
+  @RequestMapping("/test")
+  @ResponseBody
+  public String test(@RequestParam("account") String account,
+                     @RequestParam("password") String password) {
+    LOG.info("UserCOntroller.test.account: " + account);
+    User user = new User();
+    user.setAccount(account);
+    user.setPassword(password);
+    int result = userDao.test(user);
+    return RetJacksonUtil.resultOk();
+  }
 }

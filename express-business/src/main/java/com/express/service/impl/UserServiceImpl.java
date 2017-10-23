@@ -35,18 +35,34 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private RedisService redisService;
 
+  @Override
+  public User login(String account, String password, HttpServletRequest req, HttpServletResponse resp) {
+    if (Strings.isNullOrEmpty(account) || Strings.isNullOrEmpty(password)) {
+      LOG.error("UserServiceImpl.login.account or password is NULL");
+      return null;
+    }
+    User user = userDao.selectByUAP(account, password);
+    if (user == null) {
+      LOG.info("UserServiceImpl.login incorrect");
+      return null;
+    }
+    LOG.info("UserServiceImpl.login success user: " + user.toString());
+    return user;
+  }
+
   /**
    * 若登录成功，将用户信息存入redis，以uuid作为key
    * 将token作为key，uuid作为value建立一个cookie，
    */
+  /*
   @Override
-  public String login(String name, String password, HttpServletRequest req, HttpServletResponse
+  public String login(String account, String password, HttpServletRequest req, HttpServletResponse
     resp) {
-    if (Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(password)) {
-      LOG.error("UserServiceImpl.login.name or password is NULL");
+    if (Strings.isNullOrEmpty(account) || Strings.isNullOrEmpty(password)) {
+      LOG.error("UserServiceImpl.login.account or password is NULL");
       return "";
     }
-    User user = userDao.selectByUAP(name, password);
+    User user = userDao.selectByUAP(account, password);
     if (user == null) {
       LOG.info("UserServiceImpl.login incorrect");
       return "";
@@ -57,10 +73,13 @@ public class UserServiceImpl implements UserService {
     //将用户信息存入redis，uuid作为key
     redisService.set("express", uuid, JacksonUtils.toJson(user));
     redisService.expire("express", uuid, 30 * 60);
+
     //将token最为key，uuid作为value，建立cookie。
     CookieUtils.setCookie(req, resp, TT_TOKEN, uuid, 30 * 60);
     return uuid;
   }
+  */
+
 
   @Override
   public String selByToken(String token) {
