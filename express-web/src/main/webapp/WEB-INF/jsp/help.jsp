@@ -32,12 +32,12 @@ $(function(){
                 <a href="">加入收藏</a>
             </div>
             <ul class="clearfix">
-                <li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
+                <li><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/order">我的全民</a></li>
                 <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>12</span></a></li>
                 <li><a href="">网站地图</a></li>
-                <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
-                <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
+                <li class="now"><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
+                <li class="now"><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
             </ul>
         </div>
     </div>
@@ -171,4 +171,10 @@ $(function(){
 </div>
 <!--底部-->
 </body>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/1.12.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.min.js"></script>
 </html>

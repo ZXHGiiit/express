@@ -8,6 +8,58 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
+
+<script>
+    function register(){
+        var email = $("#email").val();
+        var password = $("#password").val();
+        var checkcode = $("#checkcode").val();
+        if(email == "" || password == "" || checkcode == ""){
+            alert("注册项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type : "POST",
+            url : "<%=request.getContextPath()%>/user/register",
+            data : {
+                "email":email,
+                "password":password,
+            },
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success : function(data) {
+                alter("注册成功！");
+            }
+        });
+    }
+
+
+    function login(){
+        var account = $("#account").val();
+        var password = $("#passwordLogin").val();
+        if(account == "" || password == ""){
+            alert("登录名或密码不能为空");
+            return;
+        }
+
+        $.ajax({
+            type : "POST",
+            url : "<%=request.getContextPath()%>/user/login",
+            data : {
+                "account":account,
+                "password":password,
+            },
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success : function(data) {
+                alter("登陆成功！");
+            }
+        });
+    }
+</script>
+
+
 </head>
 
 <body>
@@ -23,7 +75,7 @@
                 <a href="">加入收藏</a>
             </div>
             <ul class="clearfix">
-                <li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
+                <li><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/order">我的全民</a></li>
                 <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>12</span></a></li>
                 <li><a href="">网站地图</a></li>
@@ -48,15 +100,15 @@
         	<ul>
             	<li>
                 	<span>电子邮箱：</span>
-                    <input name="" type="text" placeholder="请输入常用邮箱，用于找回密码">
+                    <input name="email" type="text" id="email" placeholder="请输入常用邮箱，用于找回密码">
                 </li>
                 <li>
                 	<span>密码：</span>
-                    <input name="" type="text" placeholder="6-16个字符">
+                    <input name="password" type="password" id="password" placeholder="6-16个字符">
                 </li>
                 <li>
                 	<span>确认密码：</span>
-                    <input name="" type="text" placeholder="和密码一致">
+                    <input name="password" type="password" placeholder="和密码一致">
                 </li>
                 <li>
                 	<span>验证码：</span>
@@ -64,12 +116,12 @@
                     <a href="" class="yzm">获取验证码</a>
                 </li>
                 <li>
-                	<input name="" class="check" type="checkbox" value="" checked="checked">
+                	<input name="checkcode" class="check" type="checkbox" value="" checked="checked">
                     已阅读
                     <a href="">找物流网上服务协议</a>
                 </li>
                 <li class="tijiao">
-                	<a href="" class="submit">注册</a>
+                	 <button type="button" class="submit" onclick="register()">注册</button>
                 </li>
                 
             </ul>
@@ -87,14 +139,14 @@
         	<ul>
             	<li>
                 	<span>用户名：</span>
-                    <input name="" type="text" placeholder="用户名/密码">
+                    <input name="account" id="account" type="text" placeholder="账号/邮箱">
                 </li>
                 <li>
                 	<span>密码：</span>
-                    <input name="" type="text" placeholder="6-16个字符">
+                    <input name="password" id="passwordLogin"  type="password" placeholder="6-16个字符">
                 </li>
                 <li class="tijiao">
-                	<a href="" class="submit">登录</a>
+                	<button type="button" class="submit" onclick="login()">登陆</button>
                 </li>
                 <li>
                 	<p>
@@ -182,4 +234,10 @@
 </div>
 <!--底部-->
 </body>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/1.12.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.min.js"></script>
 </html>
