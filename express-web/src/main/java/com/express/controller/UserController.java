@@ -25,7 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  * Created by xinghang on 17/9/28.
  */
 
-@Controller("/user")
+@Controller
+@RequestMapping("/user")
 public class UserController {
   private Log LOG = LogFactory.getLog(UserController.class);
 

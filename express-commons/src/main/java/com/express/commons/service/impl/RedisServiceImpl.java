@@ -3,7 +3,7 @@ package com.express.commons.service.impl;
 import com.google.common.collect.Lists;
 
 import com.express.commons.service.RedisService;
-import com.express.commons.util.JsonUtils;
+import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RedisClusterPoolClient;
 
 import org.apache.commons.logging.Log;
@@ -70,7 +70,7 @@ public class RedisServiceImpl implements RedisService {
     key = area.trim() + key.trim();
     try {
       RedisClusterPoolClient.set(RedisClusterPoolClient.VERSION + key,
-        JsonUtils.objectToJson(obj));
+        JacksonUtils.toJson(obj));
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
     }
@@ -87,7 +87,7 @@ public class RedisServiceImpl implements RedisService {
     try {
       RedisClusterPoolClient.setex(
         RedisClusterPoolClient.VERSION + key, expireTime,
-        JsonUtils.objectToJson(obj));
+              JacksonUtils.toJson(obj));
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
     }
@@ -131,7 +131,7 @@ public class RedisServiceImpl implements RedisService {
         RedisClusterPoolClient.get(RedisClusterPoolClient.VERSION
           + key);
       if (value != null) {
-        return JsonUtils.jsonToPojo(value, clazz);
+        return JacksonUtils.jsonToPojo(value, clazz);
       }
       return null;
     } catch (Exception e) {
@@ -152,7 +152,7 @@ public class RedisServiceImpl implements RedisService {
 
       List<T> result = Lists.newArrayListWithExpectedSize(list.size());
       for (String string : list) {
-        result.add(JsonUtils.jsonToPojo(string, clazz));
+        result.add(JacksonUtils.jsonToPojo(string, clazz));
       }
 
       return result;

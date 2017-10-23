@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 @Controller
+@RequestMapping("/demo")
 public class DemoController {
   private Log LOG = LogFactory.getLog(DemoController.class);
 
