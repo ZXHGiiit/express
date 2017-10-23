@@ -16,7 +16,7 @@
        default-autowire="byName">
     <!-- Spring只扫描service包,controller交给SpringMVC扫描,如果Sprign全扫描会出现声明事务无法回滚问题.父子容器问题.自动注入后导致优先变高 -->
     <context:component-scan
-            base-package="com.express.service,com.express.dao,com.express.commons.service"></context:component-scan>
+            base-package="com.express.service,com.express.dao,com.express.commons.service,com.express.interceptor"></context:component-scan>
     <!-- 软编码:加载属性文件 -->
     <context:property-placeholder location="classpath:*.properties"/>
     <!-- 设置数据源 -->
@@ -33,7 +33,7 @@
     </bean>
     <!-- 扫描器 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="cn.ego.*.mapper"></property>
+        <property name="basePackage" value="com.express.dao"></property>
         <property name="sqlSessionFactoryBeanName" value="mybatisFactory"></property>
     </bean>
     <!-- 事务管理器 -->
@@ -51,7 +51,7 @@
     </tx:advice>
     <!-- aop切面 -->
     <aop:config>
-        <aop:pointcut expression="execution(* cn.ego.*.service.impl.*.*(..))" id="mypointer"/>
+        <aop:pointcut expression="execution(* com.*.service.impl.*.*(..))" id="mypointer"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="mypointer"/>
     </aop:config>
 </beans>
