@@ -18,6 +18,85 @@ $(function(){
 		$(this).parent("li").siblings("li").find(".erji").css("display","none");
 	});
 })
+
+function addUser(){
+    var userId = $("#userId").val();
+    if(userId == ""){
+        alert("UserId must be filled!");
+        return;
+    }
+    $.ajax({
+        type : "POST",
+        url : "<%=request.getContextPath()%>/dialer/whitelist/adduser",
+        data : {
+            "userId":userId
+        },
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+            if(null != data && "" != data){
+                $('#popupcontent').append('添加成功，结果如下');
+                $('#popupcontent').append('<div>'+'userId='+data.userId+', account='+data.account+', userName='+data.userName+', virtualNumber='+data.lvn+', result='+data.result+'</div>');
+                $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
+            } else {
+                $('#popupcontent').append('添加失败');
+                $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
+            }
+
+        },
+        error : function(data) {
+            $('#popupcontent').append('添加失败');
+            $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
+        }
+    });
+}
+
+function listOrder() {
+    $.ajax({
+        type: "GET",
+        url : "<%=request.getContextPath()%>/order/listOrder",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            console.info(data.finishOrders);
+            console.info(data.doingOrders);
+            $("#contentTable").empty();
+            if(null != data && "" != data){
+                $('#person_h').append('<span>个人账单</span>');
+                $('#person_rmain').append('<strong>进行中</strong>');
+                if(data.doingOrders != null) {
+                    $('#person_rmain').append('<ul>');
+                    for(var i = 0;i < data.doingOrders.length; i++) {
+                        $('#person_rmain').append('<li><span>' + data.doingOrders[i].createTime + '<span></li>');
+                    }
+                    $('#person_rmain').append('</ul>');
+                }
+                $('#person_rmain').append('<strong>已完成</strong>');
+                if(data.finishOrders != null) {
+                    $('#person_rmain').append('<ul>');
+                    for(var i = 0;i < data.finishOrders.length; i++) {
+                        $('#person_rmain').append('<li>' + data.finishOrders[i] + '</li>');
+                    }
+                    $('#person_rmain').append('</ul>');
+                }
+
+            } else {
+                $('#person_h').append('<span>个人账单</span>');
+                $('#person_rmain').append('<strong>进行中</strong>');
+                $('#person_rmain').append('<strong>已完成</strong>');
+            }
+
+        },
+        error : function(data) {
+            $('#popupcontent').append('添加失败');
+            $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
+        }
+
+    });
+}
+
+
 </script>
 </head>
 
@@ -28,8 +107,7 @@ $(function(){
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
-                <a href="<%=request.getContextPath()%>/login">登录</a>
-                <a href="<%=request.getContextPath()%>/login">注册</a>
+                <a href="<%=request.getContextPath()%>/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
@@ -69,7 +147,7 @@ $(function(){
                     <ul class="erji">
                     	<li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">我的订单</a></strong>
+                            <strong> <a onclick="listOrder()">我的订单</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
@@ -100,70 +178,9 @@ $(function(){
             </ul>
         </div>
         <div class="person_r">
-        	<div class="person_h">
-            	<span>个人资料设置</span>
+        	<div id="person_h" class="person_h">
             </div>
-            <div class="person_rmain">
-            	<strong>帐户信息</strong>
-                <ul>
-                	<li>
-                    	<span>登陆帐户：</span>
-                        <em>2817820247@qq.com</em>
-                    </li>
-                    <li>
-                    	<span>所属公司：</span>
-                        <a href="">请填写公司资料申请成为供应商</a>
-                    </li>
-                    <!--<li class="jifen">
-                    	<span>我的积分：</span>
-                        <i>0分</i>|<a href="">礼品兑换</a>|<a href="">如何获取积分</a>
-                    </li>-->
-                </ul>
-                <div class="space_hx">&nbsp;</div>
-                <strong>安全信息</strong>
-                <ul class="p_news">
-                	<!--<li>
-                    	<span>绑定手机：</span>
-                        <em>18825089267</em>
-                        <a href="" class="anniu">修改</a>
-                    </li>-->
-                    <li>
-                    	<span>绑定邮箱：</span>
-                        <em>2817820247@qq.com</em>
-                        <a href="" class="anniu">修改</a>
-                    </li>
-                    <li>
-                    	<span>密码强度：</span>
-                        <em><img src="Assets/images/icon16.jpg"/></em>
-                        <a href="" class="anniu">修改密码</a>
-                    </li>
-                </ul>
-                <div class="space_hx">&nbsp;</div>
-                <strong>基本信息</strong>
-                <form action="" method="post">
-                <ul>
-                	<li>
-                    	<span>姓名：</span>
-                        <input name="" type="text">
-                    </li>
-                    <li>
-                    	<span>手机：</span>
-                        <input name="" type="text">
-                    </li>
-                    <li>
-                    	<span>固定电话：</span>
-                        <input name="" type="text">
-                    </li>
-                    <li>
-                    	<span>发货地址：</span>
-                        <input name="" type="text">
-                        <input name="" type="text">
-                    </li>
-                    <li>
-                    	<a href="" class="submit">保存</a>
-                    </li>
-                </ul>
-                </form>
+            <div id="person_rmain" class="person_rmain">
             </div>
         </div>
     </div>
