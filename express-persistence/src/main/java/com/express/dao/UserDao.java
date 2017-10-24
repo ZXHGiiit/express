@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Select;
  * Created by xinghang on 17/9/28.
  */
 public interface UserDao {
-  String TABLE = "user";
-  String COLL_ALL = "id, account, password, name, phone, email, age, isVip";//待定
+  public static final String TABLE = "user";
+  public static final String COLL_ALL = "id, account, password, name, phone, email, age, is_vip";//待定
 
   @Select(" select "
     + COLL_ALL

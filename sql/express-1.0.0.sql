@@ -14,9 +14,17 @@ use express
   `bank_account` bigint(20) DEFAULT NULL,
   `address` varchar(20) COLLATE utf8_bin DEFAULT NULL,
   `nick_name` varchar(20) COLLATE utf8_bin NOT NULL,
+  `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+  `update_time`      timestamp       not null,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`account`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+    DROP TRIGGER IF EXISTS `update_user_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_user_trigger` BEFORE UPDATE ON `user`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
 
 
 
@@ -26,14 +34,23 @@ create table route(
     `start_address` varchar(20)     not null,
     `end_address`   varchar(20)     not null,
     `price`         bigint(10)      not null,
-    `start_time`    timestamp       not null,
-    `end_time`      timestamp       not null,
+    `status`        varchar(20)     not null default 'ready',
+    `start_time`    bigint(20)      not null default '0',
+    `end_time`      bigint(20)      not null default '0',
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`      timestamp       not null,
     primary key (`id`),
     key `user_id` (`user_id`)
 )
     engine = InnoDB
     default charset = utf8
     collate = utf8_bin;
+    DROP TRIGGER IF EXISTS `update_route_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_route_trigger` BEFORE UPDATE ON `route`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
 
 create table orders(
     `auto_id`       bigint(20)      not null    AUTO_INCREMENT,
@@ -50,6 +67,10 @@ create table orders(
     `goods_name`    varchar(20)     not null,
     `goods_weight`  bigint(10)      not null,
     `is_finish`     TINYINT(1)      not null default '0',
+    `start_time`    bigint(20)      not null default '0',
+    `end_time`      bigint(20)      not null default '0',
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`      timestamp       not null,
     primary key (`auto_id`),
     key `user_id` (`user_id`),
     key `route_id` (`route_id`),
@@ -58,3 +79,37 @@ create table orders(
     engine = InnoDB
     default charset = utf8
     collate = utf8_bin;
+
+    DROP TRIGGER IF EXISTS `update_orders_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_orders_trigger` BEFORE UPDATE ON `orders`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
+
+
+
+create table address (
+    `id`        bigint(20)      not null,
+    `user_id`   bigint(20)      not null,
+    `address`   varchar(20)     not null,
+    `is_use`    tinyint(1)      not null,
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`      timestamp       not null,
+    primary key(`id`),
+    key `user_id`(`user_id`)
+)
+    engine = InnoDB
+    default charset = utf8
+    collate = utf8_bin;
+
+    DROP TRIGGER IF EXISTS `update_address_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_address_trigger` BEFORE UPDATE ON `address`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
+
+create

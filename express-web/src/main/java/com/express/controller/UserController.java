@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,18 +43,23 @@ public class UserController {
   private UserDao userDao;
 
   @RequestMapping("/login")
-  @ResponseBody
-  public String login(String account, String password, HttpServletRequest req, HttpServletResponse
+  public ModelAndView login(String account, String password, HttpServletRequest req, HttpServletResponse
     resp) {
     //String token = userService.login(account, password, req, resp);
     User user = userService.login(account, password, req, resp);
     if (user == null) {
       LOG.error("UserController.login.ERROR.token is null");
-      return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_TOKEN);
+      ModelAndView mdv = new ModelAndView("login");
+      mdv.addObject("msg", "用户名或密码错误");
+      return mdv;
     } else {
+      LOG.info("UserController.login.user:" + user.toString()) ;
       //将用户登录信息保存到holder中
       holder.setUser(user);
-      return RetJacksonUtil.resultOk();
+      holder.setUserId(user.getId());
+      ModelAndView mdv = new ModelAndView("index");
+      mdv.addObject("user", user);
+      return mdv;
     }
   }
 

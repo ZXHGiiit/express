@@ -96,4 +96,20 @@ public class User {
   public void setId(long id) {
     this.id = id;
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "name='" + name + '\'' +
+            ", account='" + account + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", isVip=" + isVip +
+            ", age=" + age +
+            ", phone=" + phone +
+            ", create_time=" + create_time +
+            ", update_time=" + update_time +
+            ", id=" + id +
+            '}';
+  }
 }
