@@ -60,7 +60,7 @@ $(function(){
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">公司信息</a></strong>
+                            <strong><a href="">认证信息</a></strong>
                         </li>
                     </ul>
                 </li>
