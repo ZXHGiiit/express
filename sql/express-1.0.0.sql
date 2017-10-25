@@ -67,6 +67,8 @@ create table orders(
     `goods_name`    varchar(20)     not null,
     `goods_weight`  bigint(10)      not null,
     `is_finish`     TINYINT(1)      not null default '0',
+    `score`         tinyint(1),
+    `comment`       varchar(100),
     `start_time`    bigint(20)      not null default '0',
     `end_time`      bigint(20)      not null default '0',
     `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
@@ -112,4 +114,27 @@ create table address (
     DELIMITER ;
 
 
-create
+create table task (
+    `id`        bigint(20)      not null,
+    `user_id`   bigint(20)      not null,
+    `route_id`  bigint(20)      not null,
+    `order_id`  bigint(20)      not null,
+    `is_finish` tinyint(1)      not null,
+    `route`     varchar(20)     not null,
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`      timestamp       not null,
+     primary key(`id`),
+     key `user_id`(`user_id`),
+     key `route_id`(`route_id`),
+     key `order_id`(`order_id`)
+)
+    engine = InnoDB
+    default charset = utf8
+    collate = utf8_bin;
+
+    DROP TRIGGER IF EXISTS `update_task_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_task_trigger` BEFORE UPDATE ON `task`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
