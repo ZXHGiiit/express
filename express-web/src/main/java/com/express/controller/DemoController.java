@@ -1,6 +1,7 @@
 package com.express.controller;
 
 import com.express.commons.service.RedisService;
+import com.express.dao.TestDao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +20,8 @@ public class DemoController {
   private Log LOG = LogFactory.getLog(DemoController.class);
 
   @Autowired
+  private TestDao testDao;
+  @Autowired
   private RedisService redisService;
 
   @RequestMapping("/index")
@@ -35,6 +38,16 @@ public class DemoController {
     String result = redisService.get("test", "name");
     LOG.info("DemoController.redisResult = " + result);
     return "hello";
+  }
+
+
+  @RequestMapping("/test")
+  @ResponseBody
+  public String test() {
+    LOG.info("DemoController.hello==============>");
+    int result = testDao.selectCount();
+    LOG.info("DemoController.selectCountFromUSer: " + result);
+    return "zhengzhou";
   }
 
 }

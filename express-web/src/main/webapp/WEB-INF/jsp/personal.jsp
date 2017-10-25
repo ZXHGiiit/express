@@ -19,37 +19,6 @@ $(function(){
 	});
 })
 
-function addUser(){
-    var userId = $("#userId").val();
-    if(userId == ""){
-        alert("UserId must be filled!");
-        return;
-    }
-    $.ajax({
-        type : "POST",
-        url : "<%=request.getContextPath()%>/dialer/whitelist/adduser",
-        data : {
-            "userId":userId
-        },
-        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-        dataType: "json",
-        success : function(data) {
-            if(null != data && "" != data){
-                $('#popupcontent').append('添加成功，结果如下');
-                $('#popupcontent').append('<div>'+'userId='+data.userId+', account='+data.account+', userName='+data.userName+', virtualNumber='+data.lvn+', result='+data.result+'</div>');
-                $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
-            } else {
-                $('#popupcontent').append('添加失败');
-                $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
-            }
-
-        },
-        error : function(data) {
-            $('#popupcontent').append('添加失败');
-            $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
-        }
-    });
-}
 
 function listOrder() {
     $.ajax({
@@ -151,7 +120,7 @@ function listOrder() {
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">我的账单</a></strong>
+                            <strong><a href="">我的接单</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
@@ -183,6 +152,7 @@ function listOrder() {
             <div id="person_rmain" class="person_rmain">
             </div>
         </div>
+
     </div>
     <!--订单中心-->
     <div class="space_hx">&nbsp;</div>

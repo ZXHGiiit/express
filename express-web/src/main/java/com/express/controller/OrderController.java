@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,8 @@ public class OrderController {
         Map<String, Object> result = orderService.selectAllByUserId(userId);
         LOG.info("OrderController.listOrder.result :" + result.toString());
         String resultJson = JacksonUtils.toJson(result);
+        Date date = new Date();
+        long time = date.getTime();
         return resultJson;
     }
 
