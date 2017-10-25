@@ -8,7 +8,7 @@ public class Route {
     private String startAddress;
     private String endAddress;
     private double price;
-    private String status;//reday, doing, done, cancle,
+    private String status;//RouteStatusEnum
     private long startTime;
     private long endTime;
     private Date createTime;
