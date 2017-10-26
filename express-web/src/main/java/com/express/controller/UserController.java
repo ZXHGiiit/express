@@ -3,6 +3,7 @@ package com.express.controller;
 import com.google.common.base.Strings;
 
 import com.express.commons.constant.ErrorCodeEnum;
+import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.commons.vo.ExpressResult;
 import com.express.dao.UserDao;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -149,4 +152,22 @@ public class UserController {
     int result = userDao.test(user);
     return RetJacksonUtil.resultOk();
   }
+
+  /**
+   * 获取认证用户的评分相关信息
+   * 通过userId--》task--》orderId--》order--》score
+   * 每一个task对应一个order
+   * @return
+   */
+  @RequestMapping("/score")
+  @ResponseBody
+  public String scoreInfo() {
+    long userId = holder.getUserId();
+    Map<String, Object> info = userService.commentInfo(userId);
+    LOG.info("UserController.getUserScoreInfo : " + info);
+    String result = JacksonUtils.toJson(info);
+    return result;
+  }
+
+
 }

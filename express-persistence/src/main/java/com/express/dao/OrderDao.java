@@ -1,7 +1,10 @@
 package com.express.dao;
 
 import com.express.domain.Order;
+import com.express.support.MybatisExtendedLanguageDriver;
+import com.sun.tracing.dtrace.ProviderAttributes;
 
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,5 +20,22 @@ public interface OrderDao {
         + TABLE
     )
     List<Order> selectAllByUserId(@Param("userId") long userId);
+
+    /**
+     * 通过认证用户获取task--》orderId--》order--》
+     * @param orderIds
+     * @return
+     */
+    @Lang(MybatisExtendedLanguageDriver.class)
+    @Select(" select "
+        + COLL_ALL
+        + " from "
+        + TABLE
+        + " where "
+        + " id in (#{orderId})"
+        )
+    List<Order> selectAllByOrderIds(@Param("orderId") List<Long> orderIds);
+
+
 
 }

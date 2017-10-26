@@ -15,7 +15,10 @@ public class Order {
     private long takePhone;
     private String goodsName;
     private long goodsWeight;
-    private boolean isFinish;
+    private boolean isFinish;//该订单是否已经完成
+    private boolean isComment;//用户是否评论
+    private int score;
+    private String comment;
     private long startTime;
     private long endTime;
     private Date createTime;
@@ -85,6 +88,14 @@ public class Order {
         this.takeName = takeName;
     }
 
+    public boolean isComment() {
+        return isComment;
+    }
+
+    public void setComment(boolean comment) {
+        isComment = comment;
+    }
+
     public long getSendPhone() {
         return sendPhone;
     }
@@ -123,6 +134,22 @@ public class Order {
 
     public void setFinish(boolean finish) {
         isFinish = finish;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public long getStartTime() {
@@ -173,6 +200,9 @@ public class Order {
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsWeight=" + goodsWeight +
                 ", isFinish=" + isFinish +
+                ", isComment=" + isComment +
+                ", score=" + score +
+                ", comment='" + comment + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", createTime=" + createTime +

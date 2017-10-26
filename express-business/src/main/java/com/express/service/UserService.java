@@ -2,6 +2,8 @@ package com.express.service;
 
 import com.express.domain.User;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,4 +22,6 @@ public interface UserService {
   int createUser(User user);
 
   User testFilter(String userName, String password);
+
+  Map<String, Object> commentInfo(long userId);
 }
