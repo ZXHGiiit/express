@@ -124,7 +124,7 @@ function listOrder() {
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">代收货款</a></strong>
+                            <strong><a href="">我的评分</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
@@ -175,8 +175,5 @@ function listOrder() {
 </body>
 
 <!-- jQuery -->
-<script src="//cdn.bootcss.com/jquery/1.12.1/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="http://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.min.js"></script>
+<script src="Assets/js/jquery-1.8.3.min.js"></script>
 </html>
