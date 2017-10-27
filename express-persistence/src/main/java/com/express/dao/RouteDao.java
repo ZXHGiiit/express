@@ -2,6 +2,7 @@ package com.express.dao;
 
 import com.express.domain.Route;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -24,4 +25,26 @@ public interface RouteDao {
     List<Route> selectAllByAdd(@Param("startAdd") String startAdd,
                                @Param("endAdd") String endAdd);
 
+    @Select(" select "
+        + COLL_ALL
+        + " from "
+        + TABLE
+        + " where "
+        + " user_id = #{userId} "
+        + " and "
+        + " status <> 'cancle'")
+    List<Route> selectRouteByUserId(@Param("userId") long userId);
+
+    @Insert(" insert into"
+        + TABLE
+        + " set "
+        + " user_id = #{userId}, "
+        + " start_address = #{startAddress}, "
+        + " end_address = #{endAddress}, "
+        + " price = #{price}, "
+        + " status = #{status}, "
+        + " start_time = #{startTime}, "
+        + " end_time = #{endTime}, "
+    )
+    int addRoute(Route route);
 }
