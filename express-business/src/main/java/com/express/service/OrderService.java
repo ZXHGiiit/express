@@ -9,4 +9,10 @@ public interface OrderService {
     Map<String, Object> selectAllByUserId(long userId);
 
     int addOrder(Order order);
+
+    int addComment(int score, String comment, long orderId);
+
+    Order selectByOrderId(long orderId);
+
+    int updateFinish(boolean isFinish, long orderId);
 }

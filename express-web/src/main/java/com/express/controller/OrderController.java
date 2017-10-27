@@ -60,6 +60,8 @@ public class OrderController {
      * 创建订单，会一起创建运营商用户的task，
      * @return
      */
+    @RequestMapping("/addOrder")
+    @ResponseBody
     public String addOrder(@RequestParam("order") Order order) {
         if(order == null) {
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
@@ -87,5 +89,29 @@ public class OrderController {
         return RetJacksonUtil.resultOk();
     }
 
-
+    /**
+     * 添加评论
+     * @param score
+     * @param comment
+     * @return
+     */
+    @RequestMapping("/addComment")
+    @ResponseBody
+    public String addComment(@RequestParam("score") int score,
+                             @RequestParam("comment") String comment,
+                             @RequestParam("orderId") long orderId) {
+        //需要检验该order是否是属于该用户的
+        long userId = holder.getUserId();
+        Order order = orderService.selectByOrderId(orderId);
+        if(order.getUserId() != userId) {
+            LOG.error("OrderController.addComment.the order is not belong to hostUser");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_AUTH);
+        }
+        int result = orderService.addComment(score, comment, orderId);
+        if(result != 1) {
+            LOG.error("OrderController.addComment.ERROR");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
+        }
+        return RetJacksonUtil.resultOk();
+    }
 }
