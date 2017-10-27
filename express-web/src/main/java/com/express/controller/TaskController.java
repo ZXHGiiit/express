@@ -1,9 +1,11 @@
 package com.express.controller;
 
+import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.domain.Task;
 import com.express.interceptor.HostHolder;
+import com.express.service.OrderService;
 import com.express.service.TaskService;
 
 import org.apache.commons.logging.Log;
@@ -11,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -26,6 +29,8 @@ public class TaskController {
     private static final Log LOG = LogFactory.getLog(TaskController.class);
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private HostHolder holder;
     /**
@@ -68,5 +73,37 @@ public class TaskController {
         Map<String, List<Task>> result = taskService.selectAllByUserId(userId);
         LOG.info("TaskController.listTasks.result : " + result.toString());
         return JacksonUtils.toJson(result);
+    }
+
+    /**
+     * 运营商用户更新任务，
+     * 对应的order也要实时更新
+     * 这里虽然数据有冗余，但是对业务需求有优化
+     * 若更新一个成功，更新另一个失败，就设计到事务的一致性
+     * @return
+     */
+    @RequestMapping("/update/finish")
+    @ResponseBody
+    public String updateFinish(@RequestParam("isFinish") boolean isFinish,
+                               @RequestParam("taksId") long taskId) {
+        //先判断该task是否属于该用户
+        long userId = holder.getUserId();
+        Task task = taskService.selectByTaskId(taskId);
+        if(userId != task.getUserId()) {
+            LOG.error("TaskController.updateFinish.the task is not belong to hostUser！！！");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_AUTH);
+        }
+
+        //更新task
+        int resultTask = taskService.updateFinish(isFinish, taskId);
+
+        //更新对应的order
+        int resultOrder = orderService.updateFinish(isFinish, task.getOrderId());
+
+        if(resultOrder != 1 || resultTask != 1) {
+            LOG.error("TaskController.updateFinish.ERROR");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
+        }
+        return RetJacksonUtil.resultOk();
     }
 }

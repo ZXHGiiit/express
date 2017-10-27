@@ -61,4 +61,13 @@ public interface TaskDao {
         + " id = #{taskId}")
     int updateRoute(@Param("route") String route,
                     @Param("taskId") long taskId);
+
+
+    @Select(" select "
+        + COLL_ALL
+        + " from "
+        + TABLE
+        + " where "
+        + " task_id = #{taskId}")
+    Task selectByTaskId(@Param("taskId") long taskId);
 }

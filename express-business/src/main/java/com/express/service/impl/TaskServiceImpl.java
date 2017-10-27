@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,35 @@ public class TaskServiceImpl implements TaskService {
             return -1;
         }
         return taskDao.addTask(task);
+    }
+
+    @Override
+    public int updateFinish(boolean isFinish, long taskId) {
+        int result = taskDao.updateFinish(isFinish, taskId);
+        return result;
+    }
+
+    @Override
+    public int updateAllFinish(boolean isFinish, List<Long> taskIds) {
+        if(CollectionUtils.isEmpty(taskIds)) {
+            LOG.error("TaskServiceImpl.updateAllFinish.taskIds is NULL!!!");
+            return -1;
+        }
+        return taskDao.updateAllFinish(isFinish, taskIds);
+    }
+
+    @Override
+    public int updateRoute(String route, long routeId) {
+        return taskDao.updateRoute(route, routeId);
+    }
+
+    @Override
+    public Task selectByTaskId(long taskId) {
+        Task task = taskDao.selectByTaskId(taskId);
+        if(task == null) {
+            return new Task();
+        }
+        return task;
     }
 
 }
