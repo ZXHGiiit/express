@@ -182,6 +182,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUser(long userId) {
-    return null;
+    return userDao.selectByUserId(userId);
   }
 }
