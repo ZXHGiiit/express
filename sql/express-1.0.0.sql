@@ -26,6 +26,12 @@ use express
     //
     DELIMITER ;
 
+    DROP TRIGGER IF EXISTS `insert_user_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_user_trigger` BEFORE INSERT ON `user`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
 
 
 create table route(
@@ -51,6 +57,14 @@ create table route(
      FOR EACH ROW SET NEW.`update_time` = NOW()
     //
     DELIMITER ;
+
+    DROP TRIGGER IF EXISTS `insert_route_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_route_trigger` BEFORE INSERT ON `route`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
 
 create table orders(
     `auto_id`       bigint(20)      not null    AUTO_INCREMENT,
@@ -89,7 +103,12 @@ create table orders(
     //
     DELIMITER ;
 
-
+    DROP TRIGGER IF EXISTS `insert_orders_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_orders_trigger` BEFORE INSERT ON `orders`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
 
 
 create table address (
@@ -110,6 +129,13 @@ create table address (
     DELIMITER //
     CREATE TRIGGER `update_address_trigger` BEFORE UPDATE ON `address`
      FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
+    DROP TRIGGER IF EXISTS `insert_address_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_address_trigger` BEFORE INSERT ON `address`
+    FOR EACH ROW SET NEW.`update_time` = NOW()
     //
     DELIMITER ;
 
@@ -135,6 +161,13 @@ create table task (
     DROP TRIGGER IF EXISTS `update_task_trigger`;
     DELIMITER //
     CREATE TRIGGER `update_task_trigger` BEFORE UPDATE ON `task`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
+    DROP TRIGGER IF EXISTS `insert_task_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_task_trigger` BEFORE INSERT ON `task`
      FOR EACH ROW SET NEW.`update_time` = NOW()
     //
     DELIMITER ;
