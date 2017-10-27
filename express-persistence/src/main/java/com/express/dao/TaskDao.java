@@ -1,8 +1,10 @@
 package com.express.dao;
 
 import com.express.domain.Task;
+import com.express.support.MybatisExtendedLanguageDriver;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -40,6 +42,16 @@ public interface TaskDao {
         + " id = #{taskId}")
     int updateFinish(@Param("isFinish") boolean isFinish,
                      @Param("taskId") long taskId);
+
+    @Lang(MybatisExtendedLanguageDriver.class)
+    @Update(" update "
+            + TABLE
+            + " set "
+            + " is_finish = #{isFinish}"
+            + " where "
+            + " id in (#{taskId})")
+    int updateAllFinish(@Param("isFinish") boolean isFinish,
+                     @Param("taskIds") List<Long> taskIds);
 
     @Update(" update "
         + TABLE
