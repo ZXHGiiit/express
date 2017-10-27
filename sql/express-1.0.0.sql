@@ -112,7 +112,7 @@ create table orders(
 
 
 create table address (
-    `id`        bigint(20)      not null,
+    `id`        bigint(20)      not null AUTO_INCREMENT ,
     `user_id`   bigint(20)      not null,
     `address`   varchar(20)     not null,
     `is_use`    tinyint(1)      not null,
@@ -141,7 +141,7 @@ create table address (
 
 
 create table task (
-    `id`        bigint(20)      not null,
+    `id`        bigint(20)      not null AUTO_INCREMENT ,
     `user_id`   bigint(20)      not null,
     `route_id`  bigint(20)      not null,
     `order_id`  bigint(20)      not null,
