@@ -142,6 +142,7 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public Map<String, Object> commentInfo(long userId) {
+    //获取承运商信息
     List<Task> tasks = taskDao.selectAllByUserId(userId);
     if(tasks == null) {
       return new HashMap<String, Object>();
@@ -177,5 +178,10 @@ public class UserServiceImpl implements UserService {
     result.put("countOfComment", countOfComment);
     result.put("avgScore", avgScore);
     return result;
+  }
+
+  @Override
+  public User getUser(long userId) {
+    return null;
   }
 }

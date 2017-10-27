@@ -24,4 +24,6 @@ public interface UserService {
   User testFilter(String userName, String password);
 
   Map<String, Object> commentInfo(long userId);
+
+  User getUser(long userId);
 }

@@ -11,7 +11,8 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface UserDao {
   public static final String TABLE = "user";
-  public static final String COLL_ALL = "id, account, password, name, phone, email, age, is_vip";//待定
+  public static final String COLL_ALL = "id, account, password, name, id_number, email, is_vip," +
+          "age, phone, post_code, bank_account, address, nick_name, motto, create_time, update_time";
 
   @Select(" select "
     + COLL_ALL
@@ -44,4 +45,12 @@ public interface UserDao {
     + " password = #{password}"
   )
   int test(User user);
+
+  @Select(" select "
+    + COLL_ALL
+    + " from "
+    + TABLE
+    + " where "
+    + " userId = #{userId}")
+  User selectByUserId(@Param("userId") long userId);
 }
