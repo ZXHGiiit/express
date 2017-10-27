@@ -56,7 +56,7 @@ public interface RouteDao {
         + " from "
         + TABLE
         + " where "
-        + " route_id = #{routeId}"
+        + " id = #{routeId}"
     )
     Route selectByRouteId(@Param("routeId") long routeId);
 }

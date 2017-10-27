@@ -63,12 +63,33 @@ public class OrderController {
      * 创建订单，会一起创建运营商用户的task，
      * @return
      */
-    @RequestMapping("/addOrder")
+    @RequestMapping("/createOrder")
     @ResponseBody
-    public String addOrder(@RequestParam("order") Order order) {
+    //public String createOrder(@RequestParam("order") Order order) {
+    public String createOrder() {
+        Order order = new Order();
         if(order == null) {
+            LOG.error("OrderController.createOrder.ERROR. Order is null!!!");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
         }
+        long userId = holder.getUserId();
+
+        //用于测试
+        order = new Order();
+        order.setGoodsName("手机");
+        order.setGoodsWeight(150);
+        order.setRouteId(1);
+        order.setSendPhone(13633843273l);
+        order.setTakePhone(15072722945l);
+        order.setSendAddress("郑州");
+        order.setTakeAddress("北京");
+        order.setSendName("周星航");
+        order.setTakeName("周星灿");
+        //用户测试
+
+
+
+
         //获取Route
         Route route = routeService.selectByRouteId(order.getRouteId());
         //获取对应的运营商用户
@@ -76,12 +97,15 @@ public class OrderController {
 
         //创建Order
         order.setId(IDUtils.getOrderId());
+        order.setUserId(userId);
         int resultOfAddOrder = orderService.addOrder(order);
 
         //创建task
         Task task = new Task();
         task.setUserId(routeUserId);
-        task.setRoute(task.getRoute() + "-" + order.getSendAddress());
+        //task.setRoute(task.getRoute() + "-" + order.getSendAddress());
+        //创建task的时候，不需要先获取route，因为是null。只有update的时候才先获取
+        task.setRoute("-" + order.getSendAddress());
         task.setRouteId(route.getId());
         task.setOrderId(order.getId());
         int resultOfAddTask = taskService.addTask(task);

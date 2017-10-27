@@ -43,7 +43,7 @@ public interface OrderDao {
     @Insert(" insert into "
         + TABLE
         + " set "
-        + " id = #{id}"
+        + " id = #{id},"
         + " user_id = #{userId},"
         + " route_id = #{routeId},"
         + " send_address = #{sendAddress},"
@@ -51,7 +51,7 @@ public interface OrderDao {
         + " send_name = #{sendName},"
         + " take_name = #{takeName},"
         + " send_phone = #{sendPhone},"
-        + " take_phone = #{take_phone},"
+        + " take_phone = #{takePhone},"
         + " goods_name = #{goodsName},"
         + " goods_weight = #{goodsWeight}"
     )
