@@ -33,7 +33,7 @@ public interface UserDao {
     + " password = #{password}, "
     + " phone = #{phone}, "
     + " email = #{email}, "
-    + " isVip = #{isVip}, "
+    + " is_vip = #{isVip}, "
     + " age = #{age} "
   )
   int add(User user);
