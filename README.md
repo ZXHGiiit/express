@@ -19,11 +19,12 @@
         /task/update/route      正常
 	结束任务Task
 	    一同结束order和task
-        /task/update/finish     待检测
+        /task/update/finish     正常
         
 	评论订单
+	    /order/addComment      正常
 	用户中心
-	    
+	    /user/score     正常
 
 ### db设计
     
