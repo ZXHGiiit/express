@@ -85,4 +85,9 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+    @Override
+    public Task selectByOrderId(long orderId) {
+        return taskDao.selectByOrderId(orderId);
+    }
+
 }

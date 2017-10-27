@@ -2,6 +2,7 @@ package com.express.util;
 
 import com.google.common.collect.Maps;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,8 @@ public class Test {
     List<Long> stuIds = stuMap.entrySet().stream().map(i -> i.getValue().getId()).collect
       (Collectors.toList());
     System.out.println(stuIds);
+    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
+    System.out.println(sdf.format(new Date()));
   }
 }
 

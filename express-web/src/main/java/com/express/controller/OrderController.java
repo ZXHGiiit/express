@@ -1,5 +1,7 @@
 package com.express.controller;
 
+import com.google.common.collect.Maps;
+
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.IDUtils;
 import com.express.commons.util.JacksonUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +106,7 @@ public class OrderController {
         //需要检验该order是否是属于该用户的
         long userId = holder.getUserId();
         Order order = orderService.selectByOrderId(orderId);
-        if(order.getUserId() != userId) {
+        if(order == null || order.getUserId() != userId) {
             LOG.error("OrderController.addComment.the order is not belong to hostUser");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_AUTH);
         }
@@ -113,5 +116,50 @@ public class OrderController {
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
         }
         return RetJacksonUtil.resultOk();
+    }
+
+    /**
+     * 通过订单查询订单详情，行程，时间
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("/getRoute")
+    @ResponseBody
+    public String getRoute(long orderId) {
+        Order order = orderService.selectByOrderId(orderId);
+        if(order == null) {
+            LOG.warn("OrderController.getRoute  Route is NULL");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.RETURN_NULL_ERROR);
+        }
+        Map<String, Object> info = Maps.newHashMap();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        long startTime = order.getStartTime();
+        boolean isFinish = order.isFinish();
+        info.put("startTime", sdf.format(new Date(startTime)));
+        info.put("isFinish", isFinish);
+        Task task = taskService.selectByOrderId(orderId);
+        if(task == null) {
+            LOG.error("OrderController.getRoute the order don't have task!!!");
+            return JacksonUtils.toJson(info);
+        }
+        String routeInfo = task.getRoute();
+        info.put("route", routeInfo);
+        if(isFinish) {
+            //若订单结束，就直接通过order中的updateTime来充当订单结束时间
+            Date endTime = order.getUpdateTime();
+            info.put("endTime", sdf.format(endTime));
+        } else {
+            //若订单未结束，则通过route中的endTime来充当预计结束时间
+            Route route = routeService.selectByRouteId(order.getRouteId());
+            if(route == null) {
+                LOG.error("OrderController.getRoute the order don't have route!!!");
+                return JacksonUtils.toJson(info);
+            }
+            long endTimeMay = route.getEndTime();
+            info.put("endTimeMay", sdf.format(new Date(endTimeMay).toString()));
+        }
+        String result = JacksonUtils.toJson(info);
+        LOG.info("OrderController.getRoute,info : " + result);
+        return result;
     }
 }

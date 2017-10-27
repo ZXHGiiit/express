@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
         if(CollectionUtils.isEmpty(orderIds)) {
             LOG.info("OrderServiceImpl.selectByOrderId.is Empty");
-            return new Order();
+            return null;
         }
         return orders.get(0);
     }

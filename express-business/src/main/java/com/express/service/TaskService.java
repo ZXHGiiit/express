@@ -17,4 +17,6 @@ public interface TaskService {
     int updateRoute(String route, long routeId);
 
     Task selectByTaskId(long taskId);
+
+    Task selectByOrderId(long orderId);
 }

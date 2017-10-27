@@ -70,4 +70,12 @@ public interface TaskDao {
         + " where "
         + " task_id = #{taskId}")
     Task selectByTaskId(@Param("taskId") long taskId);
+
+    @Select(" select "
+            + COLL_ALL
+            + " from "
+            + TABLE
+            + " where "
+            + " order_id = #{orderId}")
+    Task selectByOrderId(@Param("orderId") long orderId);
 }
