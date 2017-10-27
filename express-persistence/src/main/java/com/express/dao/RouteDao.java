@@ -37,16 +37,16 @@ public interface RouteDao {
         + " status <> 'cancle'")
     List<Route> selectRouteByUserId(@Param("userId") long userId);
 
-    @Insert(" insert into"
+    @Insert(" insert into "
         + TABLE
         + " set "
         + " user_id = #{userId}, "
         + " start_address = #{startAddress}, "
         + " end_address = #{endAddress}, "
         + " price = #{price}, "
-        + " status = #{status}, "
+        //+ " status = #{status}, "     //status默认是ready
         + " start_time = #{startTime}, "
-        + " end_time = #{endTime}, "
+        + " end_time = #{endTime}"
     )
     int addRoute(Route route);
 

@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.express.dao.OrderDao;
 import com.express.dao.TaskDao;
 import com.express.domain.Order;
+import com.express.domain.Route;
 import com.express.domain.Task;
 import com.express.service.TaskService;
 
@@ -72,8 +73,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public int updateRoute(String route, long routeId) {
-        return taskDao.updateRoute(route, routeId);
+    public int updateRoute(String route, long taskId) {
+        Task task = taskDao.selectByTaskId(taskId);
+        if(task == null) {
+            LOG.error("TaskServiceImpl.updateRoute. task is null. taskId = " + taskId);
+            return -1;
+        }
+        return taskDao.updateRoute(task.getRoute() + "-" + route, taskId);
     }
 
     @Override

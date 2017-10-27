@@ -14,7 +14,7 @@ public interface TaskService {
 
     int updateAllFinish(boolean isFinish, List<Long> taskIds);
 
-    int updateRoute(String route, long routeId);
+    int updateRoute(String route, long taskId);
 
     Task selectByTaskId(long taskId);
 

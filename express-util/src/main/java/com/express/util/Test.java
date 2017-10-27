@@ -26,6 +26,7 @@ public class Test {
     System.out.println(stuIds);
     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
     System.out.println(sdf.format(new Date()));
+    System.out.println(new Date().getTime());
   }
 }
 

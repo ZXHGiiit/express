@@ -44,7 +44,9 @@ public class RouteController {
      * @param endAdd
      * @return
      */
-    public String add(@RequestParam("startAdd") String startAdd,
+    @RequestMapping("/create")
+    @ResponseBody
+    public String createRoute(@RequestParam("startAdd") String startAdd,
                       @RequestParam("endAdd") String endAdd,
                       @RequestParam("price") double price,
                       @RequestParam("startTime") long startTime,

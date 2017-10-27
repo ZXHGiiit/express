@@ -68,7 +68,7 @@ public interface TaskDao {
         + " from "
         + TABLE
         + " where "
-        + " task_id = #{taskId}")
+        + " id = #{taskId}")
     Task selectByTaskId(@Param("taskId") long taskId);
 
     @Select(" select "

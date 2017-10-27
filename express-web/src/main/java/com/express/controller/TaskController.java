@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/tesk")
+@RequestMapping("/task")
 public class TaskController {
     private static final Log LOG = LogFactory.getLog(TaskController.class);
     @Autowired
@@ -102,6 +102,25 @@ public class TaskController {
 
         if(resultOrder != 1 || resultTask != 1) {
             LOG.error("TaskController.updateFinish.ERROR");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
+        }
+        return RetJacksonUtil.resultOk();
+    }
+
+
+    /**
+     * 更新task行程
+     * @param taskId
+     * @param route
+     * @return
+     */
+    @RequestMapping("/update/route")
+    @ResponseBody
+    public String updateRoute(@RequestParam("taskId") long taskId,
+                              @RequestParam("route") String route) {
+        int result = taskService.updateRoute(route, taskId);
+        if(result != 1) {
+            LOG.error("TaskController.updateRoute.ERROR");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
         }
         return RetJacksonUtil.resultOk();
