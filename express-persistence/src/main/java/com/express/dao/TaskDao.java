@@ -2,8 +2,10 @@ package com.express.dao;
 
 import com.express.domain.Task;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -21,7 +23,30 @@ public interface TaskDao {
     List<Task> selectAllByUserId(@Param("userId") long userId);
 
 
+    @Insert(" insert into "
+        + TABLE
+        + " set "
+        + " user_id = #{userId}, "
+        + " route_id = #{routeId}, "
+        + " order_id = #{orderId}, "
+        + " route = #{route}")
+    int addTask(Task task);
 
+    @Update(" update "
+        + TABLE
+        + " set "
+        + " is_finish = #{isFinish}"
+        + " where "
+        + " id = #{taskId}")
+    int updateFinish(@Param("isFinish") boolean isFinish,
+                     @Param("taskId") long taskId);
 
-
+    @Update(" update "
+        + TABLE
+        + " set "
+        + " route = #{route} "
+        + " where "
+        + " id = #{taskId}")
+    int updateRoute(@Param("route") String route,
+                    @Param("taskId") long taskId);
 }

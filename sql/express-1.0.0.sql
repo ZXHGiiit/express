@@ -119,7 +119,7 @@ create table task (
     `user_id`   bigint(20)      not null,
     `route_id`  bigint(20)      not null,
     `order_id`  bigint(20)      not null,
-    `is_finish` tinyint(1)      not null,
+    `is_finish` tinyint(1)      not null default '0',
     `route`     varchar(20)     not null,
     `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
     `update_time`      timestamp       not null,

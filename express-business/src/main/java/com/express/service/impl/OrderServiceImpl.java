@@ -7,6 +7,8 @@ import com.express.dao.OrderDao;
 import com.express.domain.Order;
 import com.express.service.OrderService;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    private static final Log LOG = LogFactory.getLog(OrderServiceImpl.class);
     @Autowired
     private OrderDao orderDao;
 
@@ -38,5 +41,14 @@ public class OrderServiceImpl implements OrderService {
         result.put("finishOrders", finishOrders);
         result.put("doingOrders", doingOrders);
         return result;
+    }
+
+    @Override
+    public int addOrder(Order order) {
+        if(order == null) {
+            LOG.error("OrderServiceImpl.addOrder.order is null!!!");
+            return -1;
+        }
+        return orderDao.addOrder(order);
     }
 }

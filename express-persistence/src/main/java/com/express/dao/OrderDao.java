@@ -4,9 +4,11 @@ import com.express.domain.Order;
 import com.express.support.MybatisExtendedLanguageDriver;
 import com.sun.tracing.dtrace.ProviderAttributes;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -36,6 +38,41 @@ public interface OrderDao {
         )
     List<Order> selectAllByOrderIds(@Param("orderId") List<Long> orderIds);
 
+    @Insert(" insert into "
+        + TABLE
+        + " set "
+        + " id = #{id}"
+        + " user_id = #{userId},"
+        + " route_id = #{routeId},"
+        + " send_address = #{sendAddress},"
+        + " take_address = #{takeAddress},"
+        + " send_name = #{sendName},"
+        + " take_name = #{takeName},"
+        + " send_phone = #{sendPhone},"
+        + " take_phone = #{take_phone},"
+        + " goods_name = #{goodsName},"
+        + " goods_weight = #{goodsWeight}"
+    )
+    int addOrder(Order order);
 
+    @Update( " update "
+        + TABLE
+        + " set "
+        + " is_finish = #{isFinish} "
+        + " where "
+        + " order_id = #{orderId}")
+    int updateFinish(@Param("isFinish") boolean isFinish,
+                     @Param("orderId") long orderId);
+
+    @Update( " update "
+        + TABLE
+        + " set "
+        + " score = #{score},"
+        + " comment = #{comment}"
+        + " where "
+        + "order_id = #{orderId}")
+    int updateComment(@Param("score") int score,
+                      @Param("comment") String comment,
+                      @Param("orderId") long orderId);
 
 }

@@ -24,8 +24,6 @@ public class TaskServiceImpl implements TaskService {
     private static final Log LOG = LogFactory.getLog(TaskServiceImpl.class);
     @Autowired
     private TaskDao taskDao;
-    @Autowired
-    private OrderDao orderDao;
     @Override
     public Map<String, List<Task>> selectAllByUserId(long userId) {
         List<Task> tasks = taskDao.selectAllByUserId(userId);
@@ -46,6 +44,15 @@ public class TaskServiceImpl implements TaskService {
         result.put("doingTask", doingTask);
         result.put("finishTask", finishTask);
         return result;
+    }
+
+    @Override
+    public int addTask(Task task) {
+        if(task == null) {
+            LOG.error("TaskServiceImpl.addTask.task is null!!!");
+            return -1;
+        }
+        return taskDao.addTask(task);
     }
 
 }

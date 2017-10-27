@@ -8,4 +8,5 @@ import java.util.Map;
 public interface OrderService {
     Map<String, Object> selectAllByUserId(long userId);
 
+    int addOrder(Order order);
 }

@@ -8,4 +8,5 @@ import java.util.Map;
 public interface TaskService {
     Map<String, List<Task>> selectAllByUserId(long userId);
 
+    int addTask(Task task);
 }

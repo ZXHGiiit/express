@@ -21,8 +21,10 @@ public interface RouteDao {
         + " where "
         + " start_address = #{startAdd}"
         + " and "
-        + " end_address = #{endAdd}")
-    List<Route> selectAllByAdd(@Param("startAdd") String startAdd,
+        + " end_address = #{endAdd}"
+        + " and "
+        + " status = 'ready'")
+    List<Route> selectAllReadyByAdd(@Param("startAdd") String startAdd,
                                @Param("endAdd") String endAdd);
 
     @Select(" select "
@@ -47,4 +49,14 @@ public interface RouteDao {
         + " end_time = #{endTime}, "
     )
     int addRoute(Route route);
+
+
+    @Select(" select "
+        + COLL_ALL
+        + " from "
+        + TABLE
+        + " where "
+        + " route_id = #{routeId}"
+    )
+    Route selectByRouteId(@Param("routeId") long routeId);
 }

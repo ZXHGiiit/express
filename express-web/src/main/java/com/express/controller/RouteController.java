@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +53,7 @@ public class RouteController {
         route.setStartTime(startTime);
         route.setEndTime(endTime);
         route.setUserId(userId);
+        LOG.info("RouteController.addRoute.route : " + route.toString());
         int result = routeService.addRoute(route);
         if(result == 1) {
             return RetJacksonUtil.resultOk();
@@ -92,5 +94,17 @@ public class RouteController {
         return JacksonUtils.toJson(result);
     }
 
-
+    /**
+     * 获取行程，用户下单时，会塞选出符合条件的行程.
+     * 用户点击任意行程，会出现该运营商用户的个人评分信息。
+     * @return
+     */
+    @RequestMapping("/get")
+    @ResponseBody
+    public String getRoute(@RequestParam("startAdd") String startAdd,
+                           @RequestParam("endAdd") String endAdd) {
+        List<Route> routes = routeService.selectReadyRouteByAdd(startAdd, endAdd);
+        LOG.info("RouteController.getRoute : " + routes.toString());
+        return JacksonUtils.toJson(routes);
+    }
 }
