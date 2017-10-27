@@ -6,8 +6,10 @@ import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.domain.Route;
+import com.express.domain.User;
 import com.express.interceptor.HostHolder;
 import com.express.service.RouteService;
+import com.express.service.UserService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +35,8 @@ public class RouteController {
     private HostHolder holder;
     @Autowired
     private RouteService routeService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 发布行程
@@ -103,8 +107,32 @@ public class RouteController {
     @ResponseBody
     public String getRoute(@RequestParam("startAdd") String startAdd,
                            @RequestParam("endAdd") String endAdd) {
+        LOG.info("RouteController.getRoute.params : {startAdd=" + startAdd + ", endAdd=" + endAdd + "}");
         List<Route> routes = routeService.selectReadyRouteByAdd(startAdd, endAdd);
         LOG.info("RouteController.getRoute : " + routes.toString());
         return JacksonUtils.toJson(routes);
+    }
+
+    /**
+     * 获取行程的信息，包括承运商相关的信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getInfo")
+    @ResponseBody
+    public String getRouteInfo(@RequestParam("userId") long userId) {
+        Map<String, Object> info = userService.commentInfo(userId);
+        User user = userService.getUser(userId);
+        if(user == null) {
+            LOG.error("RouteController.getRouteInfo.get user failed. userId = " + userId);
+            String result = JacksonUtils.toJson(info);
+            LOG.info("RouteController.getRouteInfo info : " + result);
+            return result;
+        }
+        info.put("name", user.getName());
+        info.put("motto", user.getMotto());
+        String result = JacksonUtils.toJson(info);
+        LOG.info("RouteController.getRouteInfo info : " + result);
+        return result;
     }
 }
