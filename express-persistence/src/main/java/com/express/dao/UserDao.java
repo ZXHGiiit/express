@@ -51,6 +51,6 @@ public interface UserDao {
     + " from "
     + TABLE
     + " where "
-    + " userId = #{userId}")
+    + " id = #{userId}")
   User selectByUserId(@Param("userId") long userId);
 }
