@@ -62,7 +62,7 @@ public interface OrderDao {
         + " set "
         + " is_finish = #{isFinish} "
         + " where "
-        + " order_id = #{orderId}")
+        + " id = #{orderId}")
     int updateFinish(@Param("isFinish") boolean isFinish,
                      @Param("orderId") long orderId);
 
@@ -73,7 +73,7 @@ public interface OrderDao {
         + " score = #{score},"
         + " comment = #{comment}"
         + " where "
-        + "order_id = #{orderId}")
+        + "id = #{orderId}")
     int updateComment(@Param("score") int score,
                       @Param("comment") String comment,
                       @Param("orderId") long orderId);
