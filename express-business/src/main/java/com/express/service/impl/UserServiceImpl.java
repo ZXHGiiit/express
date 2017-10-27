@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
     //获取task对应的order
     List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
     //获取已经评论的order
-    List<Order> ordersWithComment = orders.stream().filter(i -> i.isComment()).collect(Collectors.toList());
+    List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
     //获取最高评分,平均评分，最低评分
     int maxScore = 0;
     int sumScore = 0;

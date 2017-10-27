@@ -16,7 +16,7 @@ public class Order {
     private String goodsName;
     private long goodsWeight;
     private boolean isFinish;//该订单是否已经完成
-    private boolean isComment;//用户是否评论
+    private boolean isCom;//该订单是否评论。不能是 isComment，否则和comment字段的get方法冲突
     private int score;
     private String comment;
     private long startTime;
@@ -88,12 +88,12 @@ public class Order {
         this.takeName = takeName;
     }
 
-    public boolean isComment() {
-        return isComment;
+    public boolean isCom() {
+        return isCom;
     }
 
-    public void setComment(boolean comment) {
-        isComment = comment;
+    public void setCom(boolean com) {
+        isCom = com;
     }
 
     public long getSendPhone() {
@@ -200,7 +200,7 @@ public class Order {
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsWeight=" + goodsWeight +
                 ", isFinish=" + isFinish +
-                ", isComment=" + isComment +
+                ", isCom = " + isCom +
                 ", score=" + score +
                 ", comment='" + comment + '\'' +
                 ", startTime=" + startTime +
