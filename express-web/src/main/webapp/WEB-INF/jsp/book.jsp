@@ -21,7 +21,7 @@ function getRoute(){
 	}
 	$.ajax({
 		url:"${pageContext.request.contextPath}/route/getRoute",
-		type:"get",
+		type:"post",
 		dataType:"json",
 		data:{
 		    "startAdd":startAdd,

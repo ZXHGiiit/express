@@ -36,7 +36,7 @@ function showRouteList(){
 	}
 	$.ajax({
 		url:"${pageContext.request.contextPath}/route/get",
-		type:"get",
+		type:"post",
 		dataType:"json",
 		data:{"startAdd":startAdd,"endAdd":endAdd},
 		contentType:"application/x-www-form-urlencoded; charset=UTF-8",

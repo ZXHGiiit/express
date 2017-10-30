@@ -109,7 +109,7 @@ public class RouteController {
      * 用户点击任意行程，会出现该运营商用户的个人评分信息。
      * @return
      */
-    @RequestMapping(value="/get",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    @RequestMapping(value="/get",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String getRoute(@RequestParam("startAdd") String startAdd,
                            @RequestParam("endAdd") String endAdd) {
@@ -124,7 +124,7 @@ public class RouteController {
      * @param userId
      * @return
      */
-    @RequestMapping(value="/getUser",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    @RequestMapping(value="/getUser",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String getUserInfo(@RequestParam("userId") long userId) {
         Map<String, Object> info = userService.commentInfo(userId);
@@ -137,7 +137,7 @@ public class RouteController {
      * 获取行程以及对应承运商的信息
      * @return
      */
-    @RequestMapping(value="/getRoute",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    @RequestMapping(value="/getRoute",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String getRouteInfo(@RequestParam("startAdd") String startAdd,
                            @RequestParam("endAdd") String endAdd) {
