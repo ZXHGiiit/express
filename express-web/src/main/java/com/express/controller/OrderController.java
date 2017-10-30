@@ -65,16 +65,16 @@ public class OrderController {
      */
     @RequestMapping("/createOrder")
     @ResponseBody
-    //public String createOrder(@RequestParam("order") Order order) {
-    public String createOrder() {
-        Order order = new Order();
+    public String createOrder(Order order) {
         if(order == null) {
             LOG.error("OrderController.createOrder.ERROR. Order is null!!!");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
         }
+        LOG.info("OrderController.createOrder.params :" + order.toString());
         long userId = holder.getUserId();
 
         //用于测试
+        /*
         order = new Order();
         order.setGoodsName("手机");
         order.setGoodsWeight(150);
@@ -85,6 +85,7 @@ public class OrderController {
         order.setTakeAddress("北京");
         order.setSendName("周星航");
         order.setTakeName("周星灿");
+        */
         //用户测试
 
 
@@ -147,9 +148,9 @@ public class OrderController {
      * @param orderId
      * @return
      */
-    @RequestMapping("/getRoute")
+    @RequestMapping(value="/getRoute",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
     @ResponseBody
-    public String getRoute(long orderId) {
+    public String getRoute(@RequestParam("orderId") long orderId) {
         Order order = orderService.selectByOrderId(orderId);
         if(order == null) {
             LOG.warn("OrderController.getRoute  Route is NULL");
@@ -157,10 +158,12 @@ public class OrderController {
         }
         Map<String, Object> info = Maps.newHashMap();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        long startTime = order.getStartTime();
         boolean isFinish = order.isFinish();
-        info.put("startTime", sdf.format(new Date(startTime)));
+        String sendAdd = order.getSendAddress();
+        String takeAdd = order.getTakeAddress();
         info.put("isFinish", isFinish);
+        info.put("sendAdd", sendAdd);
+        info.put("takeAdd", takeAdd);
         Task task = taskService.selectByOrderId(orderId);
         if(task == null) {
             LOG.error("OrderController.getRoute the order don't have task!!!");
@@ -168,20 +171,15 @@ public class OrderController {
         }
         String routeInfo = task.getRoute();
         info.put("route", routeInfo);
-        if(isFinish) {
-            //若订单结束，就直接通过order中的updateTime来充当订单结束时间
-            Date endTime = order.getUpdateTime();
-            info.put("endTime", sdf.format(endTime));
-        } else {
-            //若订单未结束，则通过route中的endTime来充当预计结束时间
-            Route route = routeService.selectByRouteId(order.getRouteId());
-            if(route == null) {
-                LOG.error("OrderController.getRoute the order don't have route!!!");
-                return JacksonUtils.toJson(info);
-            }
-            long endTimeMay = route.getEndTime();
-            info.put("endTimeMay", sdf.format(new Date(endTimeMay).toString()));
+        Route route = routeService.selectByRouteId(order.getRouteId());
+        if(route == null) {
+            LOG.error("OrderController.getRoute the order don't have route!!!");
+            return JacksonUtils.toJson(info);
         }
+        long endTime = route.getEndTime();
+        long startTime = route.getStartTime();
+        info.put("endTime", sdf.format(new Date(endTime)));
+        info.put("startTime", sdf.format(new Date(startTime)));
         String result = JacksonUtils.toJson(info);
         LOG.info("OrderController.getRoute,info : " + result);
         return result;

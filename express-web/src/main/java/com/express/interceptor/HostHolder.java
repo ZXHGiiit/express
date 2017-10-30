@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HostHolder {
     @Autowired
     private HttpServletRequest request;
+
     private static final Log LOG = LogFactory.getLog(HostHolder.class);
 
     private static final String userKey = "user_key_heheda";

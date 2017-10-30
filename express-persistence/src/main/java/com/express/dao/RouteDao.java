@@ -19,9 +19,9 @@ public interface RouteDao {
         + " from "
         + TABLE
         + " where "
-        + " start_address = #{startAdd}"
+        + " start_address like '%${startAdd}%'"
         + " and "
-        + " end_address = #{endAdd}"
+        + " end_address like '%${endAdd}%'"
         + " and "
         + " status = 'ready'")
     List<Route> selectAllReadyByAdd(@Param("startAdd") String startAdd,

@@ -6,7 +6,7 @@
 	注册/登录
 	我要发货
 	    获取行程 /route/get  正常
-	    获取行程对应的承运商信息  /route/getInfo    待测
+	    获取行程对应的承运商信息  /route/getInfo    正常
 	    创建订单    order/createOrder   正常
 	    短信提醒运营商用户   待完成
 	发布兼职（待定）
@@ -25,6 +25,7 @@
 	    /order/addComment      正常
 	用户中心
 	    /user/score     正常
+    
 
 ### db设计
     

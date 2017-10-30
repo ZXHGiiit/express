@@ -1,6 +1,20 @@
 package com.express.controller;
 
-import com.google.common.base.Strings;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
@@ -10,23 +24,7 @@ import com.express.dao.UserDao;
 import com.express.domain.User;
 import com.express.interceptor.HostHolder;
 import com.express.service.UserService;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.google.common.base.Strings;
 
 /**
  * Created by xinghang on 17/9/28.
@@ -45,30 +43,35 @@ public class UserController {
   @Autowired
   private UserDao userDao;
 
+  //跳转到登录页面
+  @RequestMapping("/loginPage")
+  public String returnLogin(){
+    return "login";
+  }
+
+  @ResponseBody
   @RequestMapping("/login")
-  public ModelAndView login(String account, String password, HttpServletRequest req, HttpServletResponse
-    resp) {
+  public String login(String account, String password, HttpServletRequest req, HttpServletResponse resp) {
     //String token = userService.login(account, password, req, resp);
     User user = userService.login(account, password, req, resp);
+    Map result=new HashMap();
     if (user == null) {
       LOG.error("UserController.login.ERROR.token is null");
-      ModelAndView mdv = new ModelAndView("login");
-      mdv.addObject("msg", "用户名或密码错误");
-      return mdv;
+      result.put("result", false);
+      result.put("message", "用户名和密码错误,请重新输入");
     } else {
       LOG.info("UserController.login.user:" + user.toString()) ;
+      result.put("result", true);
+      result.put("message", "登录成功!!");
       //将用户登录信息保存到holder中
       holder.setUser(user);
       holder.setUserId(user.getId());
-      ModelAndView mdv = new ModelAndView("index");
-      mdv.addObject("user", user);
-      return mdv;
     }
+    return JacksonUtils.toJson(result);
   }
 
 
   @RequestMapping("/token/{token}")
-  @ResponseBody
   public Object token(@PathVariable String token, String callback) {
     if (Strings.isNullOrEmpty(token)) {
       LOG.error("UserController.token.token is null");
@@ -98,41 +101,26 @@ public class UserController {
   }
 
   @RequestMapping("/logout")
-  @ResponseBody
   public Object logout(HttpServletRequest req, HttpServletResponse resp, String callback) {
     ExpressResult expressResult = new ExpressResult();
     try {
       userService.logout(req, resp);
-      expressResult.setStatus(200);
-      expressResult.setMsg("OK");
-      expressResult.setData("");
+      return "login";
     } catch (Exception e) {
       LOG.error("UserController.logout.ERROR", e);
-    }
-    if (!Strings.isNullOrEmpty(callback)) {
-      LOG.info("UserController.logout.callback = " + callback);
-      MappingJacksonValue mjv = new MappingJacksonValue(expressResult);
-      mjv.setJsonpFunction(callback);
-      return mjv;
-    } else {
-      LOG.info("UserController.logout.callback is null");
-      return expressResult;
+      return "index";
     }
   }
 
   @RequestMapping("/register")
   @ResponseBody
-  public String register(@RequestParam("email") String email,
-                         @RequestParam("password") String password) {
-    if (email == null || password == null) {
+  public String register(User user) {
+    if (user.getAccount() == null ||user.getPassword() == null) {
       LOG.error("UserController.register.parameter is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
     }
-    LOG.info("UserController.register.params:{email : "+ email + "password : "+ password + "}");
-    User user = new User();
-    user.setEmail(email);
-    user.setAccount(email);
-    user.setPassword(password);
+    LOG.info("UserController.register.params:{account : "+ user.getAccount() + "password : "+ user.getPassword() + "}");
+
     int result = userService.createUser(user);
     if (result != 1) {
       LOG.error("UserController.register.createUser Failed!!!");

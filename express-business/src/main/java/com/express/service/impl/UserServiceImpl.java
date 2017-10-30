@@ -1,6 +1,7 @@
 package com.express.service.impl;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import com.express.commons.service.RedisService;
@@ -10,6 +11,8 @@ import com.express.dao.OrderDao;
 import com.express.dao.TaskDao;
 import com.express.dao.UserDao;
 import com.express.domain.Order;
+import com.express.domain.Route;
+import com.express.domain.RouteInfoVo;
 import com.express.domain.Task;
 import com.express.domain.User;
 import com.express.service.UserService;
@@ -18,8 +21,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +175,8 @@ public class UserServiceImpl implements UserService {
     //利用BigDecimal精确除法，保留两位小数,默认四舍五入
     double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
 
+    //获取用户信息
+    User user = userDao.selectByUserId(userId);
     //保存结果
     Map<String, Object> result = Maps.newHashMap();
     result.put("maxScore", maxScore);
@@ -177,11 +184,118 @@ public class UserServiceImpl implements UserService {
     result.put("countOfTask", countOfTask);
     result.put("countOfComment", countOfComment);
     result.put("avgScore", avgScore);
+    if(user != null) {
+      result.put("userName", user.getName());
+      result.put("motto", user.getMotto());
+    }
     return result;
   }
 
   @Override
   public User getUser(long userId) {
     return userDao.selectByUserId(userId);
+  }
+
+  @Override
+  public List<RouteInfoVo> getRouteInfo(List<Long> userIds) {
+    if(CollectionUtils.isEmpty(userIds)) {
+      LOG.error("UserServiceImpl.getRouteInfo. userIds is NULL");
+      return new ArrayList<>();
+    }
+    List<RouteInfoVo> infoVos = Lists.newArrayList();
+    for(long userId : userIds) {
+      RouteInfoVo infoVo = new RouteInfoVo();
+      //获取用户信息
+      User user = userDao.selectByUserId(userId);
+      infoVo.setTaskUserName(user.getName());
+
+      //获取承运商信息
+      List<Task> tasks = taskDao.selectAllByUserId(userId);
+      if(tasks == null) {
+        continue;
+      }
+      List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
+      //获取task对应的order
+      List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+      //获取已经评论的order
+      List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
+      //获取最高评分,平均评分，最低评分
+      int maxScore = 0;
+      int sumScore = 0;
+      int minScore = Integer.MAX_VALUE;
+      for(Order order : ordersWithComment) {
+        sumScore += order.getScore();
+        if(order.getScore() > maxScore) {
+          maxScore = order.getScore();
+        }
+        if(order.getScore() < minScore) {
+          minScore = order.getScore();
+        }
+      }
+      int countOfTask = tasks.size();
+      int countOfComment = ordersWithComment.size();
+      //利用BigDecimal精确除法，保留两位小数,默认四舍五入
+      double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
+      infoVo.setAvgScore(avgScore);
+      infoVo.setCountOfTask(countOfTask);
+      infoVo.setMaxScore(maxScore);
+      infoVo.setMinScore(minScore);
+
+      infoVos.add(infoVo);
+    }
+
+    return infoVos;
+  }
+
+  @Override
+  public List<RouteInfoVo> getInfo(List<Route> routes) {
+    if(CollectionUtils.isEmpty(routes)) {
+      LOG.error("UserServiceImpl.getRouteInfo. routes is NULL");
+      return new ArrayList<>();
+    }
+    List<RouteInfoVo> infoVos = Lists.newArrayList();
+    for(Route route : routes) {
+      RouteInfoVo infoVo = new RouteInfoVo();
+      //获取用户信息
+      User user = userDao.selectByUserId(route.getUserId());
+      infoVo.setTaskUserName(user.getName());
+
+      //获取承运商信息
+      List<Task> tasks = taskDao.selectAllByUserId(route.getUserId());
+      if(tasks == null) {
+        continue;
+      }
+      List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
+      //获取task对应的order
+      List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+      //获取已经评论的order
+      List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
+      //获取最高评分,平均评分，最低评分
+      int maxScore = 0;
+      int sumScore = 0;
+      int minScore = Integer.MAX_VALUE;
+      for(Order order : ordersWithComment) {
+        sumScore += order.getScore();
+        if(order.getScore() > maxScore) {
+          maxScore = order.getScore();
+        }
+        if(order.getScore() < minScore) {
+          minScore = order.getScore();
+        }
+      }
+      int countOfTask = tasks.size();
+      int countOfComment = ordersWithComment.size();
+      //利用BigDecimal精确除法，保留两位小数,默认四舍五入
+      double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
+      infoVo.setAvgScore(avgScore);
+      infoVo.setCountOfTask(countOfTask);
+      infoVo.setMaxScore(maxScore);
+      infoVo.setMinScore(minScore);
+      //这一步是上一个方法不能做到的
+      infoVo.setRouteId(route.getId());
+      infoVos.add(infoVo);
+    }
+
+    return infoVos;
   }
 }

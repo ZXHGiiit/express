@@ -14,10 +14,14 @@
     <!-- 注解驱动,让注解生效 -->
     <mvc:annotation-driven/>
     <!-- 设置静态资源 -->
+    <!--过滤所有静态资源-->
+    <mvc:default-servlet-handler />
+    <!--
     <mvc:resources location="/WEB-INF/Assets/" mapping="/Assets/**/"/>
     <mvc:resources location="/WEB-INF/images/" mapping="/images/**"/>
     <mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
     <mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
+    -->
     <!-- 视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="suffix" value=".jsp"></property>
