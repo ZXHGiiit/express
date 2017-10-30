@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>找物流</title>
-<link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
-<link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
-<script type="text/javascript" src="Assets/js/jquery-1.8.3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="Assets/css/index.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/common.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/index.css"/>
 <!--幻灯片-->
-<link rel="stylesheet" type="text/css" href="Assets/plugins/banner/css/goodnav.css">
-<script type="text/javascript" src="Assets/plugins/banner/js/jquery.litenav.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/plugins/banner/css/goodnav.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/Assets/plugins/banner/js/jquery.litenav.js"></script>
 <!--幻灯片-->
 <!--滑动门-->
 <script type="text/javascript">
@@ -25,6 +27,56 @@ $(function(){
 		//console.log(i);
 	});
 })
+
+function showRouteList(){
+	var startAdd=$("#startAdd").val();
+	var endAdd=$("#endAdd").val();
+	if(startAdd==""||endAdd==""){
+		return
+	}
+	$.ajax({
+		url:"${pageContext.request.contextPath}/route/get",
+		type:"get",
+		dataType:"json",
+		data:{"startAdd":startAdd,"endAdd":endAdd},
+		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+		success:function(data){
+			$("#souteList li").remove();
+			console.info(data);
+			for(var i=0;i<data.length;i++){
+				$("#souteList").append("<li> <a href='#'> <span>" + data[i].startAddress+"</span>"
+				+"<img src='${pageContext.request.contextPath}/Assets/images/icon15.png'/> <span>"
+				+ data[i].endAddress+"</span>  <span> &nbsp;&nbsp;&nbsp;"+data[i].price+
+				":元 </span> </a> <em>"+data[i].startTime+"</em> </li>" )
+			}
+		}
+	});
+}
+
+function showOrder(){
+	var orderId=$("#orderId").val();
+	if(orderId== "") {
+	    alert("orderId不能为空");
+	    return;
+	}
+	$.ajax({
+		url:"${pageContext.request.contextPath}/order/getRoute",
+		type:"get",
+		dataType:"json",
+		data:{"orderId":orderId},
+		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+		success:function(data){
+			$("#souteList li").remove();
+			console.info(data);
+			for(var i=0;i<data.length;i++){
+				$("#souteList").append("<li> <a href='#'> <span>" + data[i].startAddress+"</span>"
+				+"<img src='${pageContext.request.contextPath}/Assets/images/icon15.png'/> <span>"
+				+ data[i].endAddress+"</span>  <span> &nbsp;&nbsp;&nbsp;"+data[i].price+
+				":元 </span> </a> <em>"+data[i].startTime+"</em> </li>" )
+			}
+		}
+	});
+}
 </script>
 <!--滑动门-->
 </head>
@@ -33,10 +85,11 @@ $(function(){
 <!--头部-->
 <div class="head_bg">
 	<div class="head clearfix">
-    	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
+    	<div class="logo"><a href=""><img src="${pageContext.request.contextPath}/Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
         	<div class="head_top">
-                <a href="<%=request.getContextPath()%>/logout">注销</a>
+        		<span href="#">${user_key_heheda.account}</span>
+                <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
@@ -57,25 +110,25 @@ $(function(){
 	<!--盒子1-->
     <div class="box_1 clearfix">
     	<div class="box_1_l">
-        	<a href="<%=request.getContextPath()%>/book">网上下单<img src="Assets/images/icon2.png"/></a>
-            <a href="<%=request.getContextPath()%>/carrier" class="a_2">承运商申请<img src="Assets/images/icon2.png"/></a>
+        	<a href="<%=request.getContextPath()%>/book">网上下单<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
+            <a href="<%=request.getContextPath()%>/carrier" class="a_2">承运商申请<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
         </div>
         <div class="banner">
         	<!-- 代码 开始 -->
             <div id="hotpic">
                 <div id="NewsPic">
                     <a target="_blank" href="" style="visibility: visible; display: block;">
-                        <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                        <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <a style="visibility: hidden; display: none;" target="_blank" href="">
-                       <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                       <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <a style="visibility: hidden; display: none;" target="_blank" href="">
-                        <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                        <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <a style="visibility: hidden; display: none;" target="_blank" href="">
-                        <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                        <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <a style="visibility: hidden; display: none;" target="_blank" href="">
-                        <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                        <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <a style="visibility: hidden; display: none;" target="_blank" href="">
-                        <img src="Assets/upload/banner.jpg" class="Picture" alt="" /></a>
+                        <img src="${pageContext.request.contextPath}/Assets/upload/banner.jpg" class="Picture" alt="" /></a>
                     <div class="Nav">
                         <span class="Normal">6</span>
                         <span class="Normal">5</span>
@@ -100,11 +153,11 @@ $(function(){
             <div class="tabBox">
               <ul class="tabNav">
               	<li>综合</li>
-                <li class="now">找物流</li>
+                <li class="now" >找物流</li>
                 <li>网点查询</li>
-                <li>货物追踪</li>
+                <li >货物追踪</li>
               </ul>
-              <form action="" method="post">
+
               <div class="tabCont">
               	<div class="ctn">
                 <input name="" type="text" placeholder="请输入关键字">
@@ -114,10 +167,10 @@ $(function(){
               <div class="tabCont" style="display:block;">
               	<div class="ctn">
                 <span>发货城市</span>
-                <input name="" type="text" placeholder="请输入城市名（中文/拼音）">
+                <input name="startAdd" id="startAdd" type="text" placeholder="请输入城市名（中文/拼音）">
                 <span>到达城市</span>
-                <input name="" type="text" placeholder="请输入城市名（中文/拼音）">
-                <a href="">搜索比价</a>
+                <input name="endAdd" id="endAdd" type="text" placeholder="请输入城市名（中文/拼音）">
+                <a  onclick="showRouteList()">搜索比价</a>
                 </div>
               </div>
               <div class="tabCont">
@@ -130,12 +183,12 @@ $(function(){
               <div class="tabCont">
               	<div class="ctn">
                 <span>订单号</span>
-                <input name="" type="text" placeholder="请输入订单号">
-                <a href="">搜索</a>
+                <input name="orderId" id="orderId" type="text" placeholder="请输入订单号">
+                <a onclick="showOrder()">搜索</a>
                 </div>
               </div>
             </div>
-            </form>
+
         </div>
     </div>
     <!--盒子2-->
@@ -144,63 +197,16 @@ $(function(){
     <div class="box_3 clearfix">
     	<div class="box_3_l">
         	<div class="box_head">
-            	<span>订单信息</span>
-                <a href=""><img src="Assets/images/more.png" /></a>
+            	<span id="mainTitle">物流信息</span>
+                <a href=""><img src="${pageContext.request.contextPath}/Assets/images/more.png" /></a>
             </div>
-            <ul>
+            <ul id="souteList">
             	<li>
                     <a href="">
                         <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
-                <li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="Assets/images/icon15.png"/>
-                        <span>重庆</span>
+                        <img src="${pageContext.request.contextPath}/Assets/images/icon15.png"/>
+                        <span>重庆</span>&nbsp;
+                        <span>222元</span>
                     </a>
                     <em>2014-04-13</em>
                 </li>
@@ -209,7 +215,7 @@ $(function(){
         <div class="box_3_r">
         	<div class="box_head">
             	<span>活动信息</span>
-                <a href=""><img src="Assets/images/more.png" /></a>
+                <a href=""><img src="${pageContext.request.contextPath}/Assets/images/more.png" /></a>
             </div>
             <!--开始-->
             <div class="box16 clearfix">
@@ -262,11 +268,11 @@ $(function(){
         <div class="copy">
         	Copyright&copy;&nbsp;2012-2015&nbsp; 找物流有限责任公司.&nbsp;&nbsp;All&nbsp;&nbsp;rights&nbsp;&nbsp;reserved. &nbsp;&nbsp;粤ICP备10005645
         </div>
-    </div>	
+    </div>
 </div>
 <!--底部-->
 </body>
 
 <!-- jQuery -->
-<script src="Assets/js/jquery-1.8.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
 </html>

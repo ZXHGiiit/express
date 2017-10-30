@@ -26,7 +26,7 @@ $(function(){
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
-                <a href="<%=request.getContextPath()%>/logout">注销</a>
+                <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>

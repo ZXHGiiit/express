@@ -8,6 +8,97 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
+
+
+<script type="text/javascript">
+
+function getRoute(){
+	var startAdd=$("#startAdd").val();
+	var endAdd = $("#endAdd").val();
+	if(startAdd== "" || endAdd==""){
+	    alert("不能为空");
+	    return;
+	}
+	$.ajax({
+		url:"${pageContext.request.contextPath}/route/getRoute",
+		type:"get",
+		dataType:"json",
+		data:{
+		    "startAdd":startAdd,
+            "endAdd" : endAdd
+        },
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+		success:function(data){
+			$("#routeList").empty();
+            $("#routeList").append("<tr><th colspan='11' scope='col'><span>排序：</span><a href=''>星级</a><a href=''>泡货价</a><a href=''>重泡货价</a><a href=''>重货价</a><a href=''>最低收费</a>"
+            + "<a href=''>时效</a><a href=''>承运票数</a><a href=''>总费用</a></th></tr>"
+            + "<tr class='wl_title'><td width='50' class='tubiao'>&nbsp;</td><td width='85'>物流商</td><td width='150'>线路</td><td width='90'>泡货<em>元/公斤</em></td><td width='90'>重泡货<em>元/公斤</em></td>"
+            + "<td width='90'>重货<em>元/公斤</em></td><td width='90'>最低收费</td><td width='70'>时效</td><td width='85'>承运票数</td><td width='65'>总费用</td><td width='67'>下单</td></tr>");
+			console.info(data);
+			for(var i=0;i<data.length;i++){
+			    console.info(data[i]);
+				$("#routeList").append("<tr><td><input type='checkbox' class='fav' name='test' value='"+data[i].routeId+"' />&nbsp;</a></td>"
+				+ "<td class='left'>" + data[i].taskUserName+"</br>评分:" + data[i].avgScore +"</td>"
+				+ "<td class='left'><span>从：" +startAdd+"</span><span>到："+endAdd+"</span></td>"
+				+ "<td><i>0.13</i></td><td><i>0.15</i></td><td><i>0.12</i></td>"
+				+ "<td><i>" + data[i].price + "</i>元</td>"
+				+ "<td><span>24小时</span><span>定时达</span></td>"
+				+ "<td>" + data[i].taskSize + "票</td>"
+				+ "<td><a href=''>下单</a></td><tr>");
+			}
+        }
+	});
+}
+
+function createOrder() {
+    var obj=document.getElementsByName('test'); //选择所有name="'test'"的对象，返回数组
+    //取到对象数组后，我们来循环检测它是不是被选中
+    var routeId;
+    for(var i=0; i<obj.length; i++){
+    if(obj[i].checked) routeId = obj[i].value; //如果选中，将value添加到变量s中
+    }
+
+    var takeName = $("#takeName").val();
+    var takePhone = $("#takePhone").val();
+    var takeAdd = $("#takeAdd").val();
+    var takeAddex = $("#takeAddex").val();
+    var sendName = $("#sendName").val();
+    var sendPhone = $("#sendPhone").val();
+    var sendAdd = $("#sendAdd").val();
+    var sendAddex = $("#sendAddex").val();
+    var goodsName = $("#goodsName").val();
+    var goodsWeight = $("#goodsWeight").val();
+    if(takeName == "" || takePhone == "" || takeAdd == "" || takeAddex == "" || takeAddex == "" ||
+    sendName == "" || sendPhone == "" || sendAdd == "" || sendAddex == "" || goodsName == "" ||
+    goodsWeight == "") {
+        alert("标星项不能为空");
+        return;
+    }
+    $.ajax({
+    		url:"${pageContext.request.contextPath}/order/createOrder",
+    		type:"post",
+    		dataType:"json",
+    		data:{
+    		    "routeId":parseInt(routeId),
+    		    "takeName":takeName,
+    		    "takePhone":parseInt(takePhone),
+    		    "takeAddress":takeAdd + takeAddex,
+    		    "sendName":sendName,
+    		    "sendPhone":parseInt(sendPhone),
+    		    "sendAddress":sendAdd + sendAddex,
+    		    "goodsName":goodsName,
+    		    "goodsWeight":goodsWeight
+            },
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+    		success:function(data){
+    		    alert("create order success!!!")
+    		},
+    		error:function(data) {
+    		}
+    });
+}
+
+</script>
 </head>
 
 <body>
@@ -17,7 +108,7 @@
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
-                <a href="<%=request.getContextPath()%>/logout">注销</a>
+                <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
@@ -53,38 +144,29 @@
                     <form action="" method="post">
                     <div class="fahuo">
                     	<span>
-                    	发货城市<input name="" type="text" placeholder="请输入城市名（中文/拼音）">
-                        到达城市<input name="" type="text" placeholder="请输入城市名（中文/拼音）">
-                        <a href="" class="sousuo">搜索比价</a>
+                    	发货城市<input id="startAdd" type="text" placeholder="请输入城市名（中文/拼音）">
+                        到达城市<input id="endAdd" type="text" placeholder="请输入城市名（中文/拼音）">
+                        <a onclick="getRoute()" class="sousuo">搜索比价</a>
                         </span>
                     </div>
                     <div class="space_hx">&nbsp;</div>
                     <ul class="xinxi">
                     	<li>
-                        	货物总重量
-                            <input name="" type="text" class="wenben">
-                            公斤
+                        	货物名称
+                            <input name="" id="goodsName" type="text" class="wenben">
                         </li>
                         <li>
-                        	<input name="" class="check" type="checkbox" value="">
-                        	保险（0.15%）&nbsp;&nbsp;
-                            货物总价值
-                            <input name="" type="text" class="wenben">
-                            元
+                            货物重量
+                            <input name="" id="goodsWeight" type="text" class="wenben">
+                            g
                         </li>
                         <li>
+                            <input name="" class="check" type="checkbox" value="">
+                            保险（0.15%）&nbsp;&nbsp;
                         	<input name="" class="check" type="checkbox" value="">
-                            上门取货
-                            <select name="">
-                            	<option>请选择</option>
-                            </select>
-                        </li>
-                        <li>
-                        	<input name="" class="check" type="checkbox" value="">
+                            上门取货&nbsp;&nbsp;
+                            <input name="" class="check" type="checkbox" value="">
                             送货上门
-                            <select name="">
-                            	<option>请选择</option>
-                            </select>
                         </li>
                         <li class="shuxing">
                         	<span>增值服务</span>
@@ -107,7 +189,8 @@
                         </li>
                     </ul>
                     <div class="space_hx">&nbsp;</div>
-                    <table cellpadding="0" cellspacing="0">
+                    <!--route信息填充-->
+                    <table cellpadding="0" cellspacing="0" id = "routeList">
                       <tr>
                         <th colspan="11" scope="col">
                         	<span>排序：</span>
@@ -134,72 +217,8 @@
                         <td width="65">总费用</td>
                         <td width="67">下单</td>
                       </tr>
-                      <tr>
-                      	<td><a href="" class="fav">&nbsp;</a></td>
-                        <td class="left">
-                        	金鹏物流
-                            <img src="Assets/images/icon5.png"/>
-                        </td>
-                        <td class="left">
-                        	<span>从：广州市-白云区</span>
-                            <span>到：深圳市-宝安区</span>
-                        </td>
-                        <td>&nbsp;</td>
-                        <td><i>0.15</i></td>
-                        <td><i>0.12</i></td>
-                        <td><i>20</i>元</td>
-                        <td>
-                        	<span>24小时</span>
-                            <span>定时达</span>
-                        </td>
-                        <td>0票</td>
-                        <td><i>0</i></td>
-                        <td><a href="">下单</a></td>
-                      </tr>
-                      <tr>
-                      	<td><a href="" class="fav">&nbsp;</a></td>
-                        <td class="left">
-                        	金鹏物流
-                            <img src="Assets/images/icon5.png"/>
-                        </td>
-                        <td class="left">
-                        	<span>从：广州市-白云区</span>
-                            <span>到：深圳市-宝安区</span>
-                        </td>
-                        <td>&nbsp;</td>
-                        <td><i>0.15</i></td>
-                        <td><i>0.12</i></td>
-                        <td><i>20</i>元</td>
-                        <td>
-                        	<span>24小时</span>
-                            <span>定时达</span>
-                        </td>
-                        <td>0票</td>
-                        <td><i>0</i></td>
-                        <td><a href="">下单</a></td>
-                      </tr>
-                      <tr>
-                      	<td><a href="" class="fav">&nbsp;</a></td>
-                        <td class="left">
-                        	金鹏物流
-                            <img src="Assets/images/icon5.png"/>
-                        </td>
-                        <td class="left">
-                        	<span>从：广州市-白云区</span>
-                            <span>到：深圳市-宝安区</span>
-                        </td>
-                        <td>&nbsp;</td>
-                        <td><i>0.15</i></td>
-                        <td><i>0.12</i></td>
-                        <td><i>20</i>元</td>
-                        <td>
-                        	<span>24小时</span>
-                            <span>定时达</span>
-                        </td>
-                        <td>0票</td>
-                        <td><i>0</i></td>
-                        <td><a href="">下单</a></td>
-                      </tr>
+
+
                     </table>
                     <div class="space_hx">&nbsp;</div>
                     <div class="txxx clearfix">
@@ -214,13 +233,14 @@
                                     	<i>&nbsp;</i>
                                         发货人
                                     </span>
-                                    <input name="" type="text">
+                                    <input name="" id="sendName" type="text">
                                 </li>
                                 <li>
                                 	<span>
+                                	    <i>&nbsp;</i>
                                         手机
                                     </span>
-                                    <input name="" type="text">
+                                    <input name="" id="sendPhone" type="text">
                                 </li>
                                 <li>
                                 	<span>
@@ -234,8 +254,8 @@
                                     	<i>&nbsp;</i>
                                         发货地址
                                     </span>
-                                    <input name="" type="text" placeholder="请选择/输入城市名称">
-                                    <input class="jiedao" name="" type="text" placeholder="请输入街道地址">
+                                    <input name="" id="sendAdd" type="text" placeholder="请选择/输入城市名称">
+                                    <input class="jiedao" name="" id="sendAddex" type="text" placeholder="请输入街道地址">
                                 </li>
                             </ul>
                         </div>
@@ -250,15 +270,16 @@
                             	<li>
                                 	<span>
                                     	<i>&nbsp;</i>
-                                        发货人
+                                        收件人
                                     </span>
-                                    <input name="" type="text">
+                                    <input name="" id="takeName" type="text">
                                 </li>
                                 <li>
                                 	<span>
+                                	    <i>&nbsp;</i>
                                         手机
                                     </span>
-                                    <input name="" type="text">
+                                    <input name="" id="takePhone" type="text">
                                 </li>
                                 <li>
                                 	<span>
@@ -270,10 +291,10 @@
                                 <li>
                                 	<span>
                                     	<i>&nbsp;</i>
-                                        发货地址
+                                        收货地址
                                     </span>
-                                    <input name="" type="text" placeholder="请选择/输入城市名称">
-                                    <input class="jiedao" name="" type="text" placeholder="请输入街道地址">
+                                    <input name="" id="takeAdd" type="text" placeholder="请选择/输入城市名称">
+                                    <input class="jiedao" name="" id="takeAddex" type="text" placeholder="请输入街道地址">
                                 </li>
                             </ul>
                         </div>
@@ -291,7 +312,7 @@
                     </div>
                     <div class="space_hx">&nbsp;</div>
                     <div class="xiadan_btn">
-                    	<a href="" class="sub">立刻下单</a>
+                    	<a onclick="createOrder()" class="sub">立刻下单</a>
                         <a href="" class="qux">取消</a>
                     </div>
                     </form>

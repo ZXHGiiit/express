@@ -18,7 +18,7 @@
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
-            <a href="<%=request.getContextPath()%>/logout">注销</a>
+            <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
@@ -44,7 +44,7 @@
     	<!--个人信息-->
         <div class="cy_left">
         	<div class="cy_head">
-            	<span>个人信息</span>
+            	<span>基本信息</span>
             </div>
             <form action="" method="get">
             <ul class="cy_body">
@@ -53,7 +53,7 @@
                         <i>&nbsp;</i>
                         <em>个人名称</em>
                     </span>	
-                    <input name="" type="text">
+                    <input name=" type="text">
                     <p>（个人名称必须与个人身份保证完全相同）</p>
                 </li>
                 <li>
@@ -111,7 +111,7 @@
     	<!--公司信息-->
         <div class="cy_right">
         	<div class="cy_head">
-            	<span>公司信息</span>
+            	<span>认证信息</span>
             </div>
             <form action="" method="get">
             <ul class="cy_body">

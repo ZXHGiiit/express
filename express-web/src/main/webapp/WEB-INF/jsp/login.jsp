@@ -5,13 +5,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>会员注册</title>
-<link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
-<link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
-<link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/thems.css"/>
 
 <script>
     function register(){
-        var email = $("#email").val();
+        var account = $("#account").val();
         var password = $("#password").val();
         var checkcode = $("#checkcode").val();
         if(email == "" || password == "" || checkcode == ""){
@@ -36,11 +36,11 @@
 
 
     function login(){
-        var account = $("#account").val();
+        var account = $("#accountLogin").val();
         var password = $("#passwordLogin").val();
         if(account == "" || password == ""){
-            alert("登录名或密码不能为空");
-            return;
+          $("#loginErr").show();
+	      $("#loginErr span").text("用户名或密码不能为空");
         }
 
         $.ajax({
@@ -53,7 +53,12 @@
             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             dataType: "json",
             success : function(data) {
-                alter("登陆成功！");
+	            if(data.result){
+	            	location.href="${pageContext.request.contextPath}/index";
+	            }else{
+	            	$("#loginErr").show();
+	            	$("#loginErr span").text("用户名或密码错误,请重新输入");
+	            }
             }
         });
     }
@@ -66,7 +71,7 @@
 <!--头部-->
 <div class="head_bg">
 	<div class="head clearfix">
-    	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
+    	<div class="logo"><a href=""><img src="${pageContext.request.contextPath}/Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
                 <a href="">设为首页</a>
@@ -88,17 +93,21 @@
 <div class="main clearfix">
     <div class="login_reg clearfix">
     	<!--邮箱注册-->
-        <div class="reg">
+        <div class="reg" id="register">
         	<div class="lore_top">
             	<span>
-                	<em>邮箱注册</em>
+                	<em>用户注册</em>
                 </span>
             </div>
-        	<form action="" method="post">
+        	<form action="${pageContext.request.contextPath}/user/register" method="post">
         	<ul>
             	<li>
-                	<span>电子邮箱：</span>
-                    <input name="email" type="text" id="email" placeholder="请输入常用邮箱，用于找回密码">
+                	<span>用户名：</span>
+                    <input name="account" type="text" id="account" placeholder="请输入用户名,至少6个字符">
+
+                </li>
+                <li style="display: none" id="accountErr">
+                	<span  style="color:red;width:430px;text-align: center;"></span>
                 </li>
                 <li>
                 	<span>密码：</span>
@@ -107,6 +116,7 @@
                 <li>
                 	<span>确认密码：</span>
                     <input name="password" type="password" placeholder="和密码一致">
+                     <span id="passwordErr" style="color:red"></span>
                 </li>
                 <li>
                 	<span>验证码：</span>
@@ -121,27 +131,32 @@
                 <li class="tijiao">
                 	 <button type="button" class="submit" onclick="register()">注册</button>
                 </li>
-                
+
             </ul>
             </form>
         </div>
         <!--邮箱注册-->
+
+
     	<!--登录-->
-        <div class="login">
+        <div class="login" id="login">
         	<div class="lore_top">
             	<span>
                 	<em>马上登录</em>
                 </span>
             </div>
-        	<form action="" method="post">
+        	<form action="${pageContext.request.contextPath}/user/login" method="post">
         	<ul>
             	<li>
                 	<span>用户名：</span>
-                    <input name="account" id="account" type="text" placeholder="账号/邮箱">
+                    <input name="account" id="accountLogin" type="text" placeholder="账号/邮箱">
                 </li>
                 <li>
                 	<span>密码：</span>
-                    <input name="password" id="passwordLogin"  type="password" placeholder="6-16个字符">
+                    <input name="password" id="passwordLogin"  type="password" placeholder="请输入密码">
+                </li>
+                 <li style="display: none" id="loginErr">
+                	<span  style="color:red;width:430px;text-align: center;"></span>
                 </li>
                 <li class="tijiao">
                 	<button type="button" class="submit" onclick="login()">登陆</button>
@@ -149,9 +164,9 @@
                 <li>
                 	<p>
                     	使用合作帐号登录：
-                        <a href=""><img src="Assets/images/icon10.png"/></a>
-                        <a href=""><img src="Assets/images/icon12.png"/></a>
-                        <a href=""><img src="Assets/images/icon13.png"/></a>
+                        <a href=""><img src="${pageContext.request.contextPath}/Assets/images/icon10.png"/></a>
+                        <a href=""><img src="${pageContext.request.contextPath}/Assets/images/icon12.png"/></a>
+                        <a href=""><img src="${pageContext.request.contextPath}/Assets/images/icon13.png"/></a>
                     </p>
                 </li>
             </ul>
@@ -228,11 +243,11 @@
         <div class="copy">
         	Copyright&copy;&nbsp;2012-2015&nbsp; 找物流有限责任公司.&nbsp;&nbsp;All&nbsp;&nbsp;rights&nbsp;&nbsp;reserved. &nbsp;&nbsp;粤ICP备10005645
         </div>
-    </div>	
+    </div>
 </div>
 <!--底部-->
 </body>
 
 <!-- jQuery -->
-<script src="Assets/js/jquery-1.8.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
 </html>
