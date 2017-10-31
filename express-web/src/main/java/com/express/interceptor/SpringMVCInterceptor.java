@@ -3,11 +3,13 @@ package com.express.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class SpringMVCInterceptor implements HandlerInterceptor {
-
+    private static final Log LOG = LogFactory.getLog(SpringMVCInterceptor.class);
 
     /**
      * preHandle方法是进行处理器拦截用的，顾名思义，该方法将在Controller处理之前进行调用，SpringMVC中的Interceptor拦截器是链式的，可以同时存在
@@ -19,6 +21,7 @@ public class SpringMVCInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // TODO Auto-generated method stub
+        LOG.info("SpringMVCInterceptor.preHandle.begin======>");
         return false;
     }
 
