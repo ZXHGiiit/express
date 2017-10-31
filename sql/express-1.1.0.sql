@@ -111,3 +111,15 @@ create table task (
     default charset = utf8
     collate = utf8_bin;
 
+create table message (
+    `id`        bigint           not null    AUTO_INCREMENT,
+    `user_id`   bigint           not null,
+    `msg`       varchar(100)    not null,
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`    timestamp       not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    primary key(`id`),
+    key `user_id`(`user_id`)
+)
+    engine = InnoDB
+    default charset = utf8
+    collate = utf8_bin;

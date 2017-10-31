@@ -173,3 +173,32 @@ create table task (
      FOR EACH ROW SET NEW.`update_time` = NOW()
     //
     DELIMITER ;
+
+
+
+create table message (
+    `id`        bigint           not null    AUTO_INCREMENT,
+    `user_id`   bigint           not null,
+    `msg`       varchar(100)    not null,
+    `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+    `update_time`    timestamp       not null,
+    primary key(`id`),
+    key `user_id`(`user_id`)
+)
+    engine = InnoDB
+    default charset = utf8
+    collate = utf8_bin;
+
+    DROP TRIGGER IF EXISTS `update_message_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `update_message_trigger` BEFORE UPDATE ON `message`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
+
+    DROP TRIGGER IF EXISTS `insert_message_trigger`;
+    DELIMITER //
+    CREATE TRIGGER `insert_message_trigger` BEFORE INSERT ON `message`
+     FOR EACH ROW SET NEW.`update_time` = NOW()
+    //
+    DELIMITER ;
