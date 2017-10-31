@@ -115,6 +115,7 @@ create table message (
     `id`        bigint           not null    AUTO_INCREMENT,
     `user_id`   bigint           not null,
     `msg`       varchar(100)    not null,
+    `is_view`   tinyint(1)       not null default '0',
     `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
     `update_time`    timestamp       not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     primary key(`id`),
