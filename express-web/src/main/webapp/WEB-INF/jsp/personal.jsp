@@ -30,10 +30,11 @@ function listOrder() {
             console.info(data);
             console.info(data.finishOrders);
             console.info(data.doingOrders);
-            $("#contentTable").empty();
+            $("#msg").empty();
+            $("#title").empty();
             if(null != data && "" != data){
-                $('#person_h').append('<span>个人账单</span>');
-                $('#person_rmain').append('<strong>进行中</strong>');
+                $('#title').append('<span></span>');
+                $('#msg').append('<strong>进行中</strong>');
                 if(data.doingOrders != null) {
                     $('#person_rmain').append('<ul>');
                     for(var i = 0;i < data.doingOrders.length; i++) {
@@ -45,13 +46,13 @@ function listOrder() {
                 if(data.finishOrders != null) {
                     $('#person_rmain').append('<ul>');
                     for(var i = 0;i < data.finishOrders.length; i++) {
-                        $('#person_rmain').append('<li>' + data.finishOrders[i] + '</li>');
+                        $('#person_rmain').append('<li><span>' + data.finishOrders[i] + '</span></li>');
                     }
                     $('#person_rmain').append('</ul>');
                 }
 
             } else {
-                $('#person_h').append('<span>个人账单</span>');
+                $('#title').append('<span>个人账单</span>');
                 $('#person_rmain').append('<strong>进行中</strong>');
                 $('#person_rmain').append('<strong>已完成</strong>');
             }
@@ -83,7 +84,7 @@ function listOrder() {
             <ul class="clearfix">
                 <li><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li class="now"><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
-                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>12</span></a></li>
+                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="">网站地图</a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
@@ -109,6 +110,14 @@ function listOrder() {
                         	<i>&nbsp;</i>
                             <strong><a href="">认证信息</a></strong>
                         </li>
+                        <li>
+                            <i>&nbsp;</i>
+                            <strong><a href="">我的评分</a></strong>
+                        </li>
+                         <li>
+                            <i>&nbsp;</i>
+                            <strong><a href="">常用联系人</a></strong>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -116,40 +125,69 @@ function listOrder() {
                     <ul class="erji">
                     	<li>
                         	<i>&nbsp;</i>
-                            <strong> <a onclick="listOrder()">我的订单</a></strong>
+                            <strong> <a onclick="listOrder()">进行中订单</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">我的接单</a></strong>
+                            <strong><a href="">已完成订单</a></strong>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a class="yiji"><span>任务中心</span><em>&nbsp;</em></a>
+                    <ul class="erji">
+                        <li>
+                            <i>&nbsp;</i>
+                            <strong><a href="">进行中任务</a></strong>
                         </li>
                         <li>
-                        	<i>&nbsp;</i>
-                            <strong><a href="">我的评分</a></strong>
+                            <i>&nbsp;</i>
+                            <strong><a href="">已完成任务</a></strong>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="yiji"><span>行程中心</span><em>&nbsp;</em></a>
+                    <ul class="erji">
+                        <li>
+                            <i>&nbsp;</i>
+                            <strong><a href="">进行中行程</a></strong>
                         </li>
                         <li>
-                        	<i>&nbsp;</i>
-                            <strong><a href="">资金流水</a></strong>
-                        </li>
-                        <li>
-                        	<i>&nbsp;</i>
-                            <strong><a href="">询价历史</a></strong>
-                        </li>
-                        <li>
-                        	<i>&nbsp;</i>
-                            <strong><a href="">常发货物</a></strong>
-                        </li>
-                        <li>
-                        	<i>&nbsp;</i>
-                            <strong><a href="">常用联系人</a></strong>
+                            <i>&nbsp;</i>
+                            <strong><a href="">历史行程</a></strong>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
         <div class="person_r">
-        	<div id="person_h" class="person_h">
-            </div>
-            <div id="person_rmain" class="person_rmain">
+                <div class="person_h" id="title">
+                </div>
+                <div class="person_rmain">
+                    <ul class="new_list" id="msg">
+
+                    </ul>
+                    <div class="space_hx">&nbsp;</div>
+                    <!--分页-->
+                    <div class="fenye" id="fenye">
+                        <span>页码：1/1</span>
+                        <span>总计：2</span>
+                        <a href="">首 页</a>|
+                        <a href="">上一页</a>|
+                        <a href="">下一页</a>|
+                        <a href="">尾 页</a>
+                        <span>转到：
+                            <select name="">
+                                <option>-1-</option>
+                                <option>-2-</option>
+                                <option>-3-</option>
+                            </select>
+                        </span>
+                    </div>
+                    <!--分页-->
+                </div>
             </div>
         </div>
 

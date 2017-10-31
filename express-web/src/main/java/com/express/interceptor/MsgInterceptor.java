@@ -1,16 +1,23 @@
 package com.express.interceptor;
 
+import com.express.service.MessageService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-public class SpringMVCInterceptor implements HandlerInterceptor {
-    private static final Log LOG = LogFactory.getLog(SpringMVCInterceptor.class);
+public class MsgInterceptor implements HandlerInterceptor {
+    private static final Log LOG = LogFactory.getLog(MsgInterceptor.class);
 
+    @Autowired
+    private HostHolder holder;
+    @Autowired
+    private MessageService messageService;
     /**
      * preHandle方法是进行处理器拦截用的，顾名思义，该方法将在Controller处理之前进行调用，SpringMVC中的Interceptor拦截器是链式的，可以同时存在
      * 多个Interceptor，然后SpringMVC会根据声明的前后顺序一个接一个的执行，而且所有的Interceptor中的preHandle方法都会在
@@ -21,8 +28,17 @@ public class SpringMVCInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // TODO Auto-generated method stub
-        LOG.info("SpringMVCInterceptor.preHandle.begin======>");
-        return false;
+        try {
+            long userId = holder.getUserId();
+        }catch (NullPointerException e) {
+            //用户未登录，或登录信息失效
+            return true;
+        }
+        long userId = holder.getUserId();
+        //long userId = (long) request.getSession().getAttribute("user_id_key_heheda");
+        int countNews = messageService.countOfNotView(userId);
+        holder.setCountNews(countNews);
+        return true;
     }
 
     /**
@@ -37,6 +53,7 @@ public class SpringMVCInterceptor implements HandlerInterceptor {
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         // TODO Auto-generated method stub
+
 
     }
 

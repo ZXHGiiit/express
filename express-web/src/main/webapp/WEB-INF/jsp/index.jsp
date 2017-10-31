@@ -47,7 +47,7 @@ function showSouteList(){
 				$("#souteList").append("<li> <a href='#'> <span>" + data[i].startAddress+"</span>"
 				+"<img src='${pageContext.request.contextPath}/Assets/images/icon15.png'/> <span>"
 				+ data[i].endAddress+"</span>  <span> &nbsp;&nbsp;&nbsp;"+data[i].price+
-				":元 </span> </a> <em>"+data[i].startTime+"</em> </li>" )
+				":元 </span> </a> <em>"+getLocalTime(data[i].startTime)+"</em> </li>" )
 			}
 		}
 	});
@@ -69,19 +69,23 @@ function showOrder(){
 				+	"<div style='text-indent: 20px'> 取货地址："+data.takeAdd+"</div>	"
 				+	"<div style='text-indent: 20px'> 路径："+data.route+"</div>	"
 				+   "<div style='text-indent: 20px'> 是否送达："+data.isFinish+"</div>	"
-				+   "<div style='text-indent: 20px'> 发货时间："+data.startTime+"</div>	"
-				+   "<div style='text-indent: 20px'> 送达时间："+data.endTime+"</div>	"
+				+   "<div style='text-indent: 20px'> 发货时间："+getLocalTime(data.startTime)+"</div>	"
+				+   "<div style='text-indent: 20px'> 送达时间："+getLocalTime(data.endTime)+"</div>	"
 			    +    "</li>")
 		},
 
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(XMLHttpRequest.status);
-            alert(XMLHttpRequest.readyState);
-            alert(textStatus);
+        error: function () {
+            alert("服务器内部错误");
         }
 
 	});
 }
+
+//将时间戳转换为日期
+function getLocalTime(nS) {
+   return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+}
+
 </script>
 <!--滑动门-->
 </head>
@@ -101,7 +105,7 @@ function showOrder(){
             <ul class="clearfix">
             	<li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
-                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
+                <li class="news"><a href="<%=request.getContextPath()%>/msg/index">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="">网站地图</a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
