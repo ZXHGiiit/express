@@ -1,5 +1,6 @@
 package com.express.interceptor;
 
+import com.express.domain.Message;
 import com.express.service.MessageService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 public class MsgInterceptor implements HandlerInterceptor {
     private static final Log LOG = LogFactory.getLog(MsgInterceptor.class);
@@ -17,7 +21,7 @@ public class MsgInterceptor implements HandlerInterceptor {
     @Autowired
     private HostHolder holder;
     @Autowired
-    private MessageService messageService;
+    private MessageService msgService;
     /**
      * preHandle方法是进行处理器拦截用的，顾名思义，该方法将在Controller处理之前进行调用，SpringMVC中的Interceptor拦截器是链式的，可以同时存在
      * 多个Interceptor，然后SpringMVC会根据声明的前后顺序一个接一个的执行，而且所有的Interceptor中的preHandle方法都会在
@@ -28,16 +32,39 @@ public class MsgInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // TODO Auto-generated method stub
-        try {
-            long userId = holder.getUserId();
-        }catch (NullPointerException e) {
-            //用户未登录，或登录信息失效
-            return true;
-        }
         long userId = holder.getUserId();
         //long userId = (long) request.getSession().getAttribute("user_id_key_heheda");
-        int countNews = messageService.countOfNotView(userId);
+        int countNews = msgService.countOfNotView(userId);
+        LOG.info("MsgInterceptor.preHandle {userId=" + userId + ", countNews=" + countNews + "}");
         holder.setCountNews(countNews);
+        List<Message> msgs = msgService.getAllByUserId(userId);
+        if(CollectionUtils.isEmpty(msgs)) {
+            holder.setAttribute("countNotView", 0);
+            holder.setAttribute("count",0);
+            holder.setAttribute("countNotViewSys", 0);
+            holder.setAttribute("countSys", 0);
+            return true;
+        }
+        LOG.info("MsgController.index.messages: " + msgs.toString());
+        int count = 0;
+        int countNotView = 0;
+        int countSys = 0;
+        int countNotViewSys = 0;
+        for(Message msg : msgs) {
+            if (msg.isView() && msg.isSys()) {
+                countSys ++;
+            } else if (msg.isView() && !msg.isSys()){
+                count ++;
+            } else if (!msg.isView() && msg.isSys()) {
+                countNotViewSys ++;
+            } else if (!msg.isView() && !msg.isSys()) {
+                countNotView ++;
+            }
+        }
+        holder.setAttribute("countViewSys", countSys);
+        holder.setAttribute("countView", count);
+        holder.setAttribute("countNotView", countNotView);
+        holder.setAttribute("countNotViewSys", countNotViewSys);
         return true;
     }
 

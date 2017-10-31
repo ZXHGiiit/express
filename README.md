@@ -38,3 +38,10 @@
 #### user
 
 ####  
+
+### bug记录
+
+#### ajax请求失败
+    例如<a href="" onclick="test">test</a>
+        若加上了href，就会出现页面刷新太快，ajax请求被取消的情况
+        其status为0，而不是200，表示请求没有发出去。

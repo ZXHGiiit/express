@@ -24,4 +24,20 @@ public class MessageServiceImpl implements MessageService {
         List<Message> messages = messageDao.selectAllByUserId(userId);
         return messages;
     }
+
+    @Override
+    public List<Message> getBy(long userId, boolean isView, boolean isSys) {
+        return messageDao.selectAllBy(userId, isView, isSys);
+    }
+
+    @Override
+    public Message getById(long id) {
+        return messageDao.selectById(id);
+    }
+
+    @Override
+    public int updateView(long id, boolean isView) {
+        return messageDao.updateView(id, isView);
+    }
+
 }

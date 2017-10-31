@@ -110,6 +110,7 @@ public class UserController {
     ExpressResult expressResult = new ExpressResult();
     try {
       userService.logout(req, resp);
+      holder.removeAll();
       return "login";
     } catch (Exception e) {
       LOG.error("UserController.logout.ERROR", e);

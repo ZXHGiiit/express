@@ -5,9 +5,11 @@ import java.util.Date;
 public class Message {
     private long id;
     private long userId;
+    private long sendId;
     private String title;
     private String msg;
     private boolean isView;
+    private boolean isSys;
     private Date createTime;
     private Date updateTime;
 
@@ -67,14 +69,31 @@ public class Message {
         this.title = title;
     }
 
+    public long getSendId() {
+        return sendId;
+    }
+
+    public void setSendId(long sendId) {
+        this.sendId = sendId;
+    }
+
+    public boolean isSys() {
+        return isSys;
+    }
+
+    public void setSys(boolean sys) {
+        isSys = sys;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", sendId=" + sendId +
                 ", title='" + title + '\'' +
-                ", msg='" + msg + '\'' +
                 ", isView=" + isView +
+                ", isSys=" + isSys +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

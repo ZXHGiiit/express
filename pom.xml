@@ -219,7 +219,7 @@
                     <artifactId>tomcat7-maven-plugin</artifactId>
                     <version>${tomcat-version}</version>
                     <configuration>
-                        <port>8080</port>
+                        <port>8888</port>
                         <!-- maven把项目打包成ROOT -->
                         <path>/</path>
                     </configuration>

@@ -26,6 +26,11 @@ public class HostHolder {
     private static final String userKey = "user_key_heheda";
     private static final String userIdKey = "user_id_key_heheda";
     private static final String countNewsKey = "count_news_key_heheda";
+    private static final String countNewsViewKey = "count_news_view";
+    private static final String countNewsNotViewKey = "count_news_not";
+    private static final String countNewsViewSysKey = "count_news_view_sys";
+    private static final String countNewsNotSysKey = "count_news_not_sys";
+
 
     public User getUser() {
         LOG.info("HostHolder.request = " + request.hashCode());
@@ -51,5 +56,17 @@ public class HostHolder {
 
     public void setCountNews(int countNews) {
         request.getSession().setAttribute(countNewsKey, countNews);
+    }
+
+    public void setAttribute(String key, Object obj) {
+        request.getSession().setAttribute(key, obj);
+    }
+
+    public void getAttribute(String key) {
+        request.getSession().getAttribute(key);
+    }
+
+    public void removeAll() {
+        request.getSession().invalidate();
     }
 }
