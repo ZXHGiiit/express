@@ -148,7 +148,7 @@ public class OrderController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value="/getRoute",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    @RequestMapping(value="/getRoute",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String getRoute(@RequestParam("orderId") long orderId) {
         Order order = orderService.selectByOrderId(orderId);
@@ -182,6 +182,6 @@ public class OrderController {
         info.put("startTime", sdf.format(new Date(startTime)));
         String result = JacksonUtils.toJson(info);
         LOG.info("OrderController.getRoute,info : " + result);
-        return result;
+        return JacksonUtils.toJson(info);
     }
 }

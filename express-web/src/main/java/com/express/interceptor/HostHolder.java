@@ -25,6 +25,7 @@ public class HostHolder {
 
     private static final String userKey = "user_key_heheda";
     private static final String userIdKey = "user_id_key_heheda";
+    private static final String countNewsKey = "count_news_key_heheda";
 
     public User getUser() {
         LOG.info("HostHolder.request = " + request.hashCode());
@@ -42,5 +43,13 @@ public class HostHolder {
 
     public void setUserId(long userId) {
         request.getSession().setAttribute(userIdKey, userId);
+    }
+
+    public int getCountNews() {
+        return (int) request.getSession().getAttribute(countNewsKey);
+    }
+
+    public void setCountNews(int countNews) {
+        request.getSession().setAttribute(countNewsKey, countNews);
     }
 }

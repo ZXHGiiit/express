@@ -28,7 +28,8 @@ $(function(){
 	});
 })
 
-function showRouteList(){
+function showSouteList(){
+	$("#souteList li").remove();
 	var startAdd=$("#startAdd").val();
 	var endAdd=$("#endAdd").val();
 	if(startAdd==""||endAdd==""){
@@ -39,7 +40,6 @@ function showRouteList(){
 		type:"post",
 		dataType:"json",
 		data:{"startAdd":startAdd,"endAdd":endAdd},
-		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 		success:function(data){
 			$("#souteList li").remove();
 			console.info(data);
@@ -54,27 +54,32 @@ function showRouteList(){
 }
 
 function showOrder(){
+	//删除原有的信息
+	$("#souteList li").remove();
 	var orderId=$("#orderId").val();
-	if(orderId== "") {
-	    alert("orderId不能为空");
-	    return;
-	}
 	$.ajax({
 		url:"${pageContext.request.contextPath}/order/getRoute",
-		type:"get",
+		type:"post",
 		dataType:"json",
 		data:{"orderId":orderId},
-		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 		success:function(data){
 			$("#souteList li").remove();
 			console.info(data);
-			for(var i=0;i<data.length;i++){
-				$("#souteList").append("<li> <a href='#'> <span>" + data[i].startAddress+"</span>"
-				+"<img src='${pageContext.request.contextPath}/Assets/images/icon15.png'/> <span>"
-				+ data[i].endAddress+"</span>  <span> &nbsp;&nbsp;&nbsp;"+data[i].price+
-				":元 </span> </a> <em>"+data[i].startTime+"</em> </li>" )
-			}
-		}
+			$("#souteList").append("<li> <div style='text-indent: 20px'> 发货地址："+data.sendAdd+"</div>"
+				+	"<div style='text-indent: 20px'> 取货地址："+data.takeAdd+"</div>	"
+				+	"<div style='text-indent: 20px'> 路径："+data.route+"</div>	"
+				+   "<div style='text-indent: 20px'> 是否送达："+data.isFinish+"</div>	"
+				+   "<div style='text-indent: 20px'> 发货时间："+data.startTime+"</div>	"
+				+   "<div style='text-indent: 20px'> 送达时间："+data.endTime+"</div>	"
+			    +    "</li>")
+		},
+
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status);
+            alert(XMLHttpRequest.readyState);
+            alert(textStatus);
+        }
+
 	});
 }
 </script>
@@ -96,7 +101,7 @@ function showOrder(){
             <ul class="clearfix">
             	<li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
-                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>12</span></a></li>
+                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="">网站地图</a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
@@ -170,7 +175,7 @@ function showOrder(){
                 <input name="startAdd" id="startAdd" type="text" placeholder="请输入城市名（中文/拼音）">
                 <span>到达城市</span>
                 <input name="endAdd" id="endAdd" type="text" placeholder="请输入城市名（中文/拼音）">
-                <a  onclick="showRouteList()">搜索比价</a>
+                <a  onclick="showSouteList()">搜索比价</a>
                 </div>
               </div>
               <div class="tabCont">
@@ -201,16 +206,13 @@ function showOrder(){
                 <a href=""><img src="${pageContext.request.contextPath}/Assets/images/more.png" /></a>
             </div>
             <ul id="souteList">
-            	<li>
-                    <a href="">
-                        <span>东莞</span>
-                        <img src="${pageContext.request.contextPath}/Assets/images/icon15.png"/>
-                        <span>重庆</span>&nbsp;
-                        <span>222元</span>
-                    </a>
-                    <em>2014-04-13</em>
-                </li>
+<!--             	<li>            	   -->
+<!--                   <div style="text-indent: 20px">取货地址:takeAdd</div> -->
+<!--                   <div style="text-indent: 20px">发货地址:sendAdd</div> -->
+<!--                   <div style="text-indent: 20px">发货地址:sendAdd</div>                   -->
+<!--                 </li>                      -->
             </ul>
+
         </div>
         <div class="box_3_r">
         	<div class="box_head">

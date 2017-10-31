@@ -23,6 +23,7 @@ import com.express.commons.vo.ExpressResult;
 import com.express.dao.UserDao;
 import com.express.domain.User;
 import com.express.interceptor.HostHolder;
+import com.express.service.MessageService;
 import com.express.service.UserService;
 import com.google.common.base.Strings;
 
@@ -42,7 +43,8 @@ public class UserController {
   private HostHolder holder;
   @Autowired
   private UserDao userDao;
-
+  @Autowired
+  private MessageService messageService;
   //跳转到登录页面
   @RequestMapping("/loginPage")
   public String returnLogin(){
@@ -63,6 +65,9 @@ public class UserController {
       LOG.info("UserController.login.user:" + user.toString()) ;
       result.put("result", true);
       result.put("message", "登录成功!!");
+      //获取用户的未读消息数量
+      int countOfNews = messageService.countOfNotView(user.getId());
+      holder.setCountNews(countOfNews);
       //将用户登录信息保存到holder中
       holder.setUser(user);
       holder.setUserId(user.getId());

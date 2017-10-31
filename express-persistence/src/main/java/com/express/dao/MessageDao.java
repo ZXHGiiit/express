@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MessageDao {
     public static final String TABLE = "message";
-    public static final String COLL_ALL = "id, user_id, msg, is_view, create_time, update_time";
+    public static final String COLL_ALL = "id, user_id, title, msg, is_view, create_time, update_time";
 
     @Select(" select "
         + COLL_ALL

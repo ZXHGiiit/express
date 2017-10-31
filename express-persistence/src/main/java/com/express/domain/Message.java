@@ -5,6 +5,7 @@ import java.util.Date;
 public class Message {
     private long id;
     private long userId;
+    private String title;
     private String msg;
     private boolean isView;
     private Date createTime;
@@ -58,11 +59,20 @@ public class Message {
         this.updateTime = updateTime;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", title='" + title + '\'' +
                 ", msg='" + msg + '\'' +
                 ", isView=" + isView +
                 ", createTime=" + createTime +
