@@ -122,7 +122,7 @@ function viewTask(orderId) {
                         +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
                         +   "<li><span> 接单时间："+getLocalTime(data.createTime)+"</span>	</li>"
                         +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>"
-                        + "<ul class='erji'><li><strong> <a onclick='updateTask(" + data.taskId + ")'>结束任务</a></strong></li><ul>")
+                        +   "<li><button type='button'  onclick='updateTask("+data.taskId+")'>结束任务</button></li>")
 
         },
         error : function(data) {

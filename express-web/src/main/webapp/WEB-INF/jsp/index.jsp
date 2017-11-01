@@ -97,7 +97,7 @@ function getLocalTime(nS) {
     	<div class="logo"><a href=""><img src="${pageContext.request.contextPath}/Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
         	<div class="head_top">
-        		<span href="#">${user_key_heheda.account}</span>
+        		<span href="#">${user_key_heheda.account}${user_key_heheda.isVip}</span>
                 <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
@@ -120,7 +120,14 @@ function getLocalTime(nS) {
     <div class="box_1 clearfix">
     	<div class="box_1_l">
         	<a href="<%=request.getContextPath()%>/book">网上下单<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
-            <a href="<%=request.getContextPath()%>/carrier" class="a_2">承运商申请<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
+            <c:choose>
+            <c:when test="${user_key_heheda.isVip}">
+                <a href="<%=request.getContextPath()%>/book">发布行程<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
+            </c:when>
+            <c:otherwise>
+                <a href="<%=request.getContextPath()%>/carrier" class="a_2">承运商申请<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
+            </c:otherwise>
+            </c:choose>
         </div>
         <div class="banner">
         	<!-- 代码 开始 -->

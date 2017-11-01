@@ -75,6 +75,10 @@ public class User {
     return isVip;
   }
 
+  public boolean getIsVip(){
+    return isVip;
+  }
+
   public void setVip(boolean vip) {
     isVip = vip;
   }
