@@ -98,12 +98,16 @@ public class RouteController {
 
     /**
      * 修改行程
-     * @param startAdd
-     * @param endAdd
      * @return
      */
-    public String update(String startAdd, String endAdd) {
-        return RetJacksonUtil.resultOk();
+    @RequestMapping("/update")
+    @ResponseBody
+    public String update(@RequestParam("routeId") long routeId, @RequestParam("status") String status) {
+        int result = routeService.updateStatus(routeId, status);
+        if(result != 1) {
+            return JacksonUtils.toJson("error");
+        }
+        return JacksonUtils.toJson("success");
     }
 
     /**
@@ -168,7 +172,7 @@ public class RouteController {
         return JacksonUtils.toJson(routeInfoVos);
     }
 
-    @RequestMapping("/list/record")
+    @RequestMapping(value="/list/record",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String listRouteRecord() {
         long userId = holder.getUserId();
@@ -180,7 +184,7 @@ public class RouteController {
         return JacksonUtils.toJson(routes);
     }
 
-    @RequestMapping("/list/doing")
+    @RequestMapping(value="/list/doing",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String getDoingRoute() {
         long userId = holder.getUserId();
@@ -190,4 +194,5 @@ public class RouteController {
         List<Route> routes = routeService.selectAllByUserId(userId, statusList);
         LOG.info("RouteController.getDoingRoute.routes: " + routes.toString());
         return JacksonUtils.toJson(routes);
+    }
 }

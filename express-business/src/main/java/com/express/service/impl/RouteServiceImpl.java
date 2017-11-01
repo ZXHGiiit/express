@@ -59,4 +59,9 @@ public class RouteServiceImpl implements RouteService {
     public List<Route> selectAllByUserId(long userId, List<String> statusList) {
         return routeDao.selectAllByUserId(userId, statusList);
     }
+
+    @Override
+    public int updateStatus(long routeId, String status) {
+        return routeDao.updateStatus(routeId, status);
+    }
 }

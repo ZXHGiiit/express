@@ -14,4 +14,6 @@ public interface RouteService {
     Route selectByRouteId(long routeId);
 
     List<Route> selectAllByUserId(long userId, List<String> statusList);
+
+    int updateStatus(long routeId, String status);
 }

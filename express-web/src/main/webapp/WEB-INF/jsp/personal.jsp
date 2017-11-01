@@ -156,28 +156,133 @@ function updateTask(taskId) {
      });
 }
 
-function listTask() {
+
+function listRouteRecord() {
     $.ajax({
         type: "post",
-        url : "<%=request.getContextPath()%>/task/listTask",
+        url : "<%=request.getContextPath()%>/route/list/record",
         contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-        data:{"isFinish":isFinish},
         dataType: "json",
         success : function(data) {
             console.info(data);
             $("#msg").empty();
             $("#title").empty();
-            $('#title').append('<span>任务列表</span>');
+            $('#title').append('<span>历史行程列表</span>');
            for(var i=0;i<data.length;i++) {
-               $("#msg").append("<li><span><a onclick='viewTask("+ data[i].orderId +")'>收件人："+data[i].takeName+"  |  接收于" +getLocalTime(data[i].createTime)+"</a></span></li>");
+               $("#msg").append("<li><span>"+data[i].startAddress + "->" + data[i].endAddress +
+               " | " + getLocalTime(data[i].startTime) + "->" +getLocalTime(data[i].endTime) + " | "
+               + data[i].status + "</a></span></li>");
            }
 
         },
         error : function(data) {
             alert("server error")
         }
-
     });
+}
+
+function getDoingRoute() {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/route/list/doing",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#msg").empty();
+            $("#title").empty();
+            $('#title').append('<span>进行中行程</span>');
+           for(var i=0;i<data.length;i++) {
+               $("#msg").append("<li><span>"+data[i].startAddress + "->" + data[i].endAddress +
+               " | " + getLocalTime(data[i].startTime) + "->" +getLocalTime(data[i].endTime) + " | "
+               + data[i].status + "</a></span>");
+               if(data[i].status == "ready") {
+                    $("#msg").append("<button type='button'  onclick='runRoute("+data[i].id+")'>启动行程</button>" +
+                        "<button type='button'  onclick='cancleRoute("+data[i].id+")'>取消行程</button>")
+               } else {
+                    $("#msg").append("<li><button type='button'  onclick='finishRoute("+data[i].id+")'>结束行程</button></li>");
+               }
+               $("#msg").append("</li>")
+           }
+
+        },
+        error : function(data) {
+            alert("server error")
+        }
+    });
+}
+
+function runRoute(routeId) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/route/update",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{
+            "routeId":routeId,
+            "status":"doing"
+        },
+        dataType: "json",
+        success : function(data) {
+            if(data == "success") {
+                alert("行程已启动");
+                location.reload();
+            } else {
+                alert("出现未知错误")
+            }
+        },
+        error:function(data) {
+            alert("server error");
+        }
+    });
+}
+
+function cancleRoute(routeId, status) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/route/update",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{
+            "routeId":routeId,
+            "status":"cancle"
+        },
+        dataType: "json",
+        success : function(data) {
+            if(data == "success") {
+                alert("行程已取消");
+                location.reload();
+            } else {
+                alert("出现未知错误")
+            }
+        },
+        error:function(data) {
+            alert("server error");
+        }
+    });
+}
+
+function finishRoute(routeId, status) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/route/update",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{
+            "routeId":routeId,
+            "status":"finish"
+        },
+        dataType: "json",
+        success : function(data) {
+           if(data == "success") {
+               alert("行程已结束");
+               location.reload();
+           } else {
+               alert("出现未知错误")
+           }
+        },
+        error:function(data) {
+            alert("server error");
+        }
+    });
+
 }
 
 //将时间戳转换为日期
@@ -271,11 +376,11 @@ function getLocalTime(nS) {
                     <ul class="erji">
                         <li>
                             <i>&nbsp;</i>
-                            <strong><a href="">进行中行程</a></strong>
+                            <strong><a onclick="getDoingRoute()">进行中行程</a></strong>
                         </li>
                         <li>
                             <i>&nbsp;</i>
-                            <strong><a href="">历史行程</a></strong>
+                            <strong><a onclick="listRouteRecord()">历史行程</a></strong>
                         </li>
                     </ul>
                 </li>

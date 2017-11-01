@@ -1,10 +1,13 @@
 package com.express.dao;
 
 import com.express.domain.Route;
+import com.express.support.MybatisExtendedLanguageDriver;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Lang;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -60,6 +63,7 @@ public interface RouteDao {
     )
     Route selectByRouteId(@Param("routeId") long routeId);
 
+    @Lang(MybatisExtendedLanguageDriver.class)
     @Select(" select "
             + COLL_ALL
             + " from "
@@ -69,5 +73,12 @@ public interface RouteDao {
             + " and "
             + " status in (#{statusList})"
     )
-    List<Route> selectAllByUserId(@Param("userId") long userId,@Param("status") List<String> statusList);
+    List<Route> selectAllByUserId(@Param("userId") long userId,@Param("statusList") List<String> statusList);
+
+    @Update(" update "
+        + TABLE
+        + " set status = #{status} "
+        + " where "
+        + " id = #{routeId}")
+    int updateStatus(@Param("routeId") long routeId, @Param("status") String status);
 }
