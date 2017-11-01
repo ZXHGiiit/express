@@ -49,6 +49,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> selectBy(long userId, boolean isFinish) {
+        return taskDao.selectAllBy(userId, isFinish);
+    }
+
+    @Override
     public int addTask(Task task) {
         if(task == null) {
             LOG.error("TaskServiceImpl.addTask.task is null!!!");

@@ -19,10 +19,19 @@ public class Order {
     private boolean isCom;//该订单是否评论。不能是 isComment，否则和comment字段的get方法冲突
     private int score;
     private String comment;
+    private double price;
     private long startTime;
     private long endTime;
     private Date createTime;
     private Date updateTime;
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public long getAutoId() {
         return autoId;

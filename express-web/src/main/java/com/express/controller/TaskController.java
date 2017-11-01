@@ -1,9 +1,13 @@
 package com.express.controller;
 
+import com.google.common.collect.Lists;
+
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
+import com.express.domain.Order;
 import com.express.domain.Task;
+import com.express.domain.TaskVo;
 import com.express.interceptor.HostHolder;
 import com.express.service.OrderService;
 import com.express.service.TaskService;
@@ -12,12 +16,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import redis.clients.jedis.BinaryClient;
 
 /**
  * 用户任务Controller
@@ -73,6 +82,37 @@ public class TaskController {
         Map<String, List<Task>> result = taskService.selectAllByUserId(userId);
         LOG.info("TaskController.listTasks.result : " + result.toString());
         return JacksonUtils.toJson(result);
+    }
+
+    /**
+     * 获取运营商用户任务清单。一个route可以对应多个task
+     * @return
+     */
+    @RequestMapping(value="/listTask",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
+    @ResponseBody
+    public String listTask(@RequestParam("isFinish") boolean isFinish) {
+        long userId = holder.getUserId();
+        List<Task> tasks = taskService.selectBy(userId, isFinish);
+        if(CollectionUtils.isEmpty(tasks)) {
+            LOG.info("TaskController.listTask Task is NULL. Params:{userId=" + userId + ", isFinish=" + isFinish + "}");
+        }
+        LOG.info("TaskController.listTasks.result : " + tasks.toString());
+        List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
+        Map<Long, Order> orderMap = orderService.selectByOrderIds(orderIds);
+        List<TaskVo> vos = Lists.newArrayList();
+        for(Task task : tasks) {
+            TaskVo vo = new TaskVo();
+            vo.setTaskId(task.getId());
+            vo.setOrderId(task.getOrderId());
+            Order order = orderMap.get(task.getOrderId());
+            if(order != null) {
+                vo.setTakeName(order.getTakeName());
+                vo.setCreateTime(order.getCreateTime());
+            }
+            vos.add(vo);
+        }
+        LOG.info("TaskController.listTask. taskVos:" + vos.toString());
+        return JacksonUtils.toJson(vos);
     }
 
     /**

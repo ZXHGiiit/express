@@ -46,17 +46,14 @@ public class OrderController {
      * 获取用户的所有订单
      * @return
      */
-    @RequestMapping(value="/listOrder",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    @RequestMapping(value="/listOrder",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
-    public String listOrder() {
+    public String listOrder(@RequestParam("isFinish") boolean isFinish) {
         long userId = holder.getUserId();
-        LOG.info("OrderController.getUserId : " + userId);
-        Map<String, Object> result = orderService.selectAllByUserId(userId);
-        LOG.info("OrderController.listOrder.result :" + result.toString());
-        String resultJson = JacksonUtils.toJson(result);
-        Date date = new Date();
-        long time = date.getTime();
-        return resultJson;
+        LOG.info("OrderController.listOrder. params {userId=" + userId + ", isFinish=" + isFinish);
+        List<Order> orders = orderService.selectBy(userId, isFinish);
+        LOG.info("OrderController.listOrder.result :" + orders.toString());
+        return JacksonUtils.toJson(orders);
     }
 
     /**
@@ -99,6 +96,7 @@ public class OrderController {
         //创建Order
         order.setId(IDUtils.getOrderId());
         order.setUserId(userId);
+        order.setPrice(route.getPrice());//数据冗余，便于查询
         int resultOfAddOrder = orderService.addOrder(order);
 
         //创建task
@@ -162,6 +160,11 @@ public class OrderController {
         String sendAdd = order.getSendAddress();
         String takeAdd = order.getTakeAddress();
         info.put("isFinish", isFinish);
+        if(isFinish) {
+            info.put("isFinishCN","是");
+        } else {
+            info.put("isFinishCN", "否");
+        }
         info.put("sendAdd", sendAdd);
         info.put("takeAdd", takeAdd);
         Task task = taskService.selectByOrderId(orderId);
@@ -184,4 +187,60 @@ public class OrderController {
         LOG.info("OrderController.getRoute,info : " + result);
         return JacksonUtils.toJson(info);
     }
+
+    /**
+     * 通过订单查询订单详情,包括发货人，物品等隐私内容
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value="/getInfo",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
+    @ResponseBody
+    public String getInfo(@RequestParam("orderId") long orderId) {
+        Order order = orderService.selectByOrderId(orderId);
+        if(order == null) {
+            LOG.warn("OrderController.getRoute  Route is NULL");
+            return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.RETURN_NULL_ERROR);
+        }
+        Map<String, Object> info = Maps.newHashMap();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        boolean isFinish = order.isFinish();
+        String sendAdd = order.getSendAddress();
+        String takeAdd = order.getTakeAddress();
+        info.put("isFinish", isFinish);
+        if(isFinish) {
+            info.put("isFinishCN","是");
+        } else {
+            info.put("isFinishCN", "否");
+        }
+        info.put("sendAdd", sendAdd);
+        info.put("takeAdd", takeAdd);
+        Task task = taskService.selectByOrderId(orderId);
+        if(task == null) {
+            LOG.error("OrderController.getRoute the order don't have task!!!");
+            return JacksonUtils.toJson(info);
+        }
+        String routeInfo = task.getRoute();
+        info.put("route", routeInfo);
+        Route route = routeService.selectByRouteId(order.getRouteId());
+        if(route == null) {
+            LOG.error("OrderController.getRoute the order don't have route!!!");
+            return JacksonUtils.toJson(info);
+        }
+        long endTime = route.getEndTime();
+        long startTime = route.getStartTime();
+        info.put("endTime", sdf.format(new Date(endTime)));
+        info.put("startTime", sdf.format(new Date(startTime)));
+        info.put("sendName", order.getSendName());
+        info.put("takeName", order.getTakeName());
+        info.put("sendPhone", order.getSendPhone());
+        info.put("takePhone", order.getTakePhone());
+        info.put("goodsName", order.getGoodsName());
+        info.put("createTime", task.getCreateTime());
+        info.put("price", order.getPrice());
+        info.put("id", order.getId());
+        String result = JacksonUtils.toJson(info);
+        LOG.info("OrderController.getRoute,info : " + result);
+        return JacksonUtils.toJson(info);
+    }
+
 }

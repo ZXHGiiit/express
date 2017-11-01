@@ -87,4 +87,19 @@ public class OrderServiceImpl implements OrderService {
     public int updateFinish(boolean isFinish, long orderId) {
         return orderDao.updateFinish(isFinish, orderId);
     }
+
+    @Override
+    public List<Order> selectBy(long userId, boolean isFinish) {
+        return orderDao.selectBy(userId, isFinish);
+    }
+
+    @Override
+    public Map<Long, Order> selectByOrderIds(List<Long> orderIds) {
+        Map<Long, Order> orderMap = orderDao.selectMapByOrderIds(orderIds);
+        if(CollectionUtils.isEmpty(orderMap)) {
+            //防止空指针异常
+            orderMap = Maps.newHashMap();
+        }
+        return orderDao.selectMapByOrderIds(orderIds);
+    }
 }

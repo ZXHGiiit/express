@@ -24,6 +24,16 @@ public interface TaskDao {
         + " user_id = #{userId}")
     List<Task> selectAllByUserId(@Param("userId") long userId);
 
+    @Select(" select "
+            + COLL_ALL
+            + " from "
+            + TABLE
+            + " where "
+            + " user_id = #{userId} "
+            + " and "
+            + " is_finish = #{isFinish}")
+    List<Task> selectAllBy(@Param("userId") long userId, @Param("isFinish") boolean isFinish);
+
 
     @Insert(" insert into "
         + TABLE

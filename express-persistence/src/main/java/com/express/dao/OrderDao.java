@@ -6,11 +6,13 @@ import com.sun.tracing.dtrace.ProviderAttributes;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Lang;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderDao {
     public static final String TABLE = "orders";
@@ -25,6 +27,13 @@ public interface OrderDao {
     )
     List<Order> selectAllByUserId(@Param("userId") long userId);
 
+    @Select(" select "
+            + COLL_ALL
+            + " from "
+            + TABLE
+            + " where is_finish = #{isFinish}"
+    )
+    List<Order> selectBy(@Param("userId") long userId, @Param("isFinish") boolean isFinish);
     /**
      * 通过认证用户获取task--》orderId--》order--》
      * @param orderIds
@@ -39,6 +48,17 @@ public interface OrderDao {
         + " id in (#{orderId})"
         )
     List<Order> selectAllByOrderIds(@Param("orderId") List<Long> orderIds);
+
+    @Lang(MybatisExtendedLanguageDriver.class)
+    @MapKey("id")
+    @Select(" select "
+            + COLL_ALL
+            + " from "
+            + TABLE
+            + " where "
+            + " id in (#{orderId})"
+    )
+    Map<Long, Order> selectMapByOrderIds(@Param("orderId") List<Long> orderIds);
 
     @Insert(" insert into "
         + TABLE

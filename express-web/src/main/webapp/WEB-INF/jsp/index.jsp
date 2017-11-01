@@ -68,7 +68,7 @@ function showOrder(){
 			$("#souteList").append("<li> <div style='text-indent: 20px'> 发货地址："+data.sendAdd+"</div>"
 				+	"<div style='text-indent: 20px'> 取货地址："+data.takeAdd+"</div>	"
 				+	"<div style='text-indent: 20px'> 路径："+data.route+"</div>	"
-				+   "<div style='text-indent: 20px'> 是否送达："+data.isFinish+"</div>	"
+				+   "<div style='text-indent: 20px'> 是否送达："+data.isFinishCN+"</div>	"
 				+   "<div style='text-indent: 20px'> 发货时间："+getLocalTime(data.startTime)+"</div>	"
 				+   "<div style='text-indent: 20px'> 送达时间："+getLocalTime(data.endTime)+"</div>	"
 			    +    "</li>")

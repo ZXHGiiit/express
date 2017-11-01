@@ -20,50 +20,121 @@ $(function(){
 })
 
 
-function listOrder() {
+function listOrder(isFinish) {
     $.ajax({
-        type: "GET",
+        type: "post",
         url : "<%=request.getContextPath()%>/order/listOrder",
         contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{"isFinish":isFinish},
         dataType: "json",
         success : function(data) {
             console.info(data);
-            console.info(data.finishOrders);
-            console.info(data.doingOrders);
             $("#msg").empty();
             $("#title").empty();
-            if(null != data && "" != data){
-                $('#title').append('<span></span>');
-                $('#msg').append('<strong>进行中</strong>');
-                if(data.doingOrders != null) {
-                    $('#person_rmain').append('<ul>');
-                    for(var i = 0;i < data.doingOrders.length; i++) {
-                        $('#person_rmain').append('<li><span>' + data.doingOrders[i].createTime + '<span></li>');
-                    }
-                    $('#person_rmain').append('</ul>');
-                }
-                $('#person_rmain').append('<strong>已完成</strong>');
-                if(data.finishOrders != null) {
-                    $('#person_rmain').append('<ul>');
-                    for(var i = 0;i < data.finishOrders.length; i++) {
-                        $('#person_rmain').append('<li><span>' + data.finishOrders[i] + '</span></li>');
-                    }
-                    $('#person_rmain').append('</ul>');
-                }
-
-            } else {
-                $('#title').append('<span>个人账单</span>');
-                $('#person_rmain').append('<strong>进行中</strong>');
-                $('#person_rmain').append('<strong>已完成</strong>');
-            }
+            $('#title').append('<span>订单列表</span>');
+           for(var i=0;i<data.length;i++) {
+               $("#msg").append("<li><span><a onclick='viewOrder("+ data[i].id +")'>"+data[i].id+"  |  " + data[i].takeAddress +" -> "+data[i].sendAddress+
+                "  |   "+getLocalTime(data[i].createTime)+"</a></span></li>");
+           }
 
         },
         error : function(data) {
-            $('#popupcontent').append('添加失败');
-            $('#popupcontent').append("<div id='statusbar'><button onclick='hidePopup();'>Close window</button></div>");
+            alert("server error")
         }
 
     });
+}
+
+function viewOrder(orderId) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/order/getInfo",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{"orderId":orderId},
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#msg").empty();
+            $("#title").empty();
+            $('#title').append('<span>订单详情</span>');
+            $("#msg").append("<li> <span> 订单编号："+data.id+"</span>	</li>"
+                        +"<li> <span> 发货地址："+data.sendAdd+"</span>	</li>"
+                        +	"<li><span> 取货地址："+data.takeAdd+"</span>	</li>"
+                        +   "<li><span> 发货人："+data.sendName+"</span></li>"
+                        +   "<li><span> 收件人："+data.takeName+"</span></li>"
+                        +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
+                        +	"<li><span> 路径："+data.route+"</span></li>"
+                        +   "<li><span> 是否送达："+data.isFinishCN+"</span></li>"
+                        +   "<li><span> 发货时间："+getLocalTime(data.startTime)+"</span>	</li>"
+                        +   "<li><span> 送达时间："+getLocalTime(data.endTime)+"</span></li>")
+
+        },
+        error : function(data) {
+            alert("server error")
+        }
+
+    });
+}
+
+
+function listTask(isFinish) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/task/listTask",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{"isFinish":isFinish},
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#msg").empty();
+            $("#title").empty();
+            $('#title').append('<span>任务列表</span>');
+           for(var i=0;i<data.length;i++) {
+               $("#msg").append("<li><span><a onclick='viewTask("+ data[i].orderId +")'>收件人："+data[i].takeName+"  |  接收于" +getLocalTime(data[i].createTime)+"</a></span></li>");
+           }
+
+        },
+        error : function(data) {
+            alert("server error")
+        }
+
+    });
+}
+
+function viewTask(orderId) {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/order/getInfo",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{"orderId":orderId},
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#msg").empty();
+            $("#title").empty();
+            $('#title').append('<span>任务详情</span>');
+            $("#msg").append("<li> <span> 货物名称："+data.goodsName+"</span>	</li>"
+                        +"<li> <span> 发货地址："+data.sendAdd+"</span>	</li>"
+                        +	"<li><span> 取货地址："+data.takeAdd+"</span>	</li>"
+                        +   "<li><span> 发货人："+data.sendName+"</span></li>"
+                        +   "<li><span> 收件人："+data.takeName+"</span></li>"
+                        +   "<li><span> 收件人电话："+data.takePhone+"</span></li>"
+                        +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
+                        +   "<li><span> 接单时间："+getLocalTime(data.createTime)+"</span>	</li>"
+                        +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>")
+
+        },
+        error : function(data) {
+            alert("server error")
+        }
+
+    });
+}
+
+
+//将时间戳转换为日期
+function getLocalTime(nS) {
+   return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
 }
 
 
@@ -125,11 +196,11 @@ function listOrder() {
                     <ul class="erji">
                     	<li>
                         	<i>&nbsp;</i>
-                            <strong> <a onclick="listOrder()">进行中订单</a></strong>
+                            <strong> <a onclick="listOrder(false)">进行中订单</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">已完成订单</a></strong>
+                            <strong><a onclick="listOrder(true)">已完成订单</a></strong>
                         </li>
 
                     </ul>
@@ -139,11 +210,11 @@ function listOrder() {
                     <ul class="erji">
                         <li>
                             <i>&nbsp;</i>
-                            <strong><a href="">进行中任务</a></strong>
+                            <strong><a onclick="listTask(false)">进行中任务</a></strong>
                         </li>
                         <li>
                             <i>&nbsp;</i>
-                            <strong><a href="">已完成任务</a></strong>
+                            <strong><a onclick="listTask(true)">已完成任务</a></strong>
                         </li>
                     </ul>
                 </li>
