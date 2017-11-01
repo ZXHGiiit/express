@@ -12,4 +12,6 @@ public interface RouteService {
     List<Route> selectReadyRouteByAdd(String startAdd, String endAdd);
 
     Route selectByRouteId(long routeId);
+
+    List<Route> selectAllByUserId(long userId, List<String> statusList);
 }

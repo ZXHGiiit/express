@@ -8,6 +8,7 @@ import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
 import com.express.domain.Route;
 import com.express.domain.RouteInfoVo;
+import com.express.domain.RouteStatusEnum;
 import com.express.interceptor.HostHolder;
 import com.express.service.RouteService;
 import com.express.service.UserService;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,16 +55,29 @@ public class RouteController {
     @ResponseBody
     public String createRoute(@RequestParam("startAdd") String startAdd,
                       @RequestParam("endAdd") String endAdd,
-                      @RequestParam("price") double price,
-                      @RequestParam("startTime") long startTime,
-                      @RequestParam("endTime") long endTime) {
+                      @RequestParam("price") String price,
+                      @RequestParam("startTime") String startTime,
+                      @RequestParam("endTime") String endTime) {
+        LOG.info("RouteController.createRoute. Params:{startAdd=" + startAdd + ", endAdd=" + endAdd
+        + ", price=" + price + ", startTime=" + startTime + ", endTime=" + endTime + "}");
+
+        SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
+        long startTimeL = 0;
+        long endTimeL = 0;
+        try {
+            startTimeL = sdf.parse(startTime).getTime();
+            endTimeL = sdf.parse(endTime).getTime();
+        } catch (ParseException e) {
+            LOG.error("RouteController.createRoute.parseTime Exception",e);
+        }
+
         long userId = holder.getUserId();
         Route route = new Route();
         route.setStartAddress(startAdd);
         route.setEndAddress(endAdd);
-        route.setPrice(price);
-        route.setStartTime(startTime);
-        route.setEndTime(endTime);
+        route.setPrice(Double.valueOf(price));
+        route.setStartTime(startTimeL);
+        route.setEndTime(endTimeL);
         route.setUserId(userId);
         LOG.info("RouteController.addRoute.route : " + route.toString());
         int result = routeService.addRoute(route);
@@ -100,6 +116,7 @@ public class RouteController {
         long userId = holder.getUserId();
         boolean hasRoute = routeService.hasRoute(userId);
         Map<String, Object> result = Maps.newHashMap();
+        LOG.info("RouteController.checkRoute.hasRoute:" + hasRoute);
         result.put("hasRoute", hasRoute);
         return JacksonUtils.toJson(result);
     }
@@ -151,6 +168,26 @@ public class RouteController {
         return JacksonUtils.toJson(routeInfoVos);
     }
 
+    @RequestMapping("/list/record")
+    @ResponseBody
+    public String listRouteRecord() {
+        long userId = holder.getUserId();
+        List<String> statusList = Lists.newArrayList();
+        statusList.add(RouteStatusEnum.FINISH.getStatus());
+        statusList.add(RouteStatusEnum.CANCLE.getStatus());
+        List<Route> routes = routeService.selectAllByUserId(userId, statusList);
+        LOG.info("RouteController.listRouteRecord.routes: " + routes.toString());
+        return JacksonUtils.toJson(routes);
+    }
 
-
+    @RequestMapping("/list/doing")
+    @ResponseBody
+    public String getDoingRoute() {
+        long userId = holder.getUserId();
+        List<String> statusList = Lists.newArrayList();
+        statusList.add(RouteStatusEnum.READY.getStatus());
+        statusList.add(RouteStatusEnum.DOING.getStatus());
+        List<Route> routes = routeService.selectAllByUserId(userId, statusList);
+        LOG.info("RouteController.getDoingRoute.routes: " + routes.toString());
+        return JacksonUtils.toJson(routes);
 }

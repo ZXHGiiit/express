@@ -1,9 +1,11 @@
 package com.express.service.impl;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import com.express.dao.RouteDao;
 import com.express.domain.Route;
+import com.express.domain.RouteStatusEnum;
 import com.express.service.RouteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,10 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public boolean hasRoute(long userId) {
-        List<Route> routes = routeDao.selectRouteByUserId(userId);
+        List<String> statusList = Lists.newArrayList();
+        statusList.add(RouteStatusEnum.READY.getStatus());
+        statusList.add(RouteStatusEnum.DOING.getStatus());
+        List<Route> routes = routeDao.selectAllByUserId(userId, statusList);
         if(CollectionUtils.isEmpty(routes)) {
             return false;
         } else {
@@ -48,5 +53,10 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public Route selectByRouteId(long routeId) {
         return routeDao.selectByRouteId(routeId);
+    }
+
+    @Override
+    public List<Route> selectAllByUserId(long userId, List<String> statusList) {
+        return routeDao.selectAllByUserId(userId, statusList);
     }
 }

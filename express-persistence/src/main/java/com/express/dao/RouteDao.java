@@ -34,7 +34,7 @@ public interface RouteDao {
         + " where "
         + " user_id = #{userId} "
         + " and "
-        + " status <> 'cancle'")
+        + " status not in ('cancle','finish')")
     List<Route> selectRouteByUserId(@Param("userId") long userId);
 
     @Insert(" insert into "
@@ -59,4 +59,15 @@ public interface RouteDao {
         + " id = #{routeId}"
     )
     Route selectByRouteId(@Param("routeId") long routeId);
+
+    @Select(" select "
+            + COLL_ALL
+            + " from "
+            + TABLE
+            + " where "
+            + " user_id = #{userId} "
+            + " and "
+            + " status in (#{statusList})"
+    )
+    List<Route> selectAllByUserId(@Param("userId") long userId,@Param("status") List<String> statusList);
 }
