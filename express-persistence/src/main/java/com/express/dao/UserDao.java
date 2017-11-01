@@ -53,4 +53,12 @@ public interface UserDao {
     + " where "
     + " id = #{userId}")
   User selectByUserId(@Param("userId") long userId);
+
+  @Select(" select "
+          + COLL_ALL
+          + " from "
+          + TABLE
+          + " where "
+          + " account = #{account}")
+  User selectByAccount(@Param("account") String account);
 }

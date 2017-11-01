@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -118,7 +119,7 @@ public class UserController {
     }
   }
 
-  @RequestMapping("/register")
+  @RequestMapping(value="/register",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
   @ResponseBody
   public String register(User user) {
     if (user.getAccount() == null ||user.getPassword() == null) {
@@ -126,13 +127,18 @@ public class UserController {
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
     }
     LOG.info("UserController.register.params:{account : "+ user.getAccount() + "password : "+ user.getPassword() + "}");
-
+    //要确保account是唯一的
+    User userOld = userDao.selectByAccount(user.getAccount());
+    if(userOld != null) {
+      LOG.info("UserController.register.account is used. account:" + user.getAccount());
+      return JacksonUtils.toJson("该账号已被注册过了！！！");
+    }
     int result = userService.createUser(user);
     if (result != 1) {
       LOG.error("UserController.register.createUser Failed!!!");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.UNKNOWN_ERROR);
     }
-    return RetJacksonUtil.resultOk();
+    return JacksonUtils.toJson("注册成功");
   }
 
   @RequestMapping("/test")

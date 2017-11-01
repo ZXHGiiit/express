@@ -14,7 +14,7 @@
         var account = $("#account").val();
         var password = $("#password").val();
         var checkcode = $("#checkcode").val();
-        if(email == "" || password == "" || checkcode == ""){
+        if(account == "" || password == "" || checkcode == ""){
             alert("注册项不能为空");
             return;
         }
@@ -23,13 +23,19 @@
             type : "POST",
             url : "<%=request.getContextPath()%>/user/register",
             data : {
-                "email":email,
+                "account":account,
                 "password":password,
             },
             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             dataType: "json",
             success : function(data) {
-                alter("注册成功！");
+                console.info(data);
+                alert(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+             alert(XMLHttpRequest.status);
+             alert(XMLHttpRequest.readyState);
+             alert(textStatus);
             }
         });
     }
@@ -59,6 +65,10 @@
 	            	$("#loginErr").show();
 	            	$("#loginErr span").text("用户名或密码错误,请重新输入");
 	            }
+            },
+            error: function(data) {
+                alert("服务器内部出错");
+                alert(data);
             }
         });
     }

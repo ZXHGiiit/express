@@ -91,15 +91,16 @@ public class TaskController {
     @RequestMapping(value="/listTask",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String listTask(@RequestParam("isFinish") boolean isFinish) {
+        List<TaskVo> vos = Lists.newArrayList();
         long userId = holder.getUserId();
         List<Task> tasks = taskService.selectBy(userId, isFinish);
         if(CollectionUtils.isEmpty(tasks)) {
             LOG.info("TaskController.listTask Task is NULL. Params:{userId=" + userId + ", isFinish=" + isFinish + "}");
+            return JacksonUtils.toJson(vos);
         }
         LOG.info("TaskController.listTasks.result : " + tasks.toString());
         List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
         Map<Long, Order> orderMap = orderService.selectByOrderIds(orderIds);
-        List<TaskVo> vos = Lists.newArrayList();
         for(Task task : tasks) {
             TaskVo vo = new TaskVo();
             vo.setTaskId(task.getId());
@@ -125,7 +126,7 @@ public class TaskController {
     @RequestMapping("/update/finish")
     @ResponseBody
     public String updateFinish(@RequestParam("isFinish") boolean isFinish,
-                               @RequestParam("taksId") long taskId) {
+                               @RequestParam("taskId") long taskId) {
         //先判断该task是否属于该用户
         long userId = holder.getUserId();
         Task task = taskService.selectByTaskId(taskId);

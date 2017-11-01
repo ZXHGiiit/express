@@ -121,7 +121,8 @@ function viewTask(orderId) {
                         +   "<li><span> 收件人电话："+data.takePhone+"</span></li>"
                         +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
                         +   "<li><span> 接单时间："+getLocalTime(data.createTime)+"</span>	</li>"
-                        +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>")
+                        +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>"
+                        + "<ul class='erji'><li><strong> <a onclick='updateTask(" + data.taskId + ")'>结束任务</a></strong></li><ul>")
 
         },
         error : function(data) {
@@ -131,6 +132,29 @@ function viewTask(orderId) {
     });
 }
 
+function updateTask(taskId) {
+     $.ajax({
+            type: "post",
+            url : "<%=request.getContextPath()%>/task/update/finish",
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            data:{
+                "taskId":taskId,
+                "isFinish":true
+            },
+            dataType: "json",
+            success : function(data) {
+                if(data.status.msg=="Success"){
+                    alert("更新成功");
+                } else {
+                    alert("更新失败");
+                }
+
+            },
+            error : function(data) {
+                alert("server error")
+            }
+     });
+}
 
 //将时间戳转换为日期
 function getLocalTime(nS) {

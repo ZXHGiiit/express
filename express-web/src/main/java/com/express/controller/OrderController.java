@@ -238,6 +238,7 @@ public class OrderController {
         info.put("createTime", task.getCreateTime());
         info.put("price", order.getPrice());
         info.put("id", order.getId());
+        info.put("taskId", task.getId());
         String result = JacksonUtils.toJson(info);
         LOG.info("OrderController.getRoute,info : " + result);
         return JacksonUtils.toJson(info);
