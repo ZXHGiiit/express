@@ -28,6 +28,22 @@ $(function(){
 	});
 })
 
+function checkRoute() {
+    $.ajax({
+        url:"${pageContext.request.contextPath}/route/check",
+        type:"post",
+        dataType:"json",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        success:function(data){
+            if(!data.hasRoute){
+                location.href="${pageContext.request.contextPath}/route";
+            }else{
+                alert("您已经有一个正在进行的行程，无法创建新的行程");
+            }
+        }
+    });
+}
+
 function showSouteList(){
 	$("#souteList li").remove();
 	var startAdd=$("#startAdd").val();
@@ -122,7 +138,7 @@ function getLocalTime(nS) {
         	<a href="<%=request.getContextPath()%>/book">网上下单<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
             <c:choose>
             <c:when test="${user_key_heheda.isVip}">
-                <a href="<%=request.getContextPath()%>/book">发布行程<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
+                <a onclick="checkRoute()">发布行程<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
             </c:when>
             <c:otherwise>
                 <a href="<%=request.getContextPath()%>/carrier" class="a_2">承运商申请<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>

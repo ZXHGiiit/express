@@ -156,6 +156,30 @@ function updateTask(taskId) {
      });
 }
 
+function listTask() {
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/task/listTask",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{"isFinish":isFinish},
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#msg").empty();
+            $("#title").empty();
+            $('#title').append('<span>任务列表</span>');
+           for(var i=0;i<data.length;i++) {
+               $("#msg").append("<li><span><a onclick='viewTask("+ data[i].orderId +")'>收件人："+data[i].takeName+"  |  接收于" +getLocalTime(data[i].createTime)+"</a></span></li>");
+           }
+
+        },
+        error : function(data) {
+            alert("server error")
+        }
+
+    });
+}
+
 //将时间戳转换为日期
 function getLocalTime(nS) {
    return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
