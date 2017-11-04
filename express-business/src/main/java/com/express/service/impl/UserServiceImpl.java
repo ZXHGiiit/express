@@ -187,11 +187,13 @@ public class UserServiceImpl implements UserService {
     }
     int countOfTask = tasks.size();
     int countOfComment = ordersWithComment.size();
-    //利用BigDecimal精确除法，保留两位小数,默认四舍五入
-    double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
+    double avgScore;
     if(ordersWithComment.size() == 0) {
       //若没有任何评论，则默认为5分
       avgScore = 5.0;
+    } else {
+      //利用BigDecimal精确除法，保留两位小数,默认四舍五入
+      avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
     }
     //获取用户信息
     User user = userDao.selectByUserId(userId);
@@ -253,10 +255,12 @@ public class UserServiceImpl implements UserService {
       int countOfTask = tasks.size();
       int countOfComment = ordersWithComment.size();
       //利用BigDecimal精确除法，保留两位小数,默认四舍五入
-      double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
+      double avgScore;
       if(ordersWithComment.size() == 0) {
         //若没有任何评论，则默认为5分
         avgScore = 5.0;
+      } else {
+        avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
       }
       infoVo.setAvgScore(avgScore);
       infoVo.setCountOfTask(countOfTask);
