@@ -125,11 +125,11 @@ function getLocalTime(nS) {
                     <ul class="erji">
                     	<li>
                         	<i>&nbsp;</i>
-                            <strong><a href="" onclick="listMsg(false, true)">未读消息(${countNotViewSys})</a></strong>
+                            <strong><a  onclick="listMsg(false, true)">未读消息(${countNotViewSys})</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
-                            <strong><a href="" onclick="listMsg(true, true)">已读消息(${countViewSys})</a></strong>
+                            <strong><a  onclick="listMsg(true, true)">已读消息(${countViewSys})</a></strong>
                         </li>
                     </ul>
                 </li>

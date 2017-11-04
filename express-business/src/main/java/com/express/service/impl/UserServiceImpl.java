@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private RedisService redisService;
 
+  //account可以是手机号，也可以是account
   @Override
   public User login(String account, String password, HttpServletRequest req, HttpServletResponse resp) {
     if (Strings.isNullOrEmpty(account) || Strings.isNullOrEmpty(password)) {
@@ -62,9 +63,13 @@ public class UserServiceImpl implements UserService {
       return null;
     }
     User user = userDao.selectByUAP(account, password);
-    if (user == null) {
+    User user2 = userDao.selectByPAP(Long.parseLong(account), password);
+    if (user == null && user2 == null) {
       LOG.info("UserServiceImpl.login incorrect");
       return null;
+    }
+    if(user == null) {
+      user = user2;
     }
     LOG.info("UserServiceImpl.login success user: " + user.toString());
     return user;

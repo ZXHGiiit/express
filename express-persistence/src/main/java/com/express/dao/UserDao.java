@@ -25,6 +25,17 @@ public interface UserDao {
   )
   User selectByUAP(@Param("account") String account, @Param("password") String password);
 
+  @Select(" select "
+          + COLL_ALL
+          + " from "
+          + TABLE
+          + " where "
+          + " phone = #{phone}"
+          + " and "
+          + " password = #{password}"
+  )
+  User selectByPAP(@Param("phone") long phone, @Param("password") String password);
+
   @Insert(" insert into "
     + TABLE
     + " set "
@@ -68,5 +79,5 @@ public interface UserDao {
           + TABLE
           + " where "
           + " phone = #{phone}")
-  User selectByAccount(@Param("account") long phone);
+  User selectByPhone(@Param("phone") long phone);
 }

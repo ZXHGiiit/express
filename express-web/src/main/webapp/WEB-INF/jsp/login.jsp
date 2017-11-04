@@ -101,7 +101,7 @@
         	<ul>
             	<li>
                 	<span>用户名：</span>
-                    <input name="account" id="accountLogin" type="text" placeholder="账号/邮箱">
+                    <input name="account" id="accountLogin" type="text" placeholder="用户名/手机号">
                 </li>
                 <li>
                 	<span>密码：</span>
@@ -227,10 +227,8 @@ function register(){
                 console.info(data);
                 alert(data);
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-             alert(XMLHttpRequest.status);
-             alert(XMLHttpRequest.readyState);
-             alert(textStatus);
+            error: function() {
+                alert("server error")
             }
         });
     }
