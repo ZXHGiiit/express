@@ -15,4 +15,6 @@ public interface MessageService {
     Message getById(long id);
 
     int updateView(long id, boolean isView);
+
+    int createMsg(long userId, String title, String msg, boolean isSys);
 }

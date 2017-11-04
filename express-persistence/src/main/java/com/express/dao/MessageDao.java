@@ -3,6 +3,7 @@ package com.express.dao;
 import com.express.domain.Message;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -56,4 +57,15 @@ public interface MessageDao {
         + " is_view = #{isView}"
         + " where id = #{id}")
     int updateView(@Param("id") long id, @Param("isView") boolean isView);
+
+
+    @Insert( " insert into "
+        + TABLE
+        + " set "
+        + " user_id = #{userId},"
+        + " title = #{title},"
+        + " msg = #{msg}, "
+        + " is_sys = #{isSys}")
+    int insert(@Param("userId") long userId, @Param("title") String title, @Param("msg") String msg,
+               @Param("isSys") boolean isSys);
 }

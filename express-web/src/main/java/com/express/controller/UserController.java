@@ -144,7 +144,7 @@ public class UserController {
     }
 
     //要确保手机号唯一
-    User userOld2 = userDao.selectByAccount(user.getPhone());
+    User userOld2 = userDao.selectByPhone(user.getPhone());
     if(userOld2 != null) {
       LOG.info("UserController.register.account is used. account:" + user.getAccount());
       return JacksonUtils.toJson("该手机号已被注册过了！！！");
@@ -156,7 +156,14 @@ public class UserController {
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.UNKNOWN_ERROR);
     }
 
-    //
+    //用户注册成功后，给用户发送消息
+    //首先获取用户的id
+    User userRegis = userDao.selectByAccount(user.getAccount());
+    long userId = userRegis.getId();
+    int resultMsg = messageService.createMsg(userId, "欢迎使用【全名快递】", "全民速递软件是天涯网络科技有限公司设计的一款联系全民的物品运送软件。旨在利用人们的出行，同城或跨城地运送物品至目的地，带给有运送需求者便利的同时使出行者获利。不依赖快递公司，出行者自由选择接单使得全民速递软件相对于传统快递尤其是跨区域快递有速度更快，成本更低的明显优势，便民利民，服务于大众生活，前景广阔。", true);
+    if(resultMsg != 1) {
+      LOG.error("UserController.register.sendMsg ERROR");
+    }
     return JacksonUtils.toJson("注册成功");
   }
 

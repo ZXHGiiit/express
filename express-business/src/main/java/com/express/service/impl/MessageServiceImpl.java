@@ -40,4 +40,7 @@ public class MessageServiceImpl implements MessageService {
         return messageDao.updateView(id, isView);
     }
 
+    public int createMsg(long userId, String title, String msg, boolean isSys) {
+        return  messageDao.insert(userId, title, msg, isSys);
+    }
 }
