@@ -229,4 +229,13 @@ public class UserController {
     holder.setVip(true);
     return JacksonUtils.toJson("申请成功");
   }
+
+  @RequestMapping(value="/userInfo",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
+  @ResponseBody
+  public String userInfo() {
+    long userId = holder.getUserId();
+    User user = userService.getUser(userId);
+    LOG.info("UserController.userInfo.user:" + user.toString());
+    return JacksonUtils.toJson(user);
+  }
 }

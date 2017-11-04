@@ -320,8 +320,39 @@ function finishRoute(routeId, status) {
 
 }
 
-function scoreInfo() {
+function userInfo() {
     $.ajax({
+            type: "get",
+            url : "<%=request.getContextPath()%>/user/userInfo",
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success : function(data) {
+               console.info(data);
+               $("#msg").empty();
+               $("#title").empty();
+                $('#title').append('<span>个人信息</span>');
+                   $("#msg").append("<li><span>id：" +data.id+"</span></li>"
+                      + "<li><span>用户名：" + data.account + "</span></li>"
+                      + "<li><span>姓名：" + data.name + "</span></li>"
+                      + "<li><span>身份证号：" + data.idNumber + "</span></li>"
+                      + "<li><span>email：" + data.email + "</span></li>"
+                      + "<li><span>电话：" + data.phone + "</span></li>"
+                      + "<li><span>邮编：" + data.postCode + "</span></li>"
+                      + "<li><span>银行账号：" + data.bankAccount + "</span></li>"
+                      + "<li><span>地址：" + data.address + "</span></li>"
+                      + "<li><span>昵称：" + data.nickName + "</span></li>"
+                      + "<li><span>自我介绍：" + data.motto + "</span></li>"
+                      );
+
+            },
+            error:function(data) {
+                alert("server error");
+            }
+        });
+}
+
+function scoreInfo() {
+     $.ajax({
         type: "get",
         url : "<%=request.getContextPath()%>/user/score",
         contentType:"application/x-www-form-urlencoded; charset=UTF-8",
@@ -397,7 +428,7 @@ function hidePopup(){
                     <ul class="erji">
                     	<li>
                         	<i>&nbsp;</i>
-                            <strong><a href="">个人资料</a></strong>
+                            <strong><a onclick="userInfo()">个人资料</a></strong>
                         </li>
                         <li>
                         	<i>&nbsp;</i>
