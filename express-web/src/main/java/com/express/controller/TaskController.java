@@ -5,12 +5,15 @@ import com.google.common.collect.Lists;
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
+import com.express.commons.util.SmsUtil;
 import com.express.domain.Order;
 import com.express.domain.Task;
 import com.express.domain.TaskVo;
+import com.express.domain.User;
 import com.express.interceptor.HostHolder;
 import com.express.service.OrderService;
 import com.express.service.TaskService;
+import com.express.service.UserService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import redis.clients.jedis.BinaryClient;
@@ -42,6 +46,8 @@ public class TaskController {
     private OrderService orderService;
     @Autowired
     private HostHolder holder;
+    @Autowired
+    private UserService userService;
     /**
      * 发布任务
      * @param startAdd
@@ -123,18 +129,30 @@ public class TaskController {
      * 若更新一个成功，更新另一个失败，就设计到事务的一致性
      * @return
      */
-    @RequestMapping("/update/finish")
+    @RequestMapping(value="/update/finish",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
     @ResponseBody
     public String updateFinish(@RequestParam("isFinish") boolean isFinish,
-                               @RequestParam("taskId") long taskId) {
+                               @RequestParam("taskId") long taskId,
+                               @RequestParam("code") int code) {
+
         //先判断该task是否属于该用户
         long userId = holder.getUserId();
         Task task = taskService.selectByTaskId(taskId);
-        if(userId != task.getUserId()) {
+        if(task==null || userId != task.getUserId()) {
             LOG.error("TaskController.updateFinish.the task is not belong to hostUser！！！");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_AUTH);
         }
-
+        //验证码检验
+        Order order = orderService.selectByOrderId(task.getOrderId());
+        if(order == null) {
+            LOG.error("TaskCOntroller.updateFinish.order is null");
+            return JacksonUtils.toJson("错误，order为NULL");
+        }
+        int codeOlder = (int)holder.getAttribute(String.valueOf(order.getTakePhone()));
+        if(codeOlder != code) {
+            LOG.error("TaskCOntroller.updateFinish.code is warn");
+            return JacksonUtils.toJson("验证码错误");
+        }
         //更新task
         int resultTask = taskService.updateFinish(isFinish, taskId);
 
@@ -145,7 +163,7 @@ public class TaskController {
             LOG.error("TaskController.updateFinish.ERROR");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
         }
-        return RetJacksonUtil.resultOk();
+        return JacksonUtils.toJson("更新成功");
     }
 
 
@@ -165,5 +183,27 @@ public class TaskController {
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
         }
         return RetJacksonUtil.resultOk();
+    }
+
+    @RequestMapping("/sendCode")
+    @ResponseBody
+    public String sendCode(@RequestParam("taskId") long taskId) {
+        Task task = taskService.selectByTaskId(taskId);
+        if(task == null) {
+            LOG.error("TaskController.sendCode.error");
+            return JacksonUtils.toJson("error");
+        }
+        Order order = orderService.selectByOrderId(task.getOrderId());
+        if(order == null) {
+            LOG.error("TaskCOntroller.sendCode.error");
+            return JacksonUtils.toJson("error");
+        }
+        Random random = new Random();
+        int code =  random.nextInt(999999);
+        //将产生的验证码放入到session中
+        holder.setAttribute(String.valueOf(order.getTakePhone()), code);
+        SmsUtil.sendCode(order.getTakePhone(), order.getTakeName(), code);
+        LOG.info("TaskController.sendCode.SUCCESS code=" + code);
+        return JacksonUtils.toJson("success");
     }
 }

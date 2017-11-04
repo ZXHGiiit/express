@@ -8,6 +8,18 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
+<style>
+    #popupcontent{
+        position: absolute;
+        visibility: hidden;
+        overflow: hidden;
+        border:1px solid #CCC;
+        background-color:#F9F9F9;
+        border:1px solid #333;
+        padding:5px;
+        width:300px; height:100px;position:absolute; left:50%; top:50%; margin-left: -150px; margin-top: -50px;}
+    }
+</style>
 <script type="text/javascript" src="Assets/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -121,9 +133,10 @@ function viewTask(orderId) {
                         +   "<li><span> 收件人电话："+data.takePhone+"</span></li>"
                         +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
                         +   "<li><span> 接单时间："+getLocalTime(data.createTime)+"</span>	</li>"
-                        +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>"
-                        +   "<li><button type='button'  onclick='updateTask("+data.taskId+")'>结束任务</button></li>")
-
+                        +   "<li><span> 应完成时间："+getLocalTime(data.endTime)+"</span></li>");
+            if(!data.isFinish) {
+                $("#msg").append("<li><button type='button'  onclick='updateTask1("+data.taskId+")'>结束任务</button></li>");
+            }
         },
         error : function(data) {
             alert("server error")
@@ -131,31 +144,51 @@ function viewTask(orderId) {
 
     });
 }
-
-function updateTask(taskId) {
+var id;
+function updateTask1(taskId) {
+     id = taskId;
      $.ajax({
+             type: "post",
+             url : "<%=request.getContextPath()%>/task/sendCode",
+             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+             data:{
+                 "taskId":id
+             },
+             dataType: "json",
+             success : function(data) {
+                if(data == "success") {
+                    showPopup();
+                } else {
+                    alert("出现未知错误");
+                }
+             },
+             error : function(data) {
+                 alert("server error")
+             }
+      });
+}
+
+function updateTask2() {
+    var code = $("#code").val();
+    $.ajax({
             type: "post",
             url : "<%=request.getContextPath()%>/task/update/finish",
             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             data:{
-                "taskId":taskId,
+                "taskId":id,
+                "code":code,
                 "isFinish":true
             },
             dataType: "json",
             success : function(data) {
-                if(data.status.msg=="Success"){
-                    alert("更新成功");
-                } else {
-                    alert("更新失败");
-                }
-
+                alert(data);
+                location.reload();
             },
             error : function(data) {
                 alert("server error")
             }
      });
 }
-
 
 function listRouteRecord() {
     $.ajax({
@@ -236,7 +269,9 @@ function runRoute(routeId) {
     });
 }
 
+
 function cancleRoute(routeId, status) {
+    showPopup();
     $.ajax({
         type: "post",
         url : "<%=request.getContextPath()%>/route/update",
@@ -314,7 +349,16 @@ function getLocalTime(nS) {
    return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
 }
 
+function showPopup(){
+    var popUp = document.getElementById("popupcontent");
+    popUp.style.visibility = "visible";
+}
 
+function hidePopup(){
+    var popUp = document.getElementById("popupcontent");
+    popUp.style.visibility = "hidden";
+    window.location.reload();
+}
 </script>
 </head>
 
@@ -459,6 +503,11 @@ function getLocalTime(nS) {
     </div>	
 </div>
 <!--底部-->
+<div id="popupcontent" style="overflow:auto">
+    请填写发送自收件人手机的验证码，验证信息</br>
+    <input id="code" type="text">
+    <a onclick="updateTask2()" class="submit">确定</a>
+</div>
 </body>
 
 <!-- jQuery -->
