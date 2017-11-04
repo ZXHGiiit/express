@@ -61,7 +61,8 @@ public interface UserDao {
     + " bank_account = #{bankAccount},"
     + " bank_phone = #{bankPhone},"
     + " address = #{address},"
-    + " motto = #{motto},"
+    + " motto = #{motto} "
+    + " where id = #{id}"
   )
   int update(User user);
 

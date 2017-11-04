@@ -74,6 +74,7 @@ public class UserController {
       //将用户登录信息保存到holder中
       holder.setUser(user);
       holder.setUserId(user.getId());
+      holder.setVip(user.getIsVip());
     }
     return JacksonUtils.toJson(result);
   }
@@ -211,7 +212,9 @@ public class UserController {
   @ResponseBody
   public String toVip(User user) {
     LOG.info("UserController.toUser. user : " + user.toString());
+    long userId = holder.getUserId();
     user.setVip(true);
+    user.setId(userId);
     //检验身份证号和姓名是否一致,且在数据库中是否唯一
     //TODO
 
@@ -222,6 +225,8 @@ public class UserController {
     if(result != 1) {
       LOG.error("UserController.toVip.ERROR user:" + user.toString());
     }
-    return "申请成功";
+    //申请成功后，将hostholder信息修改
+    holder.setVip(true);
+    return JacksonUtils.toJson("申请成功");
   }
 }

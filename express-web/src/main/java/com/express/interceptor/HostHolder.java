@@ -25,6 +25,7 @@ public class HostHolder {
 
     private static final String userKey = "user_key_heheda";
     private static final String userIdKey = "user_id_key_heheda";
+    private static final String isVipKey = "is_vip_key_heheda";
     private static final String countNewsKey = "count_news_key_heheda";
     private static final String countNewsViewKey = "count_news_view";
     private static final String countNewsNotViewKey = "count_news_not";
@@ -56,6 +57,14 @@ public class HostHolder {
 
     public void setCountNews(int countNews) {
         request.getSession().setAttribute(countNewsKey, countNews);
+    }
+
+    public void setVip(boolean isVip) {
+        request.getSession().setAttribute(isVipKey, isVip);
+    }
+
+    public boolean isVip() {
+        return (boolean) request.getSession().getAttribute(isVipKey);
     }
 
     public void setAttribute(String key, Object obj) {

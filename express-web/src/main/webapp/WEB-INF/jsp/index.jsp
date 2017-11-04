@@ -137,7 +137,7 @@ function getLocalTime(nS) {
     	<div class="box_1_l">
         	<a href="<%=request.getContextPath()%>/book">网上下单<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
             <c:choose>
-            <c:when test="${user_key_heheda.isVip}">
+            <c:when test="${is_vip_key_heheda}">
                 <a onclick="checkRoute()">发布行程<img src="${pageContext.request.contextPath}/Assets/images/icon2.png"/></a>
             </c:when>
             <c:otherwise>

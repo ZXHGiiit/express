@@ -75,8 +75,8 @@ public class UserServiceImpl implements UserService {
       LOG.error("UserServiceImpl.login.parselong failed",e);
       return null;
     }
-    User user2 = userDao.selectByPAP(Long.parseLong(account), password);
-    if (user2 == null) {
+    user = userDao.selectByPAP(Long.parseLong(account), password);
+    if (user == null) {
       LOG.info("UserServiceImpl.login incorrect");
       return null;
     }
