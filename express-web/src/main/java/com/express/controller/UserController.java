@@ -128,23 +128,35 @@ public class UserController {
       LOG.error("UserController.register.parameter is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
     }
+
     int codeOld = (int)holder.getAttribute(String.valueOf(user.getPhone()));
     if(codeOld != code) {
       LOG.error("UserController.register.code is error. phone : " + user.getPhone());
       return JacksonUtils.toJson("验证码错误");
     }
     LOG.info("UserController.register.params:{account : "+ user.getAccount() + "password : "+ user.getPassword() + "}");
+
     //要确保account是唯一的
     User userOld = userDao.selectByAccount(user.getAccount());
     if(userOld != null) {
       LOG.info("UserController.register.account is used. account:" + user.getAccount());
-      return JacksonUtils.toJson("该账号已被注册过了！！！");
+      return JacksonUtils.toJson("该用户名已被注册过了！！！");
     }
+
+    //要确保手机号唯一
+    User userOld2 = userDao.selectByAccount(user.getPhone());
+    if(userOld2 != null) {
+      LOG.info("UserController.register.account is used. account:" + user.getAccount());
+      return JacksonUtils.toJson("该手机号已被注册过了！！！");
+    }
+
     int result = userService.createUser(user);
     if (result != 1) {
       LOG.error("UserController.register.createUser Failed!!!");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.UNKNOWN_ERROR);
     }
+
+    //
     return JacksonUtils.toJson("注册成功");
   }
 

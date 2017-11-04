@@ -61,4 +61,12 @@ public interface UserDao {
           + " where "
           + " account = #{account}")
   User selectByAccount(@Param("account") String account);
+
+  @Select(" select "
+          + COLL_ALL
+          + " from "
+          + TABLE
+          + " where "
+          + " phone = #{phone}")
+  User selectByAccount(@Param("account") long phone);
 }
