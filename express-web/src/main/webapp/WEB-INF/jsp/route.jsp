@@ -31,7 +31,6 @@ function createRoute(){
 	    alert("不能为空");
 	    return;
 	}
-	alert(typeof(endTime));
 	$.ajax({
 		url:"${pageContext.request.contextPath}/route/create",
 		type:"post",

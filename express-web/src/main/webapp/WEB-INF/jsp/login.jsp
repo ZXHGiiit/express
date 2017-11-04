@@ -9,75 +9,13 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/thems.css"/>
 
-<script>
-    function register(){
-        var account = $("#account").val();
-        var password = $("#password").val();
-        var checkcode = $("#checkcode").val();
-        if(account == "" || password == "" || checkcode == ""){
-            alert("注册项不能为空");
-            return;
-        }
-
-        $.ajax({
-            type : "POST",
-            url : "<%=request.getContextPath()%>/user/register",
-            data : {
-                "account":account,
-                "password":password,
-            },
-            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-            dataType: "json",
-            success : function(data) {
-                console.info(data);
-                alert(data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-             alert(XMLHttpRequest.status);
-             alert(XMLHttpRequest.readyState);
-             alert(textStatus);
-            }
-        });
-    }
-
-
-    function login(){
-        var account = $("#accountLogin").val();
-        var password = $("#passwordLogin").val();
-        if(account == "" || password == ""){
-          $("#loginErr").show();
-	      $("#loginErr span").text("用户名或密码不能为空");
-        }
-
-        $.ajax({
-            type : "POST",
-            url : "<%=request.getContextPath()%>/user/login",
-            data : {
-                "account":account,
-                "password":password,
-            },
-            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-            dataType: "json",
-            success : function(data) {
-	            if(data.result){
-	            	location.href="${pageContext.request.contextPath}/index";
-	            }else{
-	            	$("#loginErr").show();
-	            	$("#loginErr span").text("用户名或密码错误,请重新输入");
-	            }
-            },
-            error: function(data) {
-                alert("服务器内部出错");
-                alert(data);
-            }
-        });
-    }
-</script>
 
 
 </head>
 
 <body>
+
+
 <!--头部-->
 <div class="head_bg">
 	<div class="head clearfix">
@@ -111,6 +49,10 @@
             </div>
         	<form action="${pageContext.request.contextPath}/user/register" method="post">
         	<ul>
+        	    <li>
+                    <span>手机号：</span>
+                    <input name="phone" type="text" id="phone" placeholder="请输入手机号">
+                </li>
             	<li>
                 	<span>用户名：</span>
                     <input name="account" type="text" id="account" placeholder="请输入用户名,至少6个字符">
@@ -130,8 +72,8 @@
                 </li>
                 <li>
                 	<span>验证码：</span>
-                    <input name="" type="text" placeholder="">
-                    <a href="" class="yzm">获取验证码</a>
+                    <input name="code" id="code" type="text" placeholder="">
+                    <button type="button" id="test1">获取验证码</button>
                 </li>
                 <li>
                 	<input name="checkcode" class="check" type="checkbox" value="" checked="checked">
@@ -258,6 +200,147 @@
 <!--底部-->
 </body>
 
+<script src="http://lib.sinaapp.com/js/jquery/1.12.4/jquery-1.12.4.min.js"></script>
+<script>
+function register(){
+        var account = $("#account").val();
+        var password = $("#password").val();
+        var phone = $("#phone").val();
+        var code = $("#code").val();
+        if(account == "" || password == "" || phone == "" || code == "" ){
+            alert("注册项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type : "POST",
+            url : "<%=request.getContextPath()%>/user/register",
+            data : {
+                "account":account,
+                "password":password,
+                "code":code,
+                "phone":phone
+            },
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success : function(data) {
+                console.info(data);
+                alert(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+             alert(XMLHttpRequest.status);
+             alert(XMLHttpRequest.readyState);
+             alert(textStatus);
+            }
+        });
+    }
+
+
+    function login(){
+        var account = $("#accountLogin").val();
+        var password = $("#passwordLogin").val();
+        if(account == "" || password == ""){
+          $("#loginErr").show();
+	      $("#loginErr span").text("用户名或密码不能为空");
+        }
+
+        $.ajax({
+            type : "POST",
+            url : "<%=request.getContextPath()%>/user/login",
+            data : {
+                "account":account,
+                "password":password,
+            },
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success : function(data) {
+	            if(data.result){
+	            	location.href="${pageContext.request.contextPath}/index";
+	            }else{
+	            	$("#loginErr").show();
+	            	$("#loginErr span").text("用户名或密码错误,请重新输入");
+	            }
+            },
+            error: function(data) {
+                alert("服务器内部出错");
+                alert(data);
+            }
+        });
+    }
+
+function buttonCountdown($el, msNum, timeFormat) {
+    var phone = $("#phone").val();
+    var text = $el.data("text") || $el.text(),
+            timer = 0;
+    if(phone == ""){
+        alert("手机号不能为空");
+        return;
+    }
+    $el.prop("disabled", true).addClass("disabled")
+            .on("bc.clear", function () {
+                clearTime();
+            });
+
+    $.ajax({
+        type : "POST",
+        url : "<%=request.getContextPath()%>/user/sendCode",
+        data : {
+            "phone":phone,
+        },
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+             alert(XMLHttpRequest.status);
+             alert(XMLHttpRequest.readyState);
+             alert(textStatus);
+        }
+    });
+
+    (function countdown() {
+        var time = showTime(msNum)[timeFormat];
+        $el.text(time + '后失效');
+        if (msNum <= 0) {
+            msNum = 0;
+            clearTime();
+        } else {
+            msNum -= 1000;
+            timer = setTimeout(arguments.callee, 1000);
+        }
+    })();
+
+    function clearTime() {
+        clearTimeout(timer);
+        $el.prop("disabled", false).removeClass("disabled").text(text);
+    }
+
+    function showTime(ms) {
+        var d = Math.floor(ms / 1000 / 60 / 60 / 24),
+                h = Math.floor(ms / 1000 / 60 / 60 % 24),
+                m = Math.floor(ms / 1000 / 60 % 60),
+                s = Math.floor(ms / 1000 % 60),
+                ss = Math.floor(ms / 1000);
+
+        return {
+            d: d + "天",
+            h: h + "小时",
+            m: m + "分",
+            ss: ss + "秒",
+            "d:h:m:s": d + "天" + h + "小时" + m + "分" + s + "秒",
+            "h:m:s": h + "小时" + m + "分" + s + "秒",
+            "m:s": m + "分" + s + "秒"
+        };
+    }
+
+    return this;
+}
+//使用演示 显示为 秒
+$("#test1").on("click",function(){
+   buttonCountdown($(this), 1000 * 60, "ss");
+});
+</script>
 <!-- jQuery -->
 <script src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
 </html>

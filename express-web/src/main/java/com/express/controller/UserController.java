@@ -2,6 +2,7 @@ package com.express.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.express.commons.constant.ErrorCodeEnum;
 import com.express.commons.util.JacksonUtils;
 import com.express.commons.util.RetJacksonUtil;
+import com.express.commons.util.SmsUtil;
 import com.express.commons.vo.ExpressResult;
 import com.express.dao.UserDao;
 import com.express.domain.User;
@@ -121,10 +123,15 @@ public class UserController {
 
   @RequestMapping(value="/register",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
   @ResponseBody
-  public String register(User user) {
-    if (user.getAccount() == null ||user.getPassword() == null) {
+  public String register(User user, int code) {
+    if (user.getAccount() == null ||user.getPassword() == null || user.getPhone() == 0) {
       LOG.error("UserController.register.parameter is null");
       return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.NO_PARAM);
+    }
+    int codeOld = (int)holder.getAttribute(String.valueOf(user.getPhone()));
+    if(codeOld != code) {
+      LOG.error("UserController.register.code is error. phone : " + user.getPhone());
+      return JacksonUtils.toJson("验证码错误");
     }
     LOG.info("UserController.register.params:{account : "+ user.getAccount() + "password : "+ user.getPassword() + "}");
     //要确保account是唯一的
@@ -169,5 +176,15 @@ public class UserController {
     return result;
   }
 
-
+  @RequestMapping("/sendCode")
+  @ResponseBody
+  public String sendCode(@RequestParam("phone") long phone) {
+    Random random = new Random();
+    int code =  random.nextInt(999999);
+    //将产生的验证码放入到session中
+    holder.setAttribute(String.valueOf(phone), code);
+    SmsUtil.sendCode(phone, "用户", code);
+    LOG.info("UserController.register.sendCode.{ phone=" + phone + ", code=" + code +"}");
+    return RetJacksonUtil.resultOk();
+  }
 }

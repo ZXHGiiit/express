@@ -62,8 +62,8 @@ public class HostHolder {
         request.getSession().setAttribute(key, obj);
     }
 
-    public void getAttribute(String key) {
-        request.getSession().getAttribute(key);
+    public Object getAttribute(String key) {
+        return request.getSession().getAttribute(key);
     }
 
     public void removeAll() {
