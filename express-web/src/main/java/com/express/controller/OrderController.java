@@ -11,6 +11,7 @@ import com.express.domain.Order;
 import com.express.domain.Route;
 import com.express.domain.Task;
 import com.express.interceptor.HostHolder;
+import com.express.service.MessageService;
 import com.express.service.OrderService;
 import com.express.service.RouteService;
 import com.express.service.TaskService;
@@ -42,6 +43,8 @@ public class OrderController {
     private RouteService routeService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private MessageService msgService;
     /**
      * 获取用户的所有订单
      * @return
@@ -107,6 +110,13 @@ public class OrderController {
         task.setRoute("-" + order.getSendAddress());
         task.setRouteId(route.getId());
         task.setOrderId(order.getId());
+
+        //创建task的时候，需要给taskUser发送消息通知
+        int resultMsg = msgService.createMsg(task.getUserId(), "新的任务通知", "尊敬的承运商用户您好，您又一个新的任务。从" + order.getSendAddress() +"到"
+            + order.getTakeAddress() +"。点击【我的全名】->【任务中心】->【进行中任务】可以查看。", false);
+        if(resultMsg != 1) {
+            LOG.error("OrderController.createOrder.sendMsg ERROR");
+        }
         int resultOfAddTask = taskService.addTask(task);
 
         if(resultOfAddOrder != 1 || resultOfAddTask != 1) {
