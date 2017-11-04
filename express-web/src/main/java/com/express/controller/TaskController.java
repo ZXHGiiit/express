@@ -100,7 +100,7 @@ public class TaskController {
         }
         LOG.info("TaskController.listTasks.result : " + tasks.toString());
         List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
-        Map<Long, Order> orderMap = orderService.selectByOrderIds(orderIds);
+        Map<Long, Order> orderMap = orderService.selectMapByOrderIds(orderIds);
         for(Task task : tasks) {
             TaskVo vo = new TaskVo();
             vo.setTaskId(task.getId());

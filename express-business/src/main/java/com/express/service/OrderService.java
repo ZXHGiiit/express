@@ -18,5 +18,7 @@ public interface OrderService {
 
     List<Order> selectBy(long userId, boolean isFinish);
 
-    Map<Long, Order> selectByOrderIds(List<Long> orderIds);
+    Map<Long, Order> selectMapByOrderIds(List<Long> orderIds);
+
+    List<Order> selectByOrderIds(List<Long> orderIds);
 }

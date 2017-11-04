@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,12 +95,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<Long, Order> selectByOrderIds(List<Long> orderIds) {
+    public Map<Long, Order> selectMapByOrderIds(List<Long> orderIds) {
+        if(CollectionUtils.isEmpty(orderIds)) {
+            LOG.info("OrderServiceImpl.selectByOrderIds.orderIds is null");
+            return new HashMap<>();
+        }
         Map<Long, Order> orderMap = orderDao.selectMapByOrderIds(orderIds);
         if(CollectionUtils.isEmpty(orderMap)) {
             //防止空指针异常
             orderMap = Maps.newHashMap();
         }
-        return orderDao.selectMapByOrderIds(orderIds);
+        return orderMap;
+    }
+
+    @Override
+    public List<Order> selectByOrderIds(List<Long> orderIds) {
+        if(CollectionUtils.isEmpty(orderIds)) {
+            return new ArrayList<>();
+        }
+        List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+        if(CollectionUtils.isEmpty(orders)) {
+            orders = Lists.newArrayList();
+        }
+        return orders;
     }
 }

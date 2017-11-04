@@ -15,6 +15,7 @@ import com.express.domain.Route;
 import com.express.domain.RouteInfoVo;
 import com.express.domain.Task;
 import com.express.domain.User;
+import com.express.service.OrderService;
 import com.express.service.UserService;
 
 import org.apache.commons.logging.Log;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private TaskDao taskDao;
   @Autowired
-  private OrderDao orderDao;
+  private OrderService orderService;
   @Autowired
   private RedisService redisService;
 
@@ -168,7 +169,7 @@ public class UserServiceImpl implements UserService {
     }
     List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
     //获取task对应的order
-    List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+    List<Order> orders = orderService.selectByOrderIds(orderIds);
     //获取已经评论的order
     List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
     //获取最高评分,平均评分，最低评分
@@ -188,7 +189,10 @@ public class UserServiceImpl implements UserService {
     int countOfComment = ordersWithComment.size();
     //利用BigDecimal精确除法，保留两位小数,默认四舍五入
     double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
-
+    if(ordersWithComment.size() == 0) {
+      //若没有任何评论，则默认为5分
+      avgScore = 5.0;
+    }
     //获取用户信息
     User user = userDao.selectByUserId(userId);
     //保存结果
@@ -230,7 +234,7 @@ public class UserServiceImpl implements UserService {
       }
       List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
       //获取task对应的order
-      List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+      List<Order> orders = orderService.selectByOrderIds(orderIds);
       //获取已经评论的order
       List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
       //获取最高评分,平均评分，最低评分
@@ -250,6 +254,10 @@ public class UserServiceImpl implements UserService {
       int countOfComment = ordersWithComment.size();
       //利用BigDecimal精确除法，保留两位小数,默认四舍五入
       double avgScore = new BigDecimal(sumScore).divide(new BigDecimal(countOfComment)).setScale(2).doubleValue();
+      if(ordersWithComment.size() == 0) {
+        //若没有任何评论，则默认为5分
+        avgScore = 5.0;
+      }
       infoVo.setAvgScore(avgScore);
       infoVo.setCountOfTask(countOfTask);
       infoVo.setMaxScore(maxScore);
@@ -281,7 +289,7 @@ public class UserServiceImpl implements UserService {
       }
       List<Long> orderIds = tasks.stream().map(i -> i.getOrderId()).collect(Collectors.toList());
       //获取task对应的order
-      List<Order> orders = orderDao.selectAllByOrderIds(orderIds);
+      List<Order> orders = orderService.selectByOrderIds(orderIds);
       //获取已经评论的order
       List<Order> ordersWithComment = orders.stream().filter(i -> i.isCom()).collect(Collectors.toList());
       //获取最高评分,平均评分，最低评分

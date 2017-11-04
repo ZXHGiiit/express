@@ -285,6 +285,30 @@ function finishRoute(routeId, status) {
 
 }
 
+function scoreInfo() {
+    $.ajax({
+        type: "get",
+        url : "<%=request.getContextPath()%>/user/score",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+           console.info(data);
+           $("#msg").empty();
+           $("#title").empty();
+           $('#title').append('<span>评分信息</span>');
+           $("#msg").append("<li><span>平均评分：" + data.avgScore+"分</span></li>"
+               + "<li><span>最高评分：" + data.maxScore + "分</span></li>"
+               + "<li><span>最低评分：" + data.maxScore + "分</span></li>"
+               + "<li><span>已完成任务：" + data.countOfTask + "</span></li>"
+               + "<li><span>已被评论任务：" + data.countOfComment + "</span></li>");
+
+        },
+        error:function(data) {
+            alert("server error");
+        }
+    });
+}
+
 //将时间戳转换为日期
 function getLocalTime(nS) {
    return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
@@ -337,7 +361,7 @@ function getLocalTime(nS) {
                         </li>
                         <li>
                             <i>&nbsp;</i>
-                            <strong><a href="">我的评分</a></strong>
+                            <strong><a onclick="scoreInfo()">我的评分</a></strong>
                         </li>
                          <li>
                             <i>&nbsp;</i>
