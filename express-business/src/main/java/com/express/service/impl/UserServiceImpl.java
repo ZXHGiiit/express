@@ -63,13 +63,22 @@ public class UserServiceImpl implements UserService {
       return null;
     }
     User user = userDao.selectByUAP(account, password);
-    User user2 = userDao.selectByPAP(Long.parseLong(account), password);
-    if (user == null && user2 == null) {
-      LOG.info("UserServiceImpl.login incorrect");
+    if(user != null) {
+      LOG.info("UserServiceImpl.login success user: " + user.toString());
+      return user;
+    }
+    //用account登录失败，用phone登录
+    long phone;
+    try {
+      phone = Long.parseLong(account);
+    } catch (Exception e) {
+      LOG.error("UserServiceImpl.login.parselong failed",e);
       return null;
     }
-    if(user == null) {
-      user = user2;
+    User user2 = userDao.selectByPAP(Long.parseLong(account), password);
+    if (user2 == null) {
+      LOG.info("UserServiceImpl.login incorrect");
+      return null;
     }
     LOG.info("UserServiceImpl.login success user: " + user.toString());
     return user;
@@ -302,5 +311,10 @@ public class UserServiceImpl implements UserService {
     }
 
     return infoVos;
+  }
+
+  @Override
+  public int updateUser(User user) {
+    return userDao.update(user);
   }
 }

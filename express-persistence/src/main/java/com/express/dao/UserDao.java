@@ -5,6 +5,7 @@ import com.express.domain.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * Created by xinghang on 17/9/28.
@@ -12,7 +13,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserDao {
   public static final String TABLE = "user";
   public static final String COLL_ALL = "id, account, password, name, id_number, email, is_vip," +
-          "age, phone, post_code, bank_account, address, nick_name, motto, create_time, update_time";
+          "age, phone, post_code, bank_account, bank_phone, address, nick_name, motto, create_time, update_time";
 
   @Select(" select "
     + COLL_ALL
@@ -48,6 +49,21 @@ public interface UserDao {
     + " age = #{age} "
   )
   int add(User user);
+
+  @Update(" update "
+    + TABLE
+    + " set "
+    + " name = #{name},"
+    + " id_number = #{idNumber},"
+    + " email = #{email},"
+    + " is_vip = #{isVip},"
+    + " post_code = #{postCode},"
+    + " bank_account = #{bankAccount},"
+    + " bank_phone = #{bankPhone},"
+    + " address = #{address},"
+    + " motto = #{motto},"
+  )
+  int update(User user);
 
   @Insert(" insert into "
     + TABLE

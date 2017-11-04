@@ -109,6 +109,7 @@ function createOrder() {
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
+                <span href="#">${user_key_heheda.account}</span>
                 <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>

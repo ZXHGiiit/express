@@ -38,4 +38,6 @@ public interface UserService {
   List<RouteInfoVo> getRouteInfo(List<Long> userIds );
 
   List<RouteInfoVo> getInfo(List<Route> routes);
+
+  int updateUser(User user);
 }

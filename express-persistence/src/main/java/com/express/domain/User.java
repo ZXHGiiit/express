@@ -17,6 +17,7 @@ public class User {
   private long phone;
   private long postCode;
   private long bankAccount;
+  private long bankPhone;
   private String address;
   private String nickName;
   private String motto;
@@ -153,6 +154,14 @@ public class User {
 
   public void setUpdateTime(Date updateTime) {
     this.updateTime = updateTime;
+  }
+
+  public long getBankPhone() {
+    return bankPhone;
+  }
+
+  public void setBankPhone(long bankPhone) {
+    this.bankPhone = bankPhone;
   }
 
   @Override

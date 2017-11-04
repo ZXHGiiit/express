@@ -8,7 +8,50 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/reset.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
 
+<script type="text/javascript">
+function submit() {
+    var name=$("#name").val();
+    var idNumber=$("#idNum").val();
+    var email = $("#email").val();
+    var postCode = $("#postCode").val();
+    var address = $("#address").val();
+    var bankAccount = $("#bankAccount").val();
+    var bankPhone = $("#bankPhone").val();
+    var motto = $("#motto").val();
+    if(name=="" || idNumber=="" || postCode=="" || address=="" || bankAccount=="" ||
+        bankPhone==""){
+        alert("标星项不能为空");
+        return;
+    }
+    $.ajax({
+        url:"${pageContext.request.contextPath}/user/toVip",
+        type:"post",
+        dataType:"json",
+        data:{
+            "name":name,
+            "idNumber":idNumber,
+            "postCode":postCode,
+            "address":address,
+            "bankAccount":bankAccount,
+            "bankPhone":bankPhone,
+            "motto":motto,
+            "email":email
+        },
+        success:function(data){
+            alert(data);
+        },
+        error:function(){
+            alert("server error");
+        }
+    });
+
+
+}
+
+
+</script>
 </head>
 
 <body>
@@ -18,14 +61,15 @@
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
-            <a href="<%=request.getContextPath()%>/user/logout">注销</a>
+                <span href="#">${user_key_heheda.account}</span>
+                <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
             <ul class="clearfix">
                 <li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
-                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>12</span></a></li>
+                <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="">网站地图</a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
@@ -53,56 +97,57 @@
                         <i>&nbsp;</i>
                         <em>个人名称</em>
                     </span>	
-                    <input name=" type="text">
+                    <input id="name" type="text">
                     <p>（个人名称必须与个人身份保证完全相同）</p>
+                </li>
+                <li>
+                	<span>
+                        <i>&nbsp;</i>
+                        <em>身份证号</em>
+                    </span>	
+                    <input id="idNum" type="text">
                 </li>
                 <li>
                 	<span>
                         <i>&nbsp;</i>
                         <em>邮政编码</em>
                     </span>	
-                    <input name="" type="text">
+                    <input id="postCode" type="text">
                 </li>
                 <li>
                 	<span>
                         <i>&nbsp;</i>
-                        <em>固定电话</em>
+                        <em>联系地址</em>
                     </span>	
-                    <input name="" type="text">
-                </li>
-                <li>
-                	<span>
-                        <i>&nbsp;</i>
-                        <em>传真</em>
-                    </span>	
-                    <input name="" type="text">
-                </li>
-                <li>
-                	<span>
-                        <i>&nbsp;</i>
-                        <em>手机号码</em>
-                    </span>	
-                    <input name="" type="text">
+                    <input id="address" type="text">
                 </li>
                 <li>
                 	<span>
                         <i>&nbsp;</i>
                         <em>银行帐号</em>
                     </span>	
-                    <input name="" type="text">
+                    <input id="bankAccount" type="text">
                     <p>（认证时候不能修改，请仔细填写）</p>
+                </li>
+                <li>
+                    <span>
+                        <i>&nbsp;</i>
+                        <em>预留手机号</em>
+                    </span>
+                    <input id="bankPhone" type="text">
+                    <p>（如遗忘，请联系当地银行）</p>
                 </li>
                 <li>
                 	<span>
                         <em>个人介绍</em>
                     </span>	
-                    <textarea name="" cols="" rows=""></textarea>
+                    <textarea id="motto" cols="" rows=""></textarea>
                 </li>
                 <li>
-                	<a href="" class="file">资质文件上传</a>
+                	<a href="" class="file">身份证正面照片上传</a>
                 </li>
-                <li>
-                	<a href="" class="submit">提交</a>
+                 <li>
+                    <a href="" class="file">身份证反面照片上传</a>
                 </li>
             </ul>
             </form>
@@ -113,12 +158,13 @@
         	<div class="cy_head">
             	<span>认证信息</span>
             </div>
-            <form action="" method="get">
+
+            <form action="" method="post">
             <ul class="cy_body">
                 <li>
                 	<span>
                         <i>&nbsp;</i>
-                        <em>公司名称</em>
+                        <em>工作单位</em>
                     </span>	
                     <input name="" type="text">
                     <p>（公司名称必须与营业执照完全相同）</p>
@@ -126,7 +172,7 @@
                 <li>
                 	<span>
                         <i>&nbsp;</i>
-                        <em>办公地址</em>
+                        <em>工作地点</em>
                     </span>	
                     <input name="" type="text">
                 </li>
@@ -141,13 +187,6 @@
                 	<span>
                         <i>&nbsp;</i>
                         <em>公司电话</em>
-                    </span>	
-                    <input name="" type="text">
-                </li>
-                <li>
-                	<span>
-                        <i>&nbsp;</i>
-                        <em>公司传真</em>
                     </span>	
                     <input name="" type="text">
                 </li>
@@ -197,7 +236,7 @@
                 	<a href="" class="file">资质文件上传</a>
                 </li>
                 <li>
-                	<a href="" class="submit">提交</a>
+                	<a onclick="submit()" class="submit">提交</a>
                 </li>
             </ul>
             </form>

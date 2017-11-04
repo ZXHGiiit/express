@@ -206,4 +206,22 @@ public class UserController {
     LOG.info("UserController.register.sendCode.{ phone=" + phone + ", code=" + code +"}");
     return RetJacksonUtil.resultOk();
   }
+
+  @RequestMapping("/toVip")
+  @ResponseBody
+  public String toVip(User user) {
+    LOG.info("UserController.toUser. user : " + user.toString());
+    user.setVip(true);
+    //检验身份证号和姓名是否一致,且在数据库中是否唯一
+    //TODO
+
+    //检查银行卡和手机号
+    //TODO
+
+    int result = userService.updateUser(user);
+    if(result != 1) {
+      LOG.error("UserController.toVip.ERROR user:" + user.toString());
+    }
+    return "申请成功";
+  }
 }
