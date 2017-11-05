@@ -31,7 +31,8 @@ public interface OrderDao {
             + COLL_ALL
             + " from "
             + TABLE
-            + " where is_finish = #{isFinish}"
+            + " where user_id = #{userId} "
+            + " and is_finish = #{isFinish}"
     )
     List<Order> selectBy(@Param("userId") long userId, @Param("isFinish") boolean isFinish);
     /**

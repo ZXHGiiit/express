@@ -20,6 +20,7 @@ function submit() {
     var bankAccount = $("#bankAccount").val();
     var bankPhone = $("#bankPhone").val();
     var motto = $("#motto").val();
+    alert(motto);
     if(name=="" || idNumber=="" || postCode=="" || address=="" || bankAccount=="" ||
         bankPhone==""){
         alert("标星项不能为空");

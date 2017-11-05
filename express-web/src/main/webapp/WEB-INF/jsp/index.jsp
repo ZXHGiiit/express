@@ -44,12 +44,13 @@ function checkRoute() {
     });
 }
 
-function showSouteList(){
+function showRouteList(){
 	$("#souteList li").remove();
 	var startAdd=$("#startAdd").val();
 	var endAdd=$("#endAdd").val();
 	if(startAdd==""||endAdd==""){
-		return
+		alert("发货城市与到达城市不能为空");
+		return;
 	}
 	$.ajax({
 		url:"${pageContext.request.contextPath}/route/get",
@@ -59,11 +60,14 @@ function showSouteList(){
 		success:function(data){
 			$("#souteList li").remove();
 			console.info(data);
+			if(data == "") {
+			    $("#souteList").append("<li>暂无</li>");
+			}
 			for(var i=0;i<data.length;i++){
 				$("#souteList").append("<li> <a href='#'> <span>" + data[i].startAddress+"</span>"
 				+"<img src='${pageContext.request.contextPath}/Assets/images/icon15.png'/> <span>"
 				+ data[i].endAddress+"</span>  <span> &nbsp;&nbsp;&nbsp;"+data[i].price+
-				":元 </span> </a> <em>"+getLocalTime(data[i].startTime)+"</em> </li>" )
+				"元 </span> </a> <em>"+getLocalTime(data[i].startTime)+"</em> </li>" )
 			}
 		}
 	});
@@ -202,7 +206,7 @@ function getLocalTime(nS) {
                 <input name="startAdd" id="startAdd" type="text" placeholder="请输入城市名（中文/拼音）">
                 <span>到达城市</span>
                 <input name="endAdd" id="endAdd" type="text" placeholder="请输入城市名（中文/拼音）">
-                <a  onclick="showSouteList()">搜索比价</a>
+                <a  onclick="showRouteList()">搜索比价</a>
                 </div>
               </div>
               <div class="tabCont">

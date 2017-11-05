@@ -317,6 +317,7 @@ public class UserServiceImpl implements UserService {
       infoVo.setCountOfTask(countOfTask);
       infoVo.setMaxScore(maxScore);
       infoVo.setMinScore(minScore);
+      infoVo.setPrice(route.getPrice());
       //这一步是上一个方法不能做到的
       infoVo.setRouteId(route.getId());
       infoVos.add(infoVo);

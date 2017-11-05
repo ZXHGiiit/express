@@ -29,6 +29,7 @@ function getRoute(){
         },
         contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 		success:function(data){
+		    console.info(data);
 			$("#routeList").empty();
             $("#routeList").append("<tr><th colspan='11' scope='col'><span>排序：</span><a href=''>星级</a><a href=''>泡货价</a><a href=''>重泡货价</a><a href=''>重货价</a><a href=''>最低收费</a>"
             + "<a href=''>时效</a><a href=''>承运票数</a><a href=''>总费用</a></th></tr>"
@@ -43,7 +44,8 @@ function getRoute(){
 				+ "<td><i>0.13</i></td><td><i>0.15</i></td><td><i>0.12</i></td>"
 				+ "<td><i>" + data[i].price + "</i>元</td>"
 				+ "<td><span>24小时</span><span>定时达</span></td>"
-				+ "<td>" + data[i].taskSize + "票</td>"
+				+ "<td><i>" + data[i].taskSize + "<i>票</td>"
+				+ "<td><i>" + data[i].price + "</i>元</td>"
 				+ "<td><a href=''>下单</a></td><tr>");
 			}
         }

@@ -11,6 +11,7 @@ import com.express.domain.Task;
 import com.express.domain.TaskVo;
 import com.express.domain.User;
 import com.express.interceptor.HostHolder;
+import com.express.service.MessageService;
 import com.express.service.OrderService;
 import com.express.service.TaskService;
 import com.express.service.UserService;
@@ -48,6 +49,8 @@ public class TaskController {
     private HostHolder holder;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService msgService;
     /**
      * 发布任务
      * @param startAdd
@@ -158,6 +161,10 @@ public class TaskController {
 
         //更新对应的order
         int resultOrder = orderService.updateFinish(isFinish, task.getOrderId());
+
+        //通知发货人，order已被签收
+        msgService.createMsg(order.getUserId(), "订单完成通知", "尊敬的用户,您好。您从" + order.getSendAddress()
+                + "发往" + order.getTakeAddress() + "的订单，已被签收。", false);
 
         if(resultOrder != 1 || resultTask != 1) {
             LOG.error("TaskController.updateFinish.ERROR");

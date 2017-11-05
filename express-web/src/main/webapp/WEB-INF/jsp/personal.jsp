@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
 <style>
-    #popupcontent{
+    #popupcontent, #popupcomment{
         position: absolute;
         visibility: hidden;
         overflow: hidden;
@@ -45,7 +45,7 @@ function listOrder(isFinish) {
             $("#title").empty();
             $('#title').append('<span>订单列表</span>');
            for(var i=0;i<data.length;i++) {
-               $("#msg").append("<li><span><a onclick='viewOrder("+ data[i].id +")'>"+data[i].id+"  |  " + data[i].takeAddress +" -> "+data[i].sendAddress+
+               $("#msg").append("<li><span><a onclick='viewOrder("+ data[i].id +")'>"+data[i].id+"  |  " + data[i].sendAddress +" -> "+data[i].takeAddress+
                 "  |   "+getLocalTime(data[i].createTime)+"</a></span></li>");
            }
 
@@ -77,9 +77,11 @@ function viewOrder(orderId) {
                         +   "<li><span> 物品名称："+data.goodsName+"</span></li>"
                         +	"<li><span> 路径："+data.route+"</span></li>"
                         +   "<li><span> 是否送达："+data.isFinishCN+"</span></li>"
-                        +   "<li><span> 发货时间："+getLocalTime(data.startTime)+"</span>	</li>"
-                        +   "<li><span> 送达时间："+getLocalTime(data.endTime)+"</span></li>")
-
+                        +   "<li><span> 发货时间："+data.startTime+"</span>	</li>"
+                        +   "<li><span> 预计送达时间："+data.endTime+"</span></li>")
+            if(data.isFinish && !data.isCom) {
+                $("#msg").append("<li><button type='button'  onclick='comment1("+data.id+")'>评价订单</button></li>");
+            }
         },
         error : function(data) {
             alert("server error")
@@ -88,7 +90,37 @@ function viewOrder(orderId) {
     });
 }
 
+var comOrderId;
 
+function comment1(orderId) {
+    comOrderId = orderId;
+    showPopupCom();
+}
+
+function comment2() {
+    var score = $("#score").val();
+    var comment = $("#comment").val();
+    console.info(comment);
+    $.ajax({
+        type: "post",
+        url : "<%=request.getContextPath()%>/order/addComment",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        data:{
+            "score":score,
+            "comment":comment,
+            "orderId":comOrderId
+        },
+        dataType: "json",
+        success : function(data) {
+            alert(data);
+            location.reload();
+        },
+        error : function(data) {
+            alert("server error")
+        }
+
+    });
+}
 function listTask(isFinish) {
     $.ajax({
         type: "post",
@@ -271,7 +303,6 @@ function runRoute(routeId) {
 
 
 function cancleRoute(routeId, status) {
-    showPopup();
     $.ajax({
         type: "post",
         url : "<%=request.getContextPath()%>/route/update",
@@ -389,6 +420,11 @@ function hidePopup(){
     var popUp = document.getElementById("popupcontent");
     popUp.style.visibility = "hidden";
     window.location.reload();
+}
+
+function showPopupCom() {
+    var popUp = document.getElementById("popupcomment");
+    popUp.style.visibility = "visible";
 }
 </script>
 </head>
@@ -539,6 +575,14 @@ function hidePopup(){
     <input id="code" type="text">
     <a onclick="updateTask2()" class="submit">确定</a>
 </div>
+<div id="popupcomment" style="overflow:auto">
+    评分
+    <input id="score" type="text" placeholder="请填写评分1~5"></br>
+    评语
+    <textarea id="comment" cols="22px" rows="3px"  placeholder="请填写评语"></textarea></br>
+    <a onclick="comment2()" class="submit">确定</a>
+</div>
+
 </body>
 
 <!-- jQuery -->

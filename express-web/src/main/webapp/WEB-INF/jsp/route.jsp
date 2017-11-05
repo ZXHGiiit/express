@@ -55,13 +55,13 @@ function createRoute(){
 </head>
 
 <body>
-<input type="text" data-beatpicker="true"/>
 <!--头部-->
 <div class="head_bg">
 	<div class="head clearfix">
     	<div class="logo"><a href=""><img src="Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
             <div class="head_top">
+                <span href="#">${user_key_heheda.account}</span>
                 <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>

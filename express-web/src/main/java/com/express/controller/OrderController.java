@@ -53,7 +53,7 @@ public class OrderController {
     @ResponseBody
     public String listOrder(@RequestParam("isFinish") boolean isFinish) {
         long userId = holder.getUserId();
-        LOG.info("OrderController.listOrder. params {userId=" + userId + ", isFinish=" + isFinish);
+        LOG.info("OrderController.listOrder. params {userId=" + userId + ", isFinish=" + isFinish + "}");
         List<Order> orders = orderService.selectBy(userId, isFinish);
         LOG.info("OrderController.listOrder.result :" + orders.toString());
         return JacksonUtils.toJson(orders);
@@ -112,7 +112,7 @@ public class OrderController {
         task.setOrderId(order.getId());
 
         //创建task的时候，需要给taskUser发送消息通知
-        int resultMsg = msgService.createMsg(task.getUserId(), "新的任务通知", "尊敬的承运商用户您好，您又一个新的任务。从" + order.getSendAddress() +"到"
+        int resultMsg = msgService.createMsg(task.getUserId(), "新的任务通知", "尊敬的承运商用户您好，您有一个新的任务。从" + order.getSendAddress() +"到"
             + order.getTakeAddress() +"。点击【我的全名】->【任务中心】->【进行中任务】可以查看。", false);
         if(resultMsg != 1) {
             LOG.error("OrderController.createOrder.sendMsg ERROR");
@@ -136,6 +136,7 @@ public class OrderController {
     public String addComment(@RequestParam("score") int score,
                              @RequestParam("comment") String comment,
                              @RequestParam("orderId") long orderId) {
+        LOG.info("addComment.params:{score=" + score + ", comment=" + comment + ", orderId=" + orderId + "}");
         //需要检验该order是否是属于该用户的
         long userId = holder.getUserId();
         Order order = orderService.selectByOrderId(orderId);
@@ -148,7 +149,8 @@ public class OrderController {
             LOG.error("OrderController.addComment.ERROR");
             return RetJacksonUtil.resultWithFailed(ErrorCodeEnum.DB_ERROR);
         }
-        return RetJacksonUtil.resultOk();
+        //return RetJacksonUtil.resultOk();
+        return JacksonUtils.toJson("comment success");
     }
 
     /**
@@ -236,6 +238,7 @@ public class OrderController {
             LOG.error("OrderController.getRoute the order don't have route!!!");
             return JacksonUtils.toJson(info);
         }
+        LOG.info("route:" + route.toString());
         long endTime = route.getEndTime();
         long startTime = route.getStartTime();
         info.put("endTime", sdf.format(new Date(endTime)));
