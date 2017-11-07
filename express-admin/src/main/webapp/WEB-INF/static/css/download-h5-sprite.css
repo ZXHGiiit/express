@@ -1,0 +1,42 @@
+
+/*-----The sprites----*/
+.andriod,
+.andriod1,
+.header-msg,
+.ios,
+.ios1 {
+  display: inline-block;
+  *zoom: 1;
+  vertical-align: middle;
+  background: url() -9999px -9999px no-repeat;
+}
+
+.andriod {
+  width: 200px;
+  height: 60px;
+  background-position: 0 0;
+}
+
+.andriod1 {
+  width: 200px;
+  height: 60px;
+  background-position: -210px 0;
+}
+
+.header-msg {
+  width: 27px;
+  height: 25px;
+  background-position: -420px 0;
+}
+
+.ios {
+  width: 201px;
+  height: 60px;
+  background-position: -457px 0;
+}
+
+.ios1 {
+  width: 201px;
+  height: 60px;
+  background-position: 0 -70px;
+}

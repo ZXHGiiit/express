@@ -1,0 +1,114 @@
+*{
+  padding:0;
+  margin:0;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  word-wrap:break-word;
+  word-break:break-all;
+  outline: none;
+  -webkit-appearance: none;
+}
+button {
+    border-style: none;
+}
+#download {
+    font-family: Microsoft Yahei;
+    width: 6.4rem;
+    min-height: 100%;
+    position: relative;
+    font-size: 28px;
+    font-family: "Lato";
+}
+
+/*1. header*/
+#download .header {
+    width: 7.5rem;
+    height: 1.19rem;
+    position: fixed;
+    top: 0;
+    background: url("/static/images/download/header-bg.jpg") no-repeat;
+    background-size: 7.5rem auto;
+    z-index: 3;
+}
+#download .header .hright {
+    width: 2rem;
+    height: 1.19rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/*2. content*/
+#download .con {
+    width: 7.5rem;
+    height: 23.51rem;
+    margin-top: 1.18rem;
+    background: url("/static/images/download/page-bg-2.png") no-repeat;
+    background-size: 7.5rem auto;
+}
+#download .con .andriod {
+    width: 2rem;
+    height: 0.6rem;
+    position: absolute;
+    left: 0.6rem;
+    top: 2.73rem;
+    background: url("/static/images/download/custom.png") 0 0 no-repeat;
+    background-size: 7rem auto;
+}
+#download .con .andriod .active {
+    background-position: -210px 0;
+}
+#download .con .ios {
+    width: 2rem;
+    height: 0.6rem;
+    position: absolute;
+    left: 0.6rem;
+    top: 3.52rem;
+    background: url("/static/images/download/custom.png") -4.57rem 0 no-repeat;
+    background-size: 7rem auto;
+}
+#download .con .ios .active {
+    background-position: 0 -70px;
+}
+/*3. footer*/
+#download .footer {
+    width: 7.5rem;
+    height: 1.07rem;
+    background: url("/static/images/download/footer.png") no-repeat;
+    background-size: 7.5rem auto;
+}
+/*4. footer-banner*/
+#download .footer-banner {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    width: 7.5rem;
+    height: 1.2rem;
+    background: url("/static/images/download/footer-banner.png") no-repeat;
+    background-size: 7.5rem auto;
+}
+#download .footer-banner .andriod {
+    position: absolute;
+    left: 2.52rem;
+    top: 0.3rem;
+    width: 2.01rem;
+    height: 0.6rem;
+    background: url("/static/images/download/custom.png") 0 0 no-repeat;
+    background-size: 7rem auto;
+}
+#download .footer-banner .andriod .active {
+    background-position: -210px 0;
+}
+#download .footer-banner .ios {
+    position: absolute;
+    left: 4.72rem;
+    top: 0.3rem;
+    width: 2.01rem;
+    height: 0.6rem;
+    /*background: url("/static/images/download/custom.png") -4.57rem 0 no-repeat;*/
+    /*background-size: 7rem auto;*/
+    background: url("/static/images/download/custom.png") -4.57rem 0 no-repeat;
+    background-size: 7rem auto;
+}
+#download .footer-banner .ios .active {
+    background-position: 0 -0.7rem;
+}

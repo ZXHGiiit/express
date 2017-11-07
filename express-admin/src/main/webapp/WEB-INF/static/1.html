@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/> 
+    <link rel="stylesheet" type="text/css" href="/static/template/grand-new/web/css/common-build.css?v=5">
+    <style>
+        body{
+            font-family: "Lato Regular";
+            color: #303030;
+        }
+        .s-reg{
+            text-align: center;
+        }
+        .s-reg h1{
+            font-size: 24px;
+            line-height: 80px; 
+            font-size: 14px;
+        }
+        .s-reg hr{
+            border: none;   
+            border-top: 1px solid #cccccc;
+        }
+        .s-reg form input{
+            width: 300px;
+            height: 40px;
+            box-sizing: border-box;
+            padding: 0 10px;
+            font-size: 14px;
+            margin-top: 20px;
+            background-color: #f8f8f8;
+            border-radius: 2px;
+        }
+        .s-reg ::-webkit-input-placeholder{
+            color: #ccc;
+            font-size: 14px;
+        }
+        .s-reg ::-moz-placeholder{
+            color: #ccc;
+            font-size: 14px;
+        
+        }
+        .s-reg :-ms-input-placeholder{
+            color: #ccc;
+            font-size: 14px;
+        }
+        .s-reg input[type=submit]{
+            font-size: 28px;
+            color: #0099c9;
+            text-decoration: underline;
+            background-color: #fff;
+            border: none;
+            box-shadow: none;
+            margin: 20px 0 30px 0;
+        }
+        .s-reg .sign-in{
+            color: #0099c9;
+            text-decoration: underline;
+        } 
+    </style>
+</head>
+<body>
+    <main class="s-reg">
+        <h1>Create Your Free Account</h1>
+        <hr>
+        <p>Search Homes and Exclusive Property Listings</p>
+        <p><i>(Price and inventory current as of April 1,2016)</i></p>
+        <form>
+            <input type="text" name="fullName" required="" pattern=".+ .+" pm="please enter your full name with a space" autofocus="" placeholder="Full Name">
+            <input type="email" t="email" placeholder="Email Address" required="" name="account" placeholder="Email Address">
+            <input type="tel" t="tel" pattern="^[\d+#\-*]{10,11}$" pm="Phone number should be 10~11 digits" name="phoneNum" required="" placeholder="Phone">
+            <input type="submit" value="Continue My Search">
+        </form>
+        <p class="sign-in">Already have an account?</p>
+        <hr>
+        <p><i>By registering,you agree to our Privacy Policy & TOS</i></p>
+    </main>
+</body>
+</html>
