@@ -33,10 +33,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 text">
-                    <h1><strong>Chime</strong> Admin Platform</h1>
+                    <h1><strong>Express</strong> Admin Platform</h1>
                     <div class="description">
                         <p>
-                            A Real Estate Platform Built Your Success!
+                            A Real Express Platform Built Your Success!
                         </p>
                     </div>
                 </div>

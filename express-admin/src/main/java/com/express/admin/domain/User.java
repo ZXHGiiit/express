@@ -1,4 +1,4 @@
-package com.express.domain;
+package com.express.admin.domain;
 
 public class User {
     private long id;

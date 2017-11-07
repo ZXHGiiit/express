@@ -16,7 +16,7 @@
        default-autowire="byName">
     <!-- Spring只扫描service包,controller交给SpringMVC扫描,如果Sprign全扫描会出现声明事务无法回滚问题.父子容器问题.自动注入后导致优先变高 -->
     <context:component-scan
-            base-package="com.express.service,com.express.dao,com.express.commons.service,com.express.interceptor"></context:component-scan>
+            base-package="com.express.admin"></context:component-scan>
     <!-- 软编码:加载属性文件 -->
     <context:property-placeholder location="classpath:*.properties"/>
     <!-- 设置数据源 -->

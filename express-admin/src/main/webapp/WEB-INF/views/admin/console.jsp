@@ -43,7 +43,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<%=request.getContextPath()%>/home">Chime Admin v1.0</a>
+            <a class="navbar-brand" href="<%=request.getContextPath()%>/home">Express Admin v1.0</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -78,48 +78,32 @@
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="<%=request.getContextPath()%>/agentsite/list2"
-                                   target="iframepage">Agent List</a>
-                                <a href="<%=request.getContextPath()%>/agentsite/list"
-                                   target="iframepage">Site List</a>
-                                <a href="<%=request.getContextPath()%>/agentsite/detail"
-                                   target="iframepage">Member Info</a>
+                                <a href="<%=request.getContextPath()%>/user/list"
+                                   target="iframepage">User List</a>
+                                <a href="<%=request.getContextPath()%>/user/listVip"
+                                   target="iframepage">VipUser List</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
 
-                    <%--<li>--%>
-                    <%--<a href="#"><i class="fa fa-wrench fa-fw"></i> Agent<span class="fa arrow"></span></a>--%>
-                    <%--<ul class="nav nav-second-level">--%>
-                    <%--<li>--%>
-                    <%--<a href="<%=request.getContextPath()%>/lead-assign/config" target="iframepage">Config</a>--%>
-                    <%--</li>--%>
-                    <%--<li>--%>
-                    <%--<a href="<%=request.getContextPath()%>/lead-assign/gotoTrack" target="iframepage">Track Lead</a>--%>
-                    <%--</li>--%>
-                    <%--</ul>--%>
-                    <%--<!-- /.nav-second-level -->--%>
-                    <%--</li>--%>
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> System Email <span
+                        <a href="#"><i class="fa fa-wrench fa-fw"></i> User <span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <%--<li>--%>
-                            <%--<a href="<%=request.getContextPath()%>/email/overview" target="iframepage"><i class="fa fa-dashboard fa-fw"></i> Email Templates </a>--%>
-                            <%--</li>--%>
                             <li>
-                                <a href="<%=request.getContextPath()%>/email/group/overview/view"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> Groups
+                                <a href="<%=request.getContextPath()%>/user/list"
+                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> User List
                                 </a>
                             </li>
                             <li>
-                                <a href="<%=request.getContextPath()%>/email/use/view"
+                                <a href="<%=request.getContextPath()%>/user/listVip"
                                    target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
-                                    邮件模版使用示例 </a>
+                                    Vip User List </a>
                             </li>
                         </ul>
                     </li>
+
                     <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Common config <span
                                 class="fa arrow"></span></a>
@@ -127,40 +111,6 @@
                             <li>
                                 <a href="<%=request.getContextPath()%>/commonconfig/overview"
                                    target="iframepage"><i class="fa fa-dashboard fa-fw"></i> configs
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Payment <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="https://finance.chime.me"><i
-                                        class="fa fa-dashboard fa-fw"></i> Agent List</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Lead <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/lead/overview"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> Lead
-                                    Setting</a>
-                            </li>
-                            <li>
-                                <a href="<%=request.getContextPath()%>/lead/userview"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> User
-                                    Setting</a>
-                            </li>
-                            <li>
-                                <a href="<%=request.getContextPath()%>/lead/exportlead"
-                                target="iframepage"><i class="fa fa-dashboard fa-fw"></i> export
-                                lead csv
                                 </a>
                             </li>
                         </ul>
@@ -182,75 +132,6 @@
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> ConfigCenter <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/configcenter/config"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
-                                    Application </a>
-                                <a href="<%=request.getContextPath()%>/configcenter/config/datasource"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
-                                    DataSource </a>
-
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> File Upload <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/file-upload"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> File
-                                    Upload</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Push Test <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/push/overview"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> Push
-                                    Test</a>
-                            </li>
-                        </ul>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/push/activity"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i> Push
-                                    Activity</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> App Version Info <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/appVersion/list/481559"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>Android
-                                    Version List </a>
-                            </li>
-                            <li>
-                                <a href="<%=request.getContextPath()%>/appVersion/list/481560"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>IOS
-                                    Version List </a>
-                            </li>
-                            <li>
-                                <a href="<%=request.getContextPath()%>/appTestUser/list"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>App Test
-                                    User List </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Super Admin <span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -258,23 +139,6 @@
                                 <a href="<%=request.getContextPath()%>/superAdmin/list"
                                    target="iframepage"><i class="fa fa-dashboard fa-fw"></i>Super
                                     Admin User List </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Email Management <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/emailManagement/fakeEmail/index"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
-                                    Supression List </a>
-                            </li>
-                            <li>
-                                <a href="<%=request.getContextPath()%>/emailManagement/emailBinding/index"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
-                                    Email Bindings</a>
                             </li>
                         </ul>
                     </li>
