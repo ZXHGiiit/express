@@ -2,7 +2,9 @@ package com.express.admin.dao;
 
 import com.express.domain.User;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -17,4 +19,12 @@ public interface UserDao {
         + TABLE
         + " where is_review = false")
     List<User> selectToVipUser();
+
+    @Update(" update "
+        + TABLE
+        + " set "
+        + " is_vip = #{isVip}, "
+        + " is_review = true "
+        + " whre id = #{userId}")
+    int updateVip(@Param("userId") long userId, @Param("isVip") boolean isVip);
 }

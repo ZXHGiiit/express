@@ -25,26 +25,26 @@
 <table class="table table-hover">
     <div id = "email_template_table">
         <tr>
-            <th>id</th>
-            <th>描述</th>
-            <th>业务名</th>
-            <th>TAG</th>
+            <th>姓名</th>
+            <th>身份证号</th>
+            <th>电话</th>
+            <th>住址</th>
             <th>操作</th>
-            <c:if test="${not empty templates}">
-                <c:forEach items="${templates}" var="template" >
+            <c:if test="${not empty users}">
+                <c:forEach items="${users}" var="user" >
                     <tr>
-                        <th>${template.id}</th>
-                        <th>${template.description}</th>
-                        <th>${template.businessName}</th>
-                        <th>${template.tag}</th>
+                        <th>${user.name}</th>
+                        <th>${user.idNumber}</th>
+                        <th>${user.phone}</th>
+                        <th>${user.address}</th>
                         <th>
                             <table>
                                 <tr>
                                     <th>
-                                        <a href="<%=request.getContextPath()%>/email/template/overview/view?id=${template.id}" class="btn btn-default">预览</a>
+                                        <a href="<%=request.getContextPath()%>/reviewVip/pass?id=${user.id}" class="btn btn-default">通过</a>
                                     </th>
                                     <th>
-                                        <a href="<%=request.getContextPath()%>/email/template/edit/view?id=${template.id}" class="btn btn-default">编辑</a>
+                                        <a href="<%=request.getContextPath()%>/reviewVip/refuse?id=${user.id}" class="btn btn-default">撤回</a>
                                     </th>
                                 </tr>
                             </table>

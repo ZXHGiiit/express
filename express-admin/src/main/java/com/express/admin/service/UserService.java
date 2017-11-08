@@ -10,4 +10,5 @@ public interface UserService {
 
     List<User> getToVipUser();
 
+    int updateVip(long userId, boolean isVip);
 }

@@ -17,4 +17,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getToVipUser() {
         return userDao.selectToVipUser();
     }
+
+    @Override
+    public int updateVip(long userId, boolean isVip) {
+        return 0;
+    }
 }
