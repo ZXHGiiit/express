@@ -1,6 +1,6 @@
 package com.express.admin.domain;
 
-public class User {
+public class Admin {
     private long id;
     private String name;
     private String account;
