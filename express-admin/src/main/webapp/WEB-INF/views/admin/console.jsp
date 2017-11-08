@@ -52,7 +52,7 @@
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-user fa-fw"></i><span>${user_key_heheda.name}<span> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
                     <li><a href="<%=request.getContextPath()%>/logout"><i
@@ -113,7 +113,7 @@
                             </li>
                         </ul>
                     </li>
-
+                    <!--
                     <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Dialer <span
                                 class="fa arrow"></span></a>
@@ -128,18 +128,22 @@
                             </li>
                         </ul>
                     </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Super Admin <span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="<%=request.getContextPath()%>/superAdmin/list"
-                                   target="iframepage"><i class="fa fa-dashboard fa-fw"></i>Super
-                                    Admin User List </a>
-                            </li>
-                        </ul>
-                    </li>
+                    -->
+                    <c:choose>
+                    <c:when test="${user_key_heheda.isSuper}">
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i> Admin <span
+                                    class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<%=request.getContextPath()%>/adminUser/list"
+                                       target="iframepage"><i class="fa fa-dashboard fa-fw"></i>
+                                        Admin User List </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </c:when>
+                    </c:choose>
 
                 </ul>
             </div>

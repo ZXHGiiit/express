@@ -1,8 +1,13 @@
 package com.express.admin.controller;
 
+import com.google.common.collect.ImmutableMap;
+
 import com.express.admin.annotation.LoginRequired;
+import com.express.admin.constant.WebCodeEnum;
 import com.express.admin.domain.Admin;
 import com.express.admin.interceptor.HostHolder;
+import com.express.admin.service.AdminService;
+import com.express.commons.constant.StringConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +38,8 @@ public class AdminController {
     private static final Log logger = LogFactory.getLog(AdminController.class);
     @Autowired
     private HostHolder hostHolder;
-
+    @Autowired
+    private AdminService adminService;
     @RequestMapping("/admin-login")
     public ModelAndView gotoAdminLoginPage(HttpServletRequest request) {
         logger.info("admin-login==============>");
@@ -38,6 +49,9 @@ public class AdminController {
     @RequestMapping("/home")
     @LoginRequired
     public ModelAndView gotoAdminCosole(HttpServletRequest request) {
+        if(hostHolder.getUser() == null) {
+            return new ModelAndView("admin/login");
+        }
         return new ModelAndView("admin/console");
     }
 
@@ -59,8 +73,15 @@ public class AdminController {
                               HttpServletResponse response,
                               @RequestParam(value = "account") String account,
                               @RequestParam(value = "password") String password) {
+        logger.info("AdminController.login.params : {account=" + account + ", password=" + password + "}");
+        Admin admin = adminService.selectByUAP(account, password);
+        if(admin == null) {
+            logger.error("AdminController.login.用户名或密码错误");
+            return getErrorView(locale, WebCodeEnum.LOGIN_ACCOUNT_PWD_ERROR);
+        }
+        hostHolder.setUser(admin);
         RedirectView view = new RedirectView("home", false);
-        return new ModelAndView();
+        return new ModelAndView(view);
     }
 
     @LoginRequired
@@ -72,4 +93,12 @@ public class AdminController {
         return new ModelAndView(view);
     }
 
+    //error view
+    public ModelAndView getErrorView(Locale locale, WebCodeEnum webCodeEnum) {
+        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
+        Map<String, Object> status = new HashMap<String, Object>();
+        status.put(StringConstants.RESULT_CODE, webCodeEnum.getErrorCode());
+        status.put(StringConstants.RESULT_MSG, webCodeEnum.getErrorMsg(locale));
+        return new ModelAndView(jsonView, ImmutableMap.of(StringConstants.RESULT_STATUS, status));
+    }
 }

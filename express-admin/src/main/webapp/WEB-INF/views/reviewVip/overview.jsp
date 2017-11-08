@@ -56,7 +56,6 @@
     </div>
 </table>
 
-<a href="<%=request.getContextPath()%>/email/template/add/view?groupId=${template.groupId}" class="btn btn-default" role="button"> 添加模版 </a>
 
 <!-- jQuery -->
 <script src="//cdn.bootcss.com/jquery/1.12.1/jquery.min.js"></script>

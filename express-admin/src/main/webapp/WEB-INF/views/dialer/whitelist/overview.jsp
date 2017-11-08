@@ -27,7 +27,7 @@
             background-color:#F9F9F9;
             border:1px solid #333;
             padding:5px;
-            width:600px; height:400px;position:absolute; left:50%; top:50%; margin-left: -300px; margin-top: -200px;}
+            }
         }
     </style>
     <script>

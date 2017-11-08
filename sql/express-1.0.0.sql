@@ -208,3 +208,31 @@ create table message (
      FOR EACH ROW SET NEW.`update_time` = NOW()
     //
     DELIMITER ;
+
+
+
+    CREATE TABLE `admin` (
+      `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'admin id',
+      `account` varchar(20) COLLATE utf8_bin NOT NULL COMMENT '账号',
+      `password` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+      `name` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+      `delete_flag` tinyint(1) NOT NULL DEFAULT '0',
+      `is_super` tinyint(1) NOT NULL DEFAULT '0',
+      `create_time`    timestamp       not null default CURRENT_TIMESTAMP,
+      `update_time`      timestamp       not null,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `account` (`account`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+        DROP TRIGGER IF EXISTS `update_admin_trigger`;
+        DELIMITER //
+        CREATE TRIGGER `update_admin_trigger` BEFORE UPDATE ON `admin`
+         FOR EACH ROW SET NEW.`update_time` = NOW()
+        //
+        DELIMITER ;
+
+        DROP TRIGGER IF EXISTS `insert_admin_trigger`;
+        DELIMITER //
+        CREATE TRIGGER `insert_admin_trigger` BEFORE INSERT ON `admin`
+         FOR EACH ROW SET NEW.`update_time` = NOW()
+        //
+        DELIMITER ;

@@ -8,4 +8,14 @@ import java.util.List;
 
 public interface AdminService {
     List<Admin> getAllAdmin();
+
+    Admin selectByUAP(String account , String password);
+
+    int delete(long id);
+
+    int rmDelete(long id);
+
+    int reset(long id, String password);
+
+    int create(Admin admin);
 }
