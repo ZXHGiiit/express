@@ -1,6 +1,6 @@
 package com.express.admin.interceptor;
 
-import com.express.admin.domain.User;
+import com.express.admin.domain.Admin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,16 +19,16 @@ public class HostHolder {
     private static final String userKey = "user_key_heheda";
     private static final String userIdKey = "user_id_key_heheda";
 
-    public User getUser() {
+    public Admin getUser() {
         LOG.info("HostHolder.request = " + request.hashCode());
-        return (User) request.getSession().getAttribute(userKey);
+        return (Admin) request.getSession().getAttribute(userKey);
     }
 
     public long getUserId() {
         return (Long) request.getSession().getAttribute(userIdKey);
     }
 
-    public void setUser(User user) {
+    public void setUser(Admin user) {
         LOG.info("HostHolder.request = " + request.hashCode());
         request.getSession().setAttribute(userKey, user);
     }

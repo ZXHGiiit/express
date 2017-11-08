@@ -24,7 +24,7 @@ public class SmsUtil {
         Map<String, String> querys = new HashMap<String, String>();
         querys.put("mobile", String.valueOf(phone));
         querys.put("params", name + "," + String.valueOf(code));
-        querys.put("sign", "全名快递");
+        querys.put("sign", "全民快递");
         querys.put("tpl_id", "47331");
         HttpEntity result = null;
         try {

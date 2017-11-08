@@ -1,7 +1,7 @@
 package com.express.admin.controller;
 
 import com.express.admin.annotation.LoginRequired;
-import com.express.admin.domain.User;
+import com.express.admin.domain.Admin;
 import com.express.admin.interceptor.HostHolder;
 
 import org.apache.commons.logging.Log;
@@ -66,7 +66,7 @@ public class AdminController {
     @LoginRequired
     @RequestMapping(value = "/logout")
     public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
-        User user = hostHolder.getUser();
+        Admin admin = hostHolder.getUser();
 
         RedirectView view = new RedirectView("admin-login", false);
         return new ModelAndView(view);

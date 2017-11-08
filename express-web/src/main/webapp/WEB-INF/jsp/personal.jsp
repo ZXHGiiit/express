@@ -353,7 +353,7 @@ function finishRoute(routeId, status) {
 
 function userInfo() {
     $.ajax({
-            type: "get",
+            type: "post",
             url : "<%=request.getContextPath()%>/user/userInfo",
             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             dataType: "json",
@@ -396,8 +396,8 @@ function scoreInfo() {
            $("#msg").append("<li><span>平均评分：" + data.avgScore+"分</span></li>"
                + "<li><span>最高评分：" + data.maxScore + "分</span></li>"
                + "<li><span>最低评分：" + data.maxScore + "分</span></li>"
-               + "<li><span>已完成任务：" + data.countOfTask + "</span></li>"
-               + "<li><span>已被评论任务：" + data.countOfComment + "</span></li>");
+               + "<li><span>已完成任务：" + data.countOfTask + "个</span></li>"
+               + "<li><span>已被评论任务：" + data.countOfComment + "个</span></li>");
 
         },
         error:function(data) {
@@ -445,7 +445,6 @@ function showPopupCom() {
                 <li><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li class="now"><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
                 <li class="news"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
-                <li><a href="">网站地图</a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
             </ul>

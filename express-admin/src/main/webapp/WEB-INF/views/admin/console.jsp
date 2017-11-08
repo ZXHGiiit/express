@@ -78,10 +78,8 @@
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="<%=request.getContextPath()%>/user/list"
-                                   target="iframepage">User List</a>
-                                <a href="<%=request.getContextPath()%>/user/listVip"
-                                   target="iframepage">VipUser List</a>
+                                <a href="<%=request.getContextPath()%>/reviewVip/overview"
+                                   target="iframepage">reviewVip</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

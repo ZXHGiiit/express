@@ -2,6 +2,7 @@ package com.express.util;
 
 import com.google.common.collect.Maps;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +28,9 @@ public class Test {
     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");
     System.out.println(sdf.format(new Date()));
     System.out.println(new Date().getTime());
+
+    double result = new BigDecimal(10).divide(new BigDecimal(3),2,BigDecimal.ROUND_HALF_UP).doubleValue();
+    System.out.println(result);
   }
 }
 

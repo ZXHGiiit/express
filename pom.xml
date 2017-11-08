@@ -13,6 +13,7 @@
         <module>express-util</module>
         <module>express-business</module>
         <module>express-persistence</module>
+        <module>express-admin</module>
     </modules>
     <packaging>pom</packaging>
     <name>express-root-pom</name>

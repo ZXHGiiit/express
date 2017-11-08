@@ -9,7 +9,6 @@ import com.express.commons.util.SmsUtil;
 import com.express.domain.Order;
 import com.express.domain.Task;
 import com.express.domain.TaskVo;
-import com.express.domain.User;
 import com.express.interceptor.HostHolder;
 import com.express.service.MessageService;
 import com.express.service.OrderService;
@@ -30,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import redis.clients.jedis.BinaryClient;
 
 /**
  * 用户任务Controller

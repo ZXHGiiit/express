@@ -161,7 +161,7 @@ public class UserController {
     //首先获取用户的id
     User userRegis = userDao.selectByAccount(user.getAccount());
     long userId = userRegis.getId();
-    int resultMsg = messageService.createMsg(userId, "欢迎使用【全名快递】", "全民速递软件是天涯网络科技有限公司设计的一款联系全民的物品运送软件。旨在利用人们的出行，同城或跨城地运送物品至目的地，带给有运送需求者便利的同时使出行者获利。不依赖快递公司，出行者自由选择接单使得全民速递软件相对于传统快递尤其是跨区域快递有速度更快，成本更低的明显优势，便民利民，服务于大众生活，前景广阔。", true);
+    int resultMsg = messageService.createMsg(userId, "欢迎使用【全民速递】", "全民速递软件是天涯网络科技有限公司设计的一款联系全民的物品运送软件。旨在利用人们的出行，同城或跨城地运送物品至目的地，带给有运送需求者便利的同时使出行者获利。不依赖快递公司，出行者自由选择接单使得全民速递软件相对于传统快递尤其是跨区域快递有速度更快，成本更低的明显优势，便民利民，服务于大众生活，前景广阔。", true);
     if(resultMsg != 1) {
       LOG.error("UserController.register.sendMsg ERROR");
     }
@@ -208,7 +208,7 @@ public class UserController {
     return RetJacksonUtil.resultOk();
   }
 
-  @RequestMapping("/toVip")
+  @RequestMapping(value="/toVip",method= RequestMethod.POST,produces="text/html;charset=UTF-8")
   @ResponseBody
   public String toVip(User user) {
     LOG.info("UserController.toUser. user : " + user.toString());
