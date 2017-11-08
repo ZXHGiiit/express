@@ -25,6 +25,6 @@ public interface UserDao {
         + " set "
         + " is_vip = #{isVip}, "
         + " is_review = true "
-        + " whre id = #{userId}")
+        + " where id = #{userId}")
     int updateVip(@Param("userId") long userId, @Param("isVip") boolean isVip);
 }

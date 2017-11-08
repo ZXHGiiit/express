@@ -20,6 +20,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateVip(long userId, boolean isVip) {
-        return 0;
+        return userDao.updateVip(userId, isVip);
     }
 }

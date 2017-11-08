@@ -52,7 +52,7 @@ public class ReviewVipController {
         if(updateResult != 1) {
             LOG.error("ReviewController.pass.updateVip.ERROR");
         }
-        int msgResult = msgService.createMsg(id, "承运方申请结果通知", "尊敬的用户，您好。恭喜您通过了我们的审核，您可以享用我们的平台里发布行程运输快递的服务了", true);
+        int msgResult = msgService.createMsg(id, "承运方申请结果通知", "尊敬的用户，您好。恭喜您通过了我们的审核，您可以使用发布行程运输快递功能了。", true);
         if(msgResult != 1) {
             LOG.error("ReviewController.pass.sendMsg.ERROR");
         }
