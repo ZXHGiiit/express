@@ -213,7 +213,8 @@ public class UserController {
   public String toVip(User user) {
     LOG.info("UserController.toUser. user : " + user.toString());
     long userId = holder.getUserId();
-    user.setVip(true);
+    //user.setVip(true);
+    user.setReview(false);//由express-admin来审核
     user.setId(userId);
     //检验身份证号和姓名是否一致,且在数据库中是否唯一
     //TODO
@@ -227,7 +228,7 @@ public class UserController {
     }
     //申请成功后，将hostholder信息修改
     holder.setVip(true);
-    return JacksonUtils.toJson("申请成功");
+    return JacksonUtils.toJson("申请成功,我们会在两个工作日内完成审核，详情请关注个人消息。");
   }
 
   @RequestMapping(value="/userInfo",method= RequestMethod.POST,produces="text/html;charset=UTF-8")

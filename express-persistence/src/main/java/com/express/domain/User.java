@@ -13,6 +13,7 @@ public class User {
   private long idNumber;
   private String email;
   private boolean isVip;
+  private boolean isReview;
   private int age;
   private long phone;
   private long postCode;
@@ -23,6 +24,14 @@ public class User {
   private String motto;
   private Date createTime;
   private Date updateTime;
+
+  public boolean isReview() {
+    return isReview;
+  }
+
+  public void setReview(boolean review) {
+    isReview = review;
+  }
 
   public long getId() {
     return id;
