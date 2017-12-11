@@ -4,6 +4,7 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -12,11 +13,14 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd"
-       default-autowire="byName">
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd"
+       default-autowire="byName"
+       default-lazy-init="false">
     <!-- Spring只扫描service包,controller交给SpringMVC扫描,如果Sprign全扫描会出现声明事务无法回滚问题.父子容器问题.自动注入后导致优先变高 -->
     <context:component-scan
-            base-package="com.express.admin.service,com.express.admin.dao"></context:component-scan>
+            base-package="com.express.admin.service,com.express.admin.dao,com.express.admin.schedule"></context:component-scan>
     <!-- 软编码:加载属性文件 -->
     <context:property-placeholder location="classpath:*.properties"/>
     <!-- 设置数据源 -->
@@ -56,4 +60,11 @@
         <aop:pointcut expression="execution(* com.*.service.impl.*.*(..))" id="mypointer"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="mypointer"/>
     </aop:config>
+
+
+    <!--开启这个配置，spring才能识别@Scheduled注解   -->
+    <task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+    <task:scheduler id="qbScheduler" pool-size="10"/>
+
+
 </beans>

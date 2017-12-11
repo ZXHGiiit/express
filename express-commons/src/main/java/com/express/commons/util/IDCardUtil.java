@@ -6,7 +6,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
-
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
