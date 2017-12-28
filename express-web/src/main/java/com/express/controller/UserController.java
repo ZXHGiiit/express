@@ -188,8 +188,10 @@ public class UserController {
    */
   @RequestMapping("/score")
   @ResponseBody
-  public String scoreInfo() {
-    long userId = holder.getUserId();
+  public String scoreInfo(@RequestParam(defaultValue = "-1") long userId) {
+    if(userId == -1) {
+      userId = holder.getUserId();
+    }
     Map<String, Object> info = userService.commentInfo(userId);
     LOG.info("UserController.getUserScoreInfo : " + info);
     String result = JacksonUtils.toJson(info);

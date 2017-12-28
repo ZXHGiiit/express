@@ -285,7 +285,7 @@ public class UserServiceImpl implements UserService {
       //获取用户信息
       User user = userDao.selectByUserId(route.getUserId());
       infoVo.setTaskUserName(user.getName());
-
+      infoVo.setTaskUserId(user.getId());
       //获取承运商信息
       List<Task> tasks = taskDao.selectAllByUserId(route.getUserId());
       if(tasks == null) {

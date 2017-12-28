@@ -1,3 +1,4 @@
+.setting
 .idea
 .classpath
 .project
@@ -10,4 +11,5 @@ generatorConfig.xml
 .DS_Store
 *.cache
 *.lock
-
+*.class
+*.svn

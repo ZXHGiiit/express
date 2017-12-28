@@ -9,6 +9,18 @@
 <link rel="stylesheet" type="text/css" href="Assets/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="Assets/css/thems.css"/>
 
+<style>
+    #popupcontent{
+        position: absolute;
+        visibility: hidden;
+        overflow: hidden;
+        border:1px solid #CCC;
+        background-color:#F9F9F9;
+        border:1px solid #333;
+        padding:5px;
+        width:300px; height:140px;position:absolute; left:50%; top:50%; margin-left: -150px; margin-top: -70px;}
+    }
+</style>
 
 <script type="text/javascript">
 
@@ -46,7 +58,7 @@ function getRoute(){
 				+ "<td><span>24小时</span><span>定时达</span></td>"
 				+ "<td><i>" + data[i].taskSize + "<i>票</td>"
 				+ "<td><i>" + data[i].price + "</i>元</td>"
-				+ "<td><a href=''>下单</a></td><tr>");
+				+ "<td><a onclick='viewUser("+data[i].taskUserId+")'>查看</a></td><tr>");
 			}
         }
 	});
@@ -99,6 +111,44 @@ function createOrder() {
     		error:function(data) {
     		}
     });
+}
+
+function viewUser(id) {
+    var popUp = document.getElementById("popupcontent");
+    popUp.style.visibility = "visible";
+    $.ajax({
+        type: "get",
+        data:{
+            "userId":id,
+        },
+        url : "<%=request.getContextPath()%>/user/score",
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        dataType: "json",
+        success : function(data) {
+            console.info(data);
+            $("#popupcontent").empty();
+            $("#popupcontent").append("<li><span>平均评分：" + data.avgScore+"分</span></li>"
+                + "<li><span>最高评分：" + data.maxScore + "分</span></li>"
+                + "<li><span>最低评分：" + data.maxScore + "分</span></li>"
+                + "<li><span>已完成任务：" + data.countOfTask + "个</span></li>"
+                + "<li><span>已被评论任务：" + data.countOfComment + "个</span></li>"
+                + "<button onclick='hidePopup()'>确认</button>");
+
+        },
+        error:function(data) {
+            alert("server error");
+        }
+    });
+}
+
+function showPopup(){
+    var popUp = document.getElementById("popupcontent");
+    popUp.style.visibility = "visible";
+}
+
+function hidePopup(){
+    var popUp = document.getElementById("popupcontent");
+    popUp.style.visibility = "hidden";
 }
 
 </script>
@@ -343,7 +393,8 @@ function createOrder() {
 
 <!--底部-->
 </body>
-
+<div id="popupcontent" style="overflow:auto">
+</div>
 <!-- jQuery -->
 <script src="Assets/js/jquery-1.8.3.min.js"></script>
 </html>

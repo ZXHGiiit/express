@@ -1,6 +1,7 @@
 package com.express.domain;
 
 public class RouteInfoVo {
+    private long taskUserId;
     private String taskUserName;
     private long routeId;
     private int taskSize;
@@ -13,6 +14,14 @@ public class RouteInfoVo {
     private int minScore;
     private int countOfTask;
     private double avgScore;
+
+    public long getTaskUserId() {
+        return taskUserId;
+    }
+
+    public void setTaskUserId(long taskUserId) {
+        this.taskUserId = taskUserId;
+    }
 
     public String getTaskUserName() {
         return taskUserName;
