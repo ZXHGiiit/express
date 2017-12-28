@@ -24,9 +24,9 @@ public class WeiBoServer {
     private static final Log LOG = LogFactory.getLog(WeiBoServer.class);
 
     //@Scheduled(fixedRate = 2000)
-    @Scheduled(cron="0/60 * *  * * ? ")
+    @Scheduled(fixedRate = 60000)
     public void updatetask() {
-        LOG.info("WeiBoServer.updateStatus.is begin===================>");
+        //LOG.info("WeiBoServer.updateStatus.is begin===================>");
         //获取当前的系统时间
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -43,19 +43,19 @@ public class WeiBoServer {
         } else if (hour == min) {
             LOG.info("WeiBoServer.updateStatus is begin===============>" + time);
             //若果是这样的就发送小猪佩奇图片。
-            status = "芥末小姐@芥末小姐a叫我发送一张小猪佩奇图片。";
+            status = "芥末小姐@芥末小姐a,叫我每当分钟和时种一样的时候，发送一张小猪佩奇图片。";
             int picNum = new Random().nextInt(16) + 23;
             updateStatusWithPic(status, picNum);
         }
 
 
-        LOG.info("WeiBoServer.updatetask.is finish==================>");
+        //LOG.info("WeiBoServer.updatetask.is finish==================>");
     }
 
     public String makeContent (int hour24) {
         StringBuilder status = new StringBuilder();
         if(hour24 == 0) {
-            status.append("现在是零点整。新的一天又开始了。");
+            return "现在是零点整。新的一天又开始了。";
         }
         for(int i = 0; i < hour24; i++) {
             status.append("铛～");
@@ -81,7 +81,7 @@ public class WeiBoServer {
     }
 
     public void updateStatusWithPic(String statuses, int hour) {
-        String filename = "/home/workspace/express/express-admin/src/main/webapp/WEB-INF/static/images/weibo/"+String.valueOf(hour)+".jpg";
+        String filename = "/home/temp/weibo/"+String.valueOf(hour)+".jpg";
         String URL = "http://zhouxinghang.com";
         try {
             try {
