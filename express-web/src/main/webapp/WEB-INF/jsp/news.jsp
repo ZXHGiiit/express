@@ -7,7 +7,7 @@
 <title>订单中心</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/reset.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/common.css"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/thems.css"/>>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Assets/css/thems.css"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/Assets/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -76,7 +76,6 @@ function getLocalTime(nS) {
 
 </script>
 </head>
-
 <body>
 <!--头部-->
 <div class="head_bg">
@@ -92,7 +91,7 @@ function getLocalTime(nS) {
             <ul class="clearfix">
                 <li><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
-                <li class="news now"><a href="<%=request.getContextPath()%>/news">消息<span>${count_news_key_heheda}</span></a></li>
+                <li class="news now"><a href="<%=request.getContextPath()%>/msg/index">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
                 <li><a href="<%=request.getContextPath()%>/about">关于全民</a></li>
             </ul>

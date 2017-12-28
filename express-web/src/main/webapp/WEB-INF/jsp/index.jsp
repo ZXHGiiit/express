@@ -116,14 +116,14 @@ function getLocalTime(nS) {
 	<div class="head clearfix">
     	<div class="logo"><a href=""><img src="${pageContext.request.contextPath}/Assets/images/logo.png" alt=""/></a></div>
         <div class="menu">
-        	<div class="head_top">
-        		<span href="#">${user_key_heheda.account}</span>
+            <div class="head_top">
+                <span href="#">${user_key_heheda.account}</span>
                 <a href="<%=request.getContextPath()%>/user/logout">注销</a>
                 <a href="">设为首页</a>
                 <a href="">加入收藏</a>
             </div>
             <ul class="clearfix">
-            	<li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
+                <li class="now"><a href="<%=request.getContextPath()%>/index">首页</a></li>
                 <li><a href="<%=request.getContextPath()%>/personal">我的全民</a></li>
                 <li class="news"><a href="<%=request.getContextPath()%>/msg/index">消息<span>${count_news_key_heheda}</span></a></li>
                 <li><a href="<%=request.getContextPath()%>/help">帮助与支持</a></li>
